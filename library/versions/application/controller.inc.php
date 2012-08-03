@@ -71,6 +71,7 @@ class VApplicationController extends VObject {
 		self::$components = array();
 		
 		foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $path) {
+			
 			if (is_dir($path)) {
 			
 				foreach (scandir($path) as $component_dir) {
