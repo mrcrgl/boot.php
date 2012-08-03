@@ -1,0 +1,67 @@
+<fieldset>
+      <legend>{text ident='ADDRESS_LGND'}</legend>
+      
+      <div class="control-group{if $house_number_err || $street_err} error{/if}">
+        <label class="control-label" for="street">{text ident='STREET_HOUSENO_LBL'}</label>
+        <div class="controls">
+          <input type="text" class="span3" id="street" name="address[street]" value="{$Address->street}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" class="span1" id="house_number" name="address[house_number]" value="{$Address->house_number}">
+          <p class="help-block">{text ident='STREET_HOUSENO_HELP'}</p>
+        </div>
+      </div>
+      
+      <div class="control-group{if $zipcode_err || $city_err} error{/if}">
+        <label class="control-label" for="zipcode">{text ident='ZIP_CITY_LBL'}</label>
+        <div class="controls">
+          <input type="text" class="span1" id="zipcode" name="address[zip]" value="{$Address->zip}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" class="span3" id="city" name="address[city]" value="{$Address->city}">
+          <p class="help-block">{text ident='ZIP_CITY_HELP'}</p>
+        </div>
+      </div>
+      
+      <div class="control-group{if $country_uid_err} error{/if}">
+        <label class="control-label" for="country">{text ident='COUNTRY_LBL'}</label>
+        <div class="controls">
+          <input type="text" class="span4" id="country" name="address[country_uid]" value="{$Address->country_uid}">
+        </div>
+      </div>
+      
+    </fieldset> 
+ 
+ 
+ 
+    
+      {*literal}
+			  <script type="text/javascript">
+			  $('input#country').suggest();
+			  </script>
+		  {/literal*}
+
+
+{*literal}
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="/static/plugins/jquery-ui-map-3.0-beta/ui/min/jquery.ui.map.full.min.js"></script>
+<script type="text/javascript">
+<!--
+$('#street, #house_number, #zipcode, #city, #country').change(function(){
+
+    $('#latlng_hint').text('');
+  var country = $('#gc_address').find('.suggest-temp').val();
+  address = $('#street').val()+$('#house_number').val()+', '+$('#zipcode').val()+' '+$('#city').val()+', '+country;
+  var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'address' : address}, function(r, s){
+	if (r[0]){
+        lng = r[0].geometry.location.lng();
+        lat = r[0].geometry.location.lat();
+        $('#longitude').val(lng);
+        $('#latitude').val(lat);
+	} else {
+	  $('#latlng_hint').text('Es können keine Koordinaten gefunden werden, bitte überprüfen Sie die Adresse');
+	}
+    })
+
+})
+
+-->
+</script>
+{/literal*}

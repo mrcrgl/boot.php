@@ -1,0 +1,10 @@
+<div id="colMain">
+  <h1>Logout</h1>
+  <br class="clr" />
+  
+  <script type="text/javascript" charset="UTF-8">
+    window.setTimeout(window.location.href = '{display_link link=index}', 2500);
+  </script>
+  
+  <span class="formSignOK">!</span><p class="formMsg">Sie wurden erfolgreich abgemeldet.</p>
+</div>

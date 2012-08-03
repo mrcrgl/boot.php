@@ -1,0 +1,52 @@
+{include file='header.htpl'}
+
+<div class="row">
+  <div class="span6 offset3">
+  
+    {if $login}
+          <span class="formSignOK">!</span><p class="formMsg">Sie wurden erfolgreich angemeldet.</p>
+        {else}
+          {if $err_login}
+            <span class="formSignError">!</span><p class="formMsg">Bei der Anmeldung trat ein Fehler auf: {$err_login}</p>
+          {/if}
+          {*if $error}
+            {include file='includes/snip-alert.htpl' message=$error type='warning'}
+          {/if*}
+    <form class="form-horizontal" action="" method="POST">
+      {$csrf_token}
+      
+      <fieldset>
+        <legend>{*text ident='LOGIN'*}</legend>
+        
+        {include file='includes/form/field-input.htpl' name='username' minlength=3 validate=required label=LOGIN_USERNAME help=LOGIN_USERNAME_HELP}
+        
+        {include file='includes/form/field-input.htpl' name='password' minlength=3 validate=required label=LOGIN_PASSWORD help=LOGIN_PASSWORD_HELP type=password}
+        
+        <input type="hidden" value="1" name="formSent">
+        
+        {if $smarty.post.requested_view && $smarty.post.requested_view != ""}
+          <input type="hidden" name="requested_view" value="{$smarty.post.requested_view}" />
+        {else}
+          {if $requested_view && $requested_view != ""}
+            <input type="hidden" name="requested_view" value="{$requested_view}">
+          {else}
+            <input type="hidden" name="requested_view" value="{$default_landing_page}">
+          {/if}
+        {/if}
+        <input type="hidden" name="do_login" value="{$smarty.now}" />
+        
+        <input type="hidden" value="3" name="formID">
+        
+        
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">{text ident='BTN_LOGIN'}</button>
+          <button class="btn">{text ident='BTN_ABORT'}</button>
+        </div>
+      </fieldset>
+    </form>
+    {/if}
+  </div>
+</div>
+
+{include file='footer.htpl'}
