@@ -1,6 +1,6 @@
 <?php
 
-class ComponentViewAuthLogin extends VApplicationView {
+class ComponentAuthViewLogin extends VApplicationView {
   
   
   public function show() {
@@ -10,6 +10,8 @@ class ComponentViewAuthLogin extends VApplicationView {
   	
   	$document->setTemplate('login.htpl');
   	
+  	$input =& VFactory::getInput();
+  	#print $input->get('name', 'nix da', 'get');
   }
   
   public function verify() {

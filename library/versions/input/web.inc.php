@@ -4,7 +4,8 @@
 class VInputWeb extends VInput {
 	
 	public function __construct() {
-		VUrl::parse($this->get('REQUEST_URI', 'index', 'server'));
+		$url =& VFactory::getUrl();
+		$url->parse($this->get('REQUEST_URI', 'index', 'server'));
 	}
 	
 	

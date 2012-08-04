@@ -16,5 +16,4 @@ abstract class VDatabase {
 		return new $classname();
 	}
 	
-	
 }

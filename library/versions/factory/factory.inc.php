@@ -16,6 +16,8 @@ abstract class VFactory {
 	
 	public static $document = null;
 	
+	public static $url = null;
+	
 	/**
 	 * @var    VSession
 	 * @since  2.0
@@ -140,6 +142,14 @@ abstract class VFactory {
 		}
 
 		return self::$session;
+	}
+	
+	public static function getUrl() {
+		if (!self::$url) {
+			self::$url = VUrl::getInstance();
+		}
+
+		return self::$url;
 	}
 	
 	protected static function createTemplate($type=null, $instance='default') {

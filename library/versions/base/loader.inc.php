@@ -157,6 +157,24 @@ class VLoader {
 			
 			return $classpath;
 		}
+		
+		/*
+		 * components
+		 */
+		elseif (substr($__classname, 0, 9) == "Component") {
+			
+			$path = VString::strtolower(implode(DS, VString::splitCamelCase($__classname)));
+			$path = str_replace('component/', '', $path);
+			foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $component_path) {
+				#print $component_path.DS.$path.NL;
+				$classpath = self::check_extensions($component_path.DS.$path);
+				if ($classpath !== false) {
+					self::register($__classname, $classpath);
+					return $classpath;
+				}
+			}
+			
+		}
 		/*
 		 * trying to get the path
 		 */

@@ -79,6 +79,8 @@ class VApplicationController extends VObject {
 					if (!is_dir($path.DS.$component_dir)) continue;
 					
 					if (!is_file($path.DS.$component_dir.DS.'controller.ini')) continue;
+					
+					if (!is_file($path.DS.$component_dir.DS.'urls.inc.php')) continue;
 
 					
 					$config = new VSettingsIni();
@@ -87,9 +89,17 @@ class VApplicationController extends VObject {
 					$alias 	= $config->get('controller.alias', $component_dir);
 					$file 	= $path.DS.$component_dir.DS.$config->get('controller.file', 'controller.inc.php');
 					
-					$classname = 'ComponentController'.ucfirst($component_dir);
+					$classname = sprintf('Component%sController', ucfirst($component_dir));
+					#$url_classname = 'ComponentUrls'.ucfirst($component_dir);
 					
-					VLoader::register($classname, $file);
+					/* get urls */
+					/*VLoader::register($url_classname, $path.DS.$component_dir.DS.'urls.inc.php');*/
+					/*$urls = new $url_classname();*/
+					
+					/*$url =& VFactory::getUrl();
+					$url->register( $urls->getPattern() );*/
+					
+					#VLoader::register($classname, $file);
 					
 					self::$components[$alias] = $classname;					
 				}
@@ -128,6 +138,8 @@ class VApplicationController extends VObject {
 		// Import view file
 		if (!VLoader::check_extensions($this->component_root.DS.'views'.DS.$view_ident))
 			throw new Exception( sprintf("View not fount at: %s", $this->component_root.DS.'views'.DS.$view_ident) );
+		
+
 		
 		$view = $this->getViewClassname( $view_ident );
 		
@@ -209,9 +221,7 @@ class VApplicationController extends VObject {
 	}
 	
 	public function getViewClassname($view_ident) {
-		$classname = 'ComponentView';
-		$classname .= ucfirst($this->get('component_name'));
-		$classname .= ucfirst($view_ident);
+		$classname = sprintf('Component%sView%s', ucfirst($this->get('component_name')), ucfirst($view_ident));
 		
 		return $classname;
 	}
