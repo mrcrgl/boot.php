@@ -39,21 +39,21 @@ class VModelManagerSearch extends VModelManagerDefault {
   }
   
   public function getAll_Default() {
-  	$db_ident = 'db_'.$this->object->_DataMap['_database'];
-  	Instance::f($db_ident)->setTable( sprintf("`%s`", $this->object->_DataMap['_head']) );
-    Instance::f($db_ident)->selectRows( 
+  	$dbo =& VFactory::getDatabase();
+  	$dbo->setTable( sprintf("`%s`", $this->object->_DataMap['_head']) );
+    $dbo->selectRows( 
     	sprintf("`%s`", $this->object->_DataMap['_uid']),
     	$this->getWhereCondition(), 
     	$this->getOrdering(), 
     	$this->getLimitCondition()
     );
-    if (!Instance::f($db_ident)->getNumRows()) {
+    if (!$dbo->getNumRows()) {
       return array();
     }
     
     $record = array();
-    while (Instance::f($db_ident)->nextRecord()) {
-      $record[] = Instance::f($db_ident)->getRecord();
+    while ($dbo->nextRecord()) {
+      $record[] = $dbo->getRecord();
     }
     
     return $this->getObjects($record, $this->object_name);
@@ -61,22 +61,22 @@ class VModelManagerSearch extends VModelManagerDefault {
   
 	public function getAll_Search() {
   	$add = $this->getQuery();
-		$db_ident = 'db_'.$this->object->_DataMap['_database'];
-  	Instance::f($db_ident)->setTable( $add['from'] );
-    Instance::f($db_ident)->selectRows( 
+  	$dbo =& VFactory::getDatabase();
+  	$dbo->setTable( $add['from'] );
+    $dbo->selectRows( 
     	sprintf("DISTINCT(`%s`)", $this->object->_DataMap['_uid']), 
     	$this->getWhereCondition($add['where']), 
     	$this->getOrdering(), 
     	$this->getLimitCondition()
     );
     
-    if (!Instance::f($db_ident)->getNumRows()) {
+    if (!$dbo->getNumRows()) {
       return array();
     }
     
     $record = array();
-    while (Instance::f($db_ident)->nextRecord()) {
-      $record[] = Instance::f($db_ident)->getRecord();
+    while ($dbo->nextRecord()) {
+      $record[] = $dbo->getRecord();
     }
     
     return $this->getObjects($record, $this->object_name);
@@ -94,20 +94,20 @@ class VModelManagerSearch extends VModelManagerDefault {
   }
   
 	public function getNumRows_Default() {
-  	$db_ident = 'db_'.$this->object->_DataMap['_database'];
-  	Instance::f($db_ident)->setTable( sprintf("`%s`", $this->object->_DataMap['_head']) );
-    Instance::f($db_ident)->selectRows("COUNT(*) as `counter`", $this->getWhereCondition());
-    Instance::f($db_ident)->nextRecord();
-    return Instance::f($db_ident)->f('counter');
+  	$dbo =& VFactory::getDatabase();
+  	$dbo->setTable( sprintf("`%s`", $this->object->_DataMap['_head']) );
+    $dbo->selectRows("COUNT(*) as `counter`", $this->getWhereCondition());
+    $dbo->nextRecord();
+    return $dbo->f('counter');
   }
   
 	public function getNumRows_Search() {
   	$add = $this->getQuery();
-		$db_ident = 'db_'.$this->object->_DataMap['_database'];
-  	Instance::f($db_ident)->setTable( $add['from'] );
-    Instance::f($db_ident)->selectRows( sprintf("COUNT(DISTINCT(`%s`)) as `counter`", $this->object->_DataMap['_uid']), $this->getWhereCondition($add['where']));
-    Instance::f($db_ident)->nextRecord();
-    return Instance::f($db_ident)->f('counter');
+		$dbo =& VFactory::getDatabase();
+  	$dbo->setTable( $add['from'] );
+    $dbo->selectRows( sprintf("COUNT(DISTINCT(`%s`)) as `counter`", $this->object->_DataMap['_uid']), $this->getWhereCondition($add['where']));
+    $dbo->nextRecord();
+    return $dbo->f('counter');
   }
   
   public function getKeywords() {

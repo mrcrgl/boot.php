@@ -171,7 +171,7 @@ class VLoader {
 				}
 				$__classname = implode('', $eparts);
 			}
-				
+			
 			$path = VString::strtolower(implode(DS, VString::splitCamelCase($__classname))); // ComponentNewsModelNews
 			$path = str_replace('component/', '', $path);
 			foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $component_path) {
