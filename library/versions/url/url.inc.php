@@ -97,13 +97,13 @@ class VUrl {
 					$_GET['_vc'] = $com;
 					$_GET['_vv'] = $view;
 					$_GET['_vm'] = $method;
-					
+					#print_r($_GET);
 					return true;
 				}
 				
 			} else {
 				// TODO
-				print "no match".NL;
+				#print "no match".NL;
 			}
 		}
 		// TODO

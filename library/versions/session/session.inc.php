@@ -559,27 +559,6 @@ class VSession extends VObject {
 	}
 
 	/**
-	 * Create a token-string
-	 *
-	 * @param   integer  $length  Length of string
-	 *
-	 * @return  string  Generated token
-	 *
-	 * @since   2.0
-	 */
-	protected function _createToken($length = 32)	{
-		static $chars = '0123456789abcdef';
-		$max = strlen($chars) - 1;
-		$token = '';
-		$name = session_name();
-		for ($i = 0; $i < $length; ++$i) {
-			$token .= $chars[(rand(0, $max))];
-		}
-
-		return md5($token . $name);
-	}
-
-	/**
 	 * Set counter of session usage
 	 *
 	 * @return  boolean  True on success
