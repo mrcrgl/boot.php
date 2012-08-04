@@ -194,7 +194,7 @@ class VLoader {
 		}
 		// Models
 		else {
-			foreach (array(VROOT.DS.'models', VFRAMEWORK.DS.'models') as $paths) {
+			foreach (array(PROJECT_MODELS, VMODELS) as $paths) {
 				#print "sdfgsdfgd";
 				$path = VString::strtolower(implode(DS, VString::splitCamelCase($__classname)));
 				$classpath = self::check_extensions($paths.DS.$path);

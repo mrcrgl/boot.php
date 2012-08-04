@@ -13,4 +13,4 @@ class ComponentDefaultViewIndex extends VApplicationView {
   }
   
 }
-?>
+

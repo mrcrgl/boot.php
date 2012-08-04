@@ -48,6 +48,11 @@ define('VCOMPONENTS', VFRAMEWORK.DS.'vcomponents');
 define('VMODULES', VFRAMEWORK.DS.'vmodules');
 
 /**
+ * @var	VMODELS	Versions modules directory
+ */
+define('VMODELS', VFRAMEWORK.DS.'vmodels');
+
+/**
  * @var	VPLUGINS	Versions plugin directory
  */
 define('VPLUGINS', VFRAMEWORK.DS.'vplugins');
@@ -76,6 +81,11 @@ define('PROJECT_CONFIG', PROJECT_ROOT.DS.'config');
  * @var PROJECT_COMPONENTS		Project config directory
  */
 define('PROJECT_COMPONENTS', PROJECT_ROOT.DS.'components');
+
+/**
+ * @var PROJECT_MODELS		Project models directory
+ */
+define('PROJECT_MODELS', PROJECT_ROOT.DS.'models');
 
 /**
  * @var PROJECT_PLUGINS		Project config directory
