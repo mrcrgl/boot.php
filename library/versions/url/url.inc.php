@@ -72,6 +72,16 @@ class VUrl {
 						$_GET[$key] = $match[0];
 					}
  				}
+ 				
+ 				if (is_array($destination)) {
+ 					$temp = $destination;
+ 					$args = array();
+ 					if (isset($temp[1])) $args = $temp[1];
+ 					$destination = $temp[0];
+ 					foreach ($args as $argk => $argv) {
+ 						$_GET[$argk] = $argv;
+ 					}
+ 				}
 				
 				// found, next level
 				if (substr($destination, 0, strlen('include:')) == 'include:') {

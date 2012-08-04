@@ -7,11 +7,26 @@ class ComponentAuthViewLogin extends VApplicationView {
     
   	$document =& VFactory::getDocument();
   	$renderer =& $document->getRenderer();
+  	$session =& VFactory::getSession();
+  	$input =& VFactory::getInput();
+  	
+  	$login =& $session->get('login');
+  	if (is_object($login) && $login->loggedIn()) {
+  		header( sprintf("Location: %s", $input->get('referer', '/', 'get')) );
+  		exit;
+  	}
   	
   	$document->setTemplate('login.htpl');
   	
-  	$input =& VFactory::getInput();
+  	
   	#print $input->get('name', 'nix da', 'get');
+  	
+  	print $input->get('referer');
+  	
+  	if (strtolower($input->getMethod()) == 'post') {
+  		$this->verify();
+  	}
+  	
   }
   
   public function verify() {
@@ -20,7 +35,7 @@ class ComponentAuthViewLogin extends VApplicationView {
   	$input =& VFactory::getInput();
   	
   	if ($input->get('do_login', false, 'post')) {
-      $refLogin = new Login("User");
+      $refLogin = new ComponentAuthModelLogin("User");
       $requested_view = $input->get('requested_view', false, 'post');
       if ( $requested_view ) {
         $refLogin->followUrl( $requested_view );
@@ -40,6 +55,8 @@ class ComponentAuthViewLogin extends VApplicationView {
       }
     }
     
+    header('Location: '.$input->get('HTTP_REFERER', '/', 'server'));
+    exit;
   }
   /*
   public function show() {

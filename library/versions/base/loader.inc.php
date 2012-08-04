@@ -208,6 +208,7 @@ class VLoader {
 				
 				$path = VString::strtolower(implode(DS, VString::splitCamelCase($__classname)));
 				
+				#print $path;
 				
 				$classpath = self::check_extensions($paths.DS.$path);
 				if ($classpath === false) {
@@ -216,8 +217,8 @@ class VLoader {
 					$parts[] = $last;
 					$classpath = self::check_extensions($paths.DS.implode(DS, $parts));
 				}
-					
-				return $classpath;
+				
+				if ($classpath) return $classpath;
 			}
 				
 			throw new Exception("Unknown class_path layout: ".$__classname);
@@ -233,6 +234,7 @@ class VLoader {
 	 */
 	static function check_extensions($__part, $include=true) {
 		foreach (self::$extensions as $ext) {
+			#print $__part.$ext.NL;
 			if (is_file($__part.$ext)) {
 				if ($include) self::file($__part.$ext);
 				return $__part.$ext;

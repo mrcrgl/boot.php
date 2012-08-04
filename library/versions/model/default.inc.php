@@ -221,9 +221,12 @@ abstract class VModelDefault extends VBasic {
     
     if (isset($param)) {
       $bFormOk = true;
+      
+      $document =& VFactory::getDocument();
+      
       foreach ($param as $key => $value) {
-        if (Instance::f('smarty'))
-          Instance::f('smarty')->assign($key.'_var', $value);
+        if ($document)
+          $document->assign($key.'_var', $value);
         if (isset($arrRules[$key])) {
           $model[($arrRules[$key]['2'])][$key] = $value;
 					//if (!ereg($arrRules[$key]['1'], $value)) {
@@ -233,8 +236,8 @@ abstract class VModelDefault extends VBasic {
 							if ($arrRules[$key]['0'] == true || ($arrRules[$key]['0'] == false && strlen($value) > 0)) {
 	              $bFormOk = false;
 	              $this->setErrorMsg($key.'_err');
-	              if (Instance::f('smarty'))
-	                Instance::f('smarty')->assign($key.'_err', '1');
+	              if ($document)
+	                $document->assign($key.'_err', '1');
 	            } // [/if]
 						}
 						
@@ -242,8 +245,8 @@ abstract class VModelDefault extends VBasic {
             if ($arrRules[$key]['0'] == true || ($arrRules[$key]['0'] == false && strlen($value) > 0)) {
               $bFormOk = false;
               $this->setErrorMsg($key.'_err');
-              if (Instance::f('smarty'))
-                Instance::f('smarty')->assign($key.'_err', '1');
+              if ($document)
+                $document->assign($key.'_err', '1');
             } // [/if]
           } // [/if]
         } // [/if]
@@ -251,8 +254,8 @@ abstract class VModelDefault extends VBasic {
     } // [/if]
     
     if ($bFormOk == false) {
-      if (Instance::f('smarty'))
-        Instance::f('smarty')->assign('error', '1');
+      if ($document)
+        $document->assign('error', '1');
     }
     return ($bFormOk == false) ? false : $model;
   }
