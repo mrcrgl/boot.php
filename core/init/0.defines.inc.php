@@ -19,8 +19,8 @@ define('NL', ((PHP_SAPI != 'cli') ? '<br />' : "\n"));
 /**
  * @var	VFRAMEWORK		Versions core directory
  */
-define('VFRAMEWORK', dirname(__FILE__).DS.'..'.DS.'..');
-define('VROOT', VFRAMEWORK.DS.'..');
+define('VFRAMEWORK', realpath(dirname(__FILE__).DS.'..'.DS.'..'));
+define('VROOT', realpath(VFRAMEWORK.DS.'..'));
 
 /**
  * @var VCONFIG		Versions config directory
@@ -70,7 +70,7 @@ define('VTEMPLATES', VFRAMEWORK.DS.'templates');
 /**
  * @var PROJECT_ROOT		Project root directory
  */
-define('PROJECT_ROOT', PROJECT_HTDOCS.DS.'..');
+define('PROJECT_ROOT', realpath(PROJECT_HTDOCS.DS.'..'));
 
 /**
  * @var PROJECT_CONFIG		Project config directory

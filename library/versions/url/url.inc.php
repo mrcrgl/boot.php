@@ -82,7 +82,21 @@ class VUrl {
  						$_GET[$argk] = $argv;
  					}
  				}
-				
+ 				
+ 				/*
+ 				 * register template path to renderer
+ 				 */
+				$document =& VFactory::getDocument();
+				$renderer =& $document->getRenderer();
+				$object = new ReflectionObject($this);
+				$template_path = dirname($object->getFileName()).DS.'templates';
+				#print "<pre>";
+					
+				#print $template_path.NL;
+				$renderer->addTemplateDir($template_path);
+ 				#var_dump($renderer->getTemplateDir());
+ 				#print "</pre>";
+ 				
 				// found, next level
 				if (substr($destination, 0, strlen('include:')) == 'include:') {
 					$component_ident = substr($destination, strlen('include:'));

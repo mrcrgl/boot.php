@@ -134,6 +134,9 @@ class VApplicationController extends VObject {
 	
 	public function prepareRequest() {
 		$view_ident = $this->getRequestView();
+		$document =& VFactory::getDocument();
+		$renderer =& $document->getRenderer();
+		$renderer->init();
 		
 		// Import view file
 		if (!VLoader::check_extensions($this->component_root.DS.'views'.DS.$view_ident))

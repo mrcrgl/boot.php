@@ -9,6 +9,10 @@ class VDocumentRendererHtmlSmarty extends Smarty {
 		parent::__construct();
 		
 		
+		
+	}
+	
+	public function init() {
 		/*
 		 * collecting template directories
 		 * 1. project component template if available
@@ -21,20 +25,31 @@ class VDocumentRendererHtmlSmarty extends Smarty {
 		$component_root = $controller->component_root;
 		$template_dirs 	= array();
 		
-		$project_component_tpl_dir = PROJECT_TEMPLATES.DS.'components'.DS.$component;
+		/* MR: removed unnštig? */
+		/*$project_component_tpl_dir = PROJECT_TEMPLATES.DS.'components'.DS.$component;
 		if (is_dir($project_component_tpl_dir))
-			$template_dirs[] = $project_component_tpl_dir;
+			$template_dirs[] = $project_component_tpl_dir;*/
+		
+		#if (is_dir($component_root.DS.'templates'))
+		#	$template_dirs[] = $component_root.DS.'templates';
 		
 		if (is_dir(PROJECT_TEMPLATES))
 			$template_dirs[] = PROJECT_TEMPLATES;
 		
-		if (is_dir($component_root.DS.'templates'))
-			$template_dirs[] = $component_root.DS.'templates';
 		
 		if (is_dir(VTEMPLATES))
 			$template_dirs[] = VTEMPLATES;
-			
-		$this->setTemplateDir( $template_dirs );
+		
+		#print "<pre>";
+		#var_dump($this->getTemplateDir());
+		$templates = array_merge(array_reverse($this->getTemplateDir()), $template_dirs);
+		$templates = array_unique($templates, SORT_REGULAR);
+		foreach ($templates as $i => $v) {
+			if (!is_dir($v)) unset($templates[$i]);
+		}
+		$this->setTemplateDir( $templates );
+		#var_dump($this->getTemplateDir());
+		#print "</pre>";
 		
 		$this->cache_dir 		= PROJECT_CACHE.DS.'smarty'.DS;
 		$this->compile_dir 	= PROJECT_CACHE.DS.'smarty_compile'.DS;
