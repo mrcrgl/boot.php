@@ -48,6 +48,16 @@ class VDocumentHtml extends VDocument {
 		return $this->_template;
 	}
 	
+	/**
+	 * 
+	 * 
+	 */
+	public function assignDocumentVars() {
+		$renderer =& $this->getRenderer();
+		
+		$renderer->assign('_document', &$this);
+		
+	}
 	
 	/**
 	 * Outputs the document
@@ -66,6 +76,8 @@ class VDocumentHtml extends VDocument {
 		if (!is_object($this->_renderer)) {
 			throw new Exception("No renderer instanciated");
 		}
+		
+		$this->assignDocumentVars();
 		
 		$data = $this->_renderer->fetch( $this->getTemplate() );
 		$this->setBody($data);

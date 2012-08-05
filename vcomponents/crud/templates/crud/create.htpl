@@ -1,0 +1,10 @@
+{include file='header.htpl'}
+<div class="row">
+  <div class="span3">
+    {include file='crud/navigation_aside.htpl'}
+  </div><!--/span-->
+  <div class="span9">
+    {include file=$user_defined_template}
+  </div><!--/span-->
+</div><!--/row-->
+{include file='footer.htpl'}

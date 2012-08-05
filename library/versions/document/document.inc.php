@@ -34,7 +34,15 @@ class VDocument {
 	 * @since  2.0
 	 */
 	public $base = '';
-
+	
+	/**
+	 * Document url_prefix URL Prefix
+	 *
+	 * @var    string
+	 * @since  2.0
+	 */
+	public $url_prefix = '';
+	
 	/**
 	 * Contains the document language setting
 	 *
@@ -476,6 +484,32 @@ class VDocument {
 	 */
 	public function getBase() {
 		return $this->base;
+	}
+	
+	/**
+	 * Sets the prefix URI of the document
+	 *
+	 * @param   string  $url_prefix  The prefix URI to be set
+	 *
+	 * @return  VDocument instance of $this to allow chaining
+	 *
+	 * @since   2.0
+	 */
+	public function setUrlPrefix($url_prefix) {
+		$this->url_prefix = $url_prefix;
+
+		return $this;
+	}
+
+	/**
+	 * Return the prefix URI of the document.
+	 *
+	 * @return  string
+	 *
+	 * @since   2.0
+	 */
+	public function getUrlPrefix() {
+		return $this->url_prefix;
 	}
 
 	/**

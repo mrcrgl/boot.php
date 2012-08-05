@@ -34,7 +34,7 @@ class VUrl {
 		return self::$instance;
 	}
 	
-	public function parse($request_uri=null, $use_own_pattern=false) {
+	public function parse($request_uri=null, $chained_uri=null) {
 		
 		VLoader::import('versions.utilities.array');
 		
@@ -54,6 +54,9 @@ class VUrl {
 		if (substr($path, -1) != '/') {
 			$path = $path.'/';
 		}
+		
+		if (!$chained_uri) $chained_uri = $path;
+		
 		#printf("Class is %s".NL, get_class($this));
 		#$url =& VFactory::getUrl();
 		#$patternlist = (($use_own_pattern) ? $this->getPattern() : $url->getPattern());
@@ -112,7 +115,13 @@ class VUrl {
 					$url_classname = sprintf("Component%sUrls", ucfirst($component_ident));
 					$com_urls = new $url_classname();
 					
-					return $com_urls->parse($remaining_part, true);
+					/*
+					 * Url prefix to able the component building urls
+					 */
+					#var_dump(str_replace($remaining_part, '', $chained_uri));
+					$document->setUrlPrefix( str_replace($remaining_part, '', $chained_uri) );
+					#print $document->getUrlPrefix();
+					return $com_urls->parse($remaining_part, $chained_uri);
 					
 				} else {
 					

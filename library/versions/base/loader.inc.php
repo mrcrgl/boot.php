@@ -177,6 +177,12 @@ class VLoader {
 			foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $component_path) {
 				#print $component_path.DS.$path.NL;
 				$classpath = self::check_extensions($component_path.DS.$path);
+				if ($classpath === false) {
+					$parts = explode(DS, $path);
+					$last = $parts[(count($parts)-1)];
+					$parts[] = $last;
+					$classpath = self::check_extensions($component_path.DS.implode(DS, $parts));
+				}
 				if ($classpath !== false) {
 					self::register($__classname, $classpath);
 					return $classpath;

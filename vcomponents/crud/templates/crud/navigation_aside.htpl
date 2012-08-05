@@ -1,0 +1,6 @@
+<div class="well sidebar-nav">
+  <ul class="nav nav-list">
+    <li><a title="" href="/{$_document->getUrlPrefix()}">anzeigen</a></li>
+    <li><a title="" href="/{$_document->getUrlPrefix()}new">hinzuf&uuml;gen</a></li>
+  </ul>
+</div>
