@@ -72,6 +72,8 @@ class ComponentCrudViewModel extends VApplicationView {
   	$this->object = new $this->object_name($this->object_uid);
   	$this->object_manager = new $this->object_manager_name();
   	
+  	$this->object_manager->set('ignore_object_state', true);
+  	
   	$document =& VFactory::getDocument();
   	$document->assign('object', &$this->object);
   	$document->assign('manager', &$this->object_manager);

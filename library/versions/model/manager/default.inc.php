@@ -11,7 +11,7 @@
  * 
  * --
  */
-abstract class VModelManagerDefault extends VBasic {
+abstract class VModelManagerDefault extends VObject {
   
   var $limit = "none";
   
@@ -27,7 +27,7 @@ abstract class VModelManagerDefault extends VBasic {
   
   var $check_owner = false;
    
-  
+  var $ignore_object_state = false;
   
   /*
    * getObjects
@@ -73,7 +73,7 @@ abstract class VModelManagerDefault extends VBasic {
       $where = "1";
     }
     
-    if (!$this->display_deleted && $this->object->hasField('status')) {
+    if (!$this->display_deleted && !$this->ignore_object_state && $this->object->hasField('status')) {
       $where .= sprintf(" AND `status` >= %d", VSettings::f('default.min_object_state', 1));
     }
     
