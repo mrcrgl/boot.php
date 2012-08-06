@@ -5,6 +5,7 @@ class ComponentHelperViewDatabase extends VApplicationView {
 	public function show() {
 		$document =& VFactory::getDocument();
 		$document->setTemplate('database/index.htpl');
+		$document->assign('_current_step_tpl', 'database/step/check.htpl');
 		
 		try {
 			$dbo =& VFactory::getDatabase();
@@ -14,20 +15,20 @@ class ComponentHelperViewDatabase extends VApplicationView {
 			$document->assign('do_database_setup', true);
 		}
 		
+		
 	}
 	
-	public function show() {
+	public function configure() {
 		$document =& VFactory::getDocument();
-		$document->setTemplate('database/index.htpl');
+		$input    =& VFactory::getInput();
 		
-		/*
-		try {
-			$dbo =& VFactory::getDatabase();
-			#$dbo->connect();
+		$document->setTemplate('database/index.htpl');
+		$document->assign('_current_step_tpl', 'database/step/configure.htpl');
+		
+		if (strtolower($input->getMethod()) == 'post') {
 			
-		} catch(Exception $e) {
-			$document->assign('do_database_setup', true);
-		}*/
+		}
+		
 		
 	}
 	

@@ -61,7 +61,7 @@ abstract class VModelManagerDefault extends VObject {
   function getOrdering() {
   	
   	if ($this->object->hasField('priority')) {
-      return sprintf(" BY `priority` ASC");
+      return sprintf(" `priority` ASC");
     }
   	
   	return "none";
