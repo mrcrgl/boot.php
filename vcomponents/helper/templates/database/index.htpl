@@ -1,0 +1,16 @@
+{include file='header.htpl'}
+
+<h1>Setup database <small></small></h1>
+
+<div class="row">
+
+<div class="span6 offset3 well">
+  <h2>Keine Datenbank konfiguriert</h2>
+  
+  <a class="btn btn-primary" href="/{$_document->getUrlPrefix()}database/create">Mit Konfiguration der Datenbank fortfahren...</a>
+
+</div>
+
+</div>
+
+{include file='footer.htpl'}

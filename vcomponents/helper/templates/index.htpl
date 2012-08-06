@@ -1,0 +1,3 @@
+{include file='header.htpl'}
+
+{include file='footer.htpl'}

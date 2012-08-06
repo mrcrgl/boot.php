@@ -20,6 +20,14 @@ class VDocument {
 	public $description = '';
 
 	/**
+	 * Document project name
+	 *
+	 * @var    string
+	 * @since  2.0
+	 */
+	public $project_name = 'Versions 2.0 - Project';
+	
+	/**
 	 * Document full URL
 	 *
 	 * @var    string
@@ -90,6 +98,14 @@ class VDocument {
 	 */
 	public $_charset = 'utf-8';
 
+	/**
+	 * Contains the document author
+	 *
+	 * @var    string
+	 * @since  2.0
+	 */
+	public $_author = '';
+	
 	/**
 	 * Document mime type
 	 *
@@ -406,6 +422,60 @@ class VDocument {
 	 */
 	public function getCharset() {
 		return $this->_charset;
+	}
+	
+	/**
+	 * Sets the document author
+	 *
+	 * @param   string  $author  Author string
+	 *
+	 * @return  VDocument instance of $this to allow chaining
+	 *
+	 * @since   2.0
+	 */
+	public function setAuthor($author) {
+
+		$this->_author = $author;
+
+		return $this;
+	}
+
+	/**
+	 * Returns the document author.
+	 *
+	 * @return  string
+	 *
+	 * @since   2.0
+	 */
+	public function getAuthor() {
+		return $this->_author;
+	}
+	
+	/**
+	 * Sets the document project name
+	 *
+	 * @param   string  $project_name  project name string
+	 *
+	 * @return  VDocument instance of $this to allow chaining
+	 *
+	 * @since   2.0
+	 */
+	public function setProjectName($project_name) {
+
+		$this->project_name = $project_name;
+
+		return $this;
+	}
+
+	/**
+	 * Returns the document project name.
+	 *
+	 * @return  string
+	 *
+	 * @since   2.0
+	 */
+	public function getProjectName() {
+		return $this->project_name;
 	}
 
 	/**

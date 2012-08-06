@@ -51,14 +51,19 @@ abstract class VModelManagerDefault extends VObject {
   }
   
   function getUserListString() {
-    if ($this->display_subuser) {
+    /*if ($this->display_subuser) {
       return Instance::f("Login")->obj->customer->all_sub_customer_string;
     } else {
       return "'".Instance::f("Login")->obj->customer_uid."'";
-    }
+    }*/
   }
   
   function getOrdering() {
+  	
+  	if ($this->object->hasField('priority')) {
+      return sprintf(" BY `priority` ASC");
+    }
+  	
   	return "none";
   }
   
