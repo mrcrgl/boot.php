@@ -1,0 +1,19 @@
+  <h2>Datenbank konfigurieren</h2>
+  
+  {include file='includes/form/form-messages.htpl'}
+  
+  <form class="form-horizontal" method="post" action="">
+    {$csrf_token}
+    
+    {include file='includes/form/field-input.htpl' name='db_host' label='Server' help='z.B. localhost' value=$db_host}
+    
+    {include file='includes/form/field-input.htpl' name='db_main_user' label='Benutzer (root)' value=$db_main_user}
+    {include file='includes/form/field-input.htpl' name='db_main_pass' label='Passwort (root)' value=$db_main_pass}
+    
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">pr&uuml;fen</button>
+      <a class="btn" href="/{$_document->getUrlPrefix()}database">abbrechen</a>
+    </div>
+    
+  </form>
+  

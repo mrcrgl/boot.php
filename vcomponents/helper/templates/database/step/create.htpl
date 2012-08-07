@@ -1,0 +1,41 @@
+  <h2>Datenbank konfigurieren</h2>
+  
+  {include file='includes/form/form-messages.htpl'}
+  
+  <form class="form-horizontal" method="post" action="">
+    {$csrf_token}
+    
+    <input type='hidden' name='db_host' value='{$db_host}' />
+    <input type='hidden' name='db_main_user' value='{$db_main_user}' />
+    <input type='hidden' name='db_main_pass' value='{$db_main_pass}' />
+    
+    {include file='includes/form/field-input.htpl' name='db_host' label='Server' value=$db_host uneditable=true}
+    {include file='includes/form/field-input.htpl' name='db_main_user' label='Benutzer (root)' value=$db_main_user uneditable=true}
+    
+    <fieldset>
+      <legend>Datenbank und Benutzer definieren</legend>
+      {include file='includes/form/field-input.htpl' name='db_database' label='Neue Datenbank' help='z.B. versions_development oder versions_production' value=$db_database}
+      
+      <div class="control-group">
+        <label class="control-label" for="create_user">Optionen</label>
+        <div class="controls">
+          <label class="checkbox">
+            <input name="create_user" id="create_user" type="checkbox" value="1" {if $create_user}checked="checked"{/if}>
+            Neuen Benutzer anlegen und Rechte f&uuml;r die Datenbank erteilen.
+          </label>
+        </div>
+      </div>
+      
+      <div class="create_user">
+      {include file='includes/form/field-input.htpl' name='db_user' label='Neuer Benutzer' help='zu erstellender Datenbankbenutzer' value=$db_user}
+      {include file='includes/form/field-input.htpl' name='db_pass' label='Neues Passwort' value=$db_pass}
+      </div>
+    </fieldset>
+    
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">pr&uuml;fen</button>
+      <a class="btn" href="/{$_document->getUrlPrefix()}database">abbrechen</a>
+    </div>
+    
+  </form>
+  
