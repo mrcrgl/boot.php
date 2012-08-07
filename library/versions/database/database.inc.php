@@ -4,7 +4,7 @@ VLoader::discover(dirname(__FILE__).DS.'adapter');
 
 abstract class VDatabase {
 	
-	static public function getInstance($type='mysql') {
+	static public function getInstance($type='mysql', $host=null, $database=null, $user=null, $pass=null) {
 		
 		$classname = 'VDatabase'.ucfirst($type);
 		
@@ -13,7 +13,7 @@ abstract class VDatabase {
 			//user_error()
 		}
 		
-		return new $classname();
+		return new $classname($host, $database, $user, $pass);
 	}
 	
 }

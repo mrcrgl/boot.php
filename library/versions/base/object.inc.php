@@ -38,7 +38,7 @@ class VObject {
 	public function __toString() {
 		return get_class($this);
 	}
-
+	
 	/**
 	 * Sets a default value if not alreay assigned
 	 *

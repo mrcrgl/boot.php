@@ -752,7 +752,11 @@ class VDocument {
 
 		return $this;
 	}
-
+	
+	public function getMessages($leave=false) {
+		return VMessages::getMessages();
+	}
+	
 	/**
 	 * Returns the lineEnd
 	 *

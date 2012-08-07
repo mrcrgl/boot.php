@@ -34,6 +34,28 @@ class VUrl {
 		return self::$instance;
 	}
 	
+	public function getDestinationComponent($destination) {
+		if (substr($destination, 0, strlen('include:')) == 'include:') {
+			return substr($destination, strlen('include:'));
+		}
+		return false;
+	}
+	
+	public function splitDestination($destination, $publish_args=true) {
+		if (is_array($destination)) {
+ 			$temp = $destination;
+ 			$args = array();
+ 			if (isset($temp[1])) $args = $temp[1];
+ 			$destination = $temp[0];
+ 			if ($publish_args) {
+	 			foreach ($args as $argk => $argv) {
+	 				$_GET[$argk] = $argv;
+	 			}
+ 			}
+ 		}
+ 		return $destination;
+	}
+	
 	public function parse($request_uri=null, $chained_uri=null) {
 		
 		VLoader::import('versions.utilities.array');
@@ -76,15 +98,7 @@ class VUrl {
 					}
  				}
  				
- 				if (is_array($destination)) {
- 					$temp = $destination;
- 					$args = array();
- 					if (isset($temp[1])) $args = $temp[1];
- 					$destination = $temp[0];
- 					foreach ($args as $argk => $argv) {
- 						$_GET[$argk] = $argv;
- 					}
- 				}
+ 				$destination = $this->splitDestination($destination);
  				
  				/*
  				 * register template path to renderer
@@ -101,9 +115,7 @@ class VUrl {
  				#print "</pre>";
  				
 				// found, next level
-				if (substr($destination, 0, strlen('include:')) == 'include:') {
-					$component_ident = substr($destination, strlen('include:'));
-					
+				if ($component_ident = $this->getDestinationComponent($destination)) {	
 					#print "Have to include $component_ident".NL;
 					
 					$matched_part = $matches[0][0];

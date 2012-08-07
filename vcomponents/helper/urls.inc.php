@@ -6,7 +6,11 @@ class ComponentHelperUrls extends VUrl {
 		'^/$' 									=> 'helper.index.show',
 		'^login/$' 							=> array('include:auth', array('referer' => '/versions/helper/')),
 		'^database/$'						=> 'helper.database.show',
-		'^database/configure/$'	=> 'helper.database.configure'
+		'^database/configure/$'	=> 'helper.database.configure',
+		'^database/create/$'		=> 'helper.database.create',
+		'^database/showconfig/$'=> 'helper.database.showconfig',
+		'^database/models/$'		=> 'helper.models.show',
+	
 	);
 	
 }
