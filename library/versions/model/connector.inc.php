@@ -222,7 +222,7 @@ abstract class VModelConnector extends VModelDefault {
   		
   		$temp = "--\n-- Structure for table `$table`\n--\n\n";
   		
-		if($delete) $return2[] = $delete."\n";
+			if($delete) $return2[] = $delete."\n";
   		$temp .= "CREATE TABLE IF NOT EXISTS `$table` ( \n";
   		
   		$fields_sql = array();

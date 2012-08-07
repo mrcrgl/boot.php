@@ -3,5 +3,5 @@
  
  <a class="btn btn-primary" href="/{$_document->getUrlPrefix()}database/configure">Mit Konfiguration der Datenbank fortfahren...</a>
  {else}
- foo
+ <a class="btn btn-primary" href="/{$_document->getUrlPrefix()}database/models">Datenbank Layout bearbeiten</a>
  {/if}

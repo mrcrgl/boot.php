@@ -10,7 +10,7 @@ class ComponentHelperUrls extends VUrl {
 		'^database/create/$'		=> 'helper.database.create',
 		'^database/showconfig/$'=> 'helper.database.showconfig',
 		'^database/models/$'		=> 'helper.models.show',
-	
+		'^database/(?P<model>\w+)/create/$'		=> 'helper.models.sql_create',
 	);
 	
 }

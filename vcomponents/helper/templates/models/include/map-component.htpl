@@ -14,7 +14,7 @@
     <li>VModels <span class="badge badge-info">{$map.vmodels|@count}</span>
       <ul>
         {foreach from=$map.vmodels item=vmodel}
-        <li>{$vmodel}</li>
+        <li>{$vmodel} <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel}/create">DROP / CREATE</a></li>
         {/foreach}
       </ul>
     </li>
@@ -23,13 +23,15 @@
     <li>Models <span class="badge badge-info">{$map.models|@count}</span>
       <ul>
         {foreach from=$map.models item=model}
-        <li>{$model}</li>
+        <li>{$model} <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$model}/create">DROP / CREATE</a></li>
         {/foreach}
       </ul>
     </li>
     {/if}
     {if $map.components}
-    {include file='models/include/map-component.htpl' map=$map.components level=$level+1}
+    {foreach from=$map.components item=mcomponent}
+      {include file='models/include/map-component.htpl' map=$mcomponent level=$level+1}
+    {/foreach}
     {/if}
   </ul>
 </li>

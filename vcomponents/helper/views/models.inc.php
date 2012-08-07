@@ -15,6 +15,48 @@ class ComponentHelperViewModels extends VApplicationView {
 		
 		$document->assign('map', $return);
 		
+		VMessages::_('', 'Datenbank: xy');
+	}
+	
+	public function sql_create() {
+		
+		$document =& VFactory::getDocument();
+		$input    =& VFactory::getInput();
+		$dbo      =& VFactory::getDatabase();
+		
+		$classname= $input->get('model', false, 'get');
+		$check    = true;
+		
+		if (!$classname) {
+			VMessages::_('Error', 'Invalid Model', 'error');
+			$check = false;
+		}
+		VLoader::autoload($classname);
+		if ($check && !class_exists($classname)) {
+			VMessages::_('Error', sprintf('Class \'%s\' not found!', $classname), 'error');
+			$check = false;
+		}
+		
+		$model = new $classname();
+		
+		$sql = $model->getSQL(true);
+		// DROP Tables 
+		if (isset($sql[1]) && is_array($sql[1])) {
+			foreach ($sql[1] as $tmp) {
+				$dbo->userQuery($tmp);
+			}
+		}
+		// CREATE Tables 
+		if (isset($sql[0]) && is_array($sql[0])) {
+			foreach ($sql[0] as $tmp) {
+				$dbo->userQuery($tmp);
+			}
+		}
+		
+		VMessages::_('Success!', sprintf('Database Layout for Modal \'%s\' installed!', $classname), 'success');
+		
+		header( sprintf("Location: /%sdatabase/models", $document->getUrlPrefix()) );
+		exit;
 	}
 	
 	private function parsePattern($urls, $name='project', $is_root=false) {
@@ -30,7 +72,6 @@ class ComponentHelperViewModels extends VApplicationView {
 		$return['vmodels'] = $this->getRequiredModels($component_root_path);
 		$return['models'] = $this->scanModels($models_path);
 		
-		
 		foreach ($urls->getPattern() as $destination) {
 			
 			$destination = $urls->splitDestination($destination, false);
@@ -45,7 +86,7 @@ class ComponentHelperViewModels extends VApplicationView {
 			$url_classname = sprintf("Component%sUrls", ucfirst($component_ident));
 			$surls = new $url_classname();
 			
-			$return['components'] = $this->parsePattern($surls, $component_ident);
+			$return['components'][] = $this->parsePattern($surls, $component_ident);
 		}
 		return $return;
 	}
@@ -72,7 +113,13 @@ class ComponentHelperViewModels extends VApplicationView {
 		
 		while (false !== ($file = readdir($handle))) {
 			if (is_dir($models_path.DS.$file) && $file != '.' && $file != '..') {
-				$models = array_merge($models, $this->scanModels($models_path.DS.$file));
+				$newmodels = $this->scanModels($models_path.DS.$file);
+				if (count($newmodels) > 0) {
+					foreach ($newmodels as $newmodel) {
+						#print "adding model ".$newmodel.NL;
+						$models[] = $newmodel;
+					}
+				}
 				continue;
 			}
 			
@@ -82,6 +129,8 @@ class ComponentHelperViewModels extends VApplicationView {
 			
 			$models = $this->getClassesOfFile($models_path.DS.$file, $models);
 		}
+		
+		closedir($handle);
 		
 		return $models;
 	}
@@ -104,6 +153,7 @@ class ComponentHelperViewModels extends VApplicationView {
 		    }
 		  }       
 		}
+		#var_dump($classes);
 		return $classes;
 	}
 }

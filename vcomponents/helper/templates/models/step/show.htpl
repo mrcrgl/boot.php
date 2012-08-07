@@ -1,4 +1,6 @@
 
+{include file='includes/form/form-messages.htpl'}
+
 <ul>
   {include file='models/include/map-component.htpl' map=$map level=0}
 </ul>
