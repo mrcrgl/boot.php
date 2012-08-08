@@ -110,6 +110,10 @@ abstract class VModelManagerDefault extends VObject {
   	$this->$_filter = array();
   }
   
+  public function limit($count, $offset=0) {
+  	$this->limit = sprintf("%d, %d", $offset, $count);
+  }
+  
   /*
    * getObjects
    * 
