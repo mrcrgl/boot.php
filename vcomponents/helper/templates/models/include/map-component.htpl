@@ -18,14 +18,15 @@
         {$vmodel.name}
         {if $vmodel.is_installed}
           {if $vmodel.is_uptodate}
-          <span class="label label-success">up to date</span>
+          <span class="label label-success">up to date</span>&nbsp;
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel.name}/create">FORCE UPDATE</a>
           {else}
           <span class="label label-warning">update required!</span>&nbsp;
-          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel.name}/create">DROP / CREATE</a></li>
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel.name}/create">DROP / CREATE</a>
           {/if}
         {else}
           <span class="label label-important">not installed!</span>&nbsp;
-          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel.name}/create">DROP / CREATE</a></li>
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel.name}/create">DROP / CREATE</a>
         {/if}        
         </li>
         {/foreach}
@@ -40,16 +41,17 @@
         {$model.name}
         {if $model.is_installed}
           {if $model.is_uptodate}
-          <span class="label label-success">up to date</span>
+          <span class="label label-success">up to date</span>&nbsp;
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel.name}/create">FORCE UPDATE</a>
           {else}
           <span class="label label-warning">update required!</span>&nbsp;
-          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$model.name}/create">DROP / CREATE</a></li>
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$model.name}/create">DROP / CREATE</a>
           {/if}
         {else}
           <span class="label label-important">not installed!</span>&nbsp;
-          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$model.name}/create">DROP / CREATE</a></li>
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$model.name}/create">DROP / CREATE</a>
         {/if}
-        
+        </li>
         {/foreach}
       </ul>
     </li>
