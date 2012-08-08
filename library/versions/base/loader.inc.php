@@ -227,7 +227,7 @@ class VLoader {
 				if ($classpath) return $classpath;
 			}
 				
-			throw new Exception("Unknown class_path layout: ".$__classname);
+			// TODO Debugging, incorrect class_path layout
 		}
 		
 		return false;

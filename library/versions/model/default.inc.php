@@ -63,8 +63,19 @@ abstract class VModelDefault extends VBasic {
 	  			$parts[$k] = ucfirst($v);
 	  		}
 	  		$classname = implode('', $parts);
-	  		if (class_exists($classname, true)) {
+	  		VLoader::autoload($classname);
+		  	if (class_exists($classname, true)) {
 	  			return new $classname($this->$attr);
+	  		} else {
+		  		array_shift($parts);
+	  			foreach ($parts as $k => $v) {
+		  			$parts[$k] = ucfirst($v);
+		  		}
+		  		$classname = implode('', $parts);
+		  		VLoader::autoload($classname);
+		  		if (class_exists($classname, true)) {
+		  			return new $classname($this->$attr);
+		  		}
 	  		}
 	  		
 	  	} 

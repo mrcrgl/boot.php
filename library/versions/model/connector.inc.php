@@ -113,6 +113,20 @@ abstract class VModelConnector extends VModelDefault {
     		foreach ($parts as $pkey => $pval) {
     			$classname .= ucfirst($pval);
     		}
+    		VLoader::autoload($classname);
+    		if (!class_exists($classname)) {
+    			array_shift($parts);
+	    		$classname = "";
+	    		foreach ($parts as $pkey => $pval) {
+	    			$classname .= ucfirst($pval);
+	    		}
+	    		
+	    		VLoader::autoload($classname);
+	    		if (!class_exists($classname)) {
+	    			continue;
+	    		}
+    		}
+    		
     		
     		try {
     			$obj = new $classname( (($this->isValid()) ? $this->$attribute : false) );

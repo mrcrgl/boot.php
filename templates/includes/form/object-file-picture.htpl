@@ -1,0 +1,13 @@
+
+
+<input type='hidden' name='{$name}[_upload_ident]' value='{$unique}' />
+<div class="control-group">
+  <label class="control-label" for="{$unique}">{$label|default:'Bild'}</label>
+  <div class="controls">
+    <input class="input-file" id="{$unique}" name="{$unique}" type="file">
+    {if $help}<p class="help-block">{text ident=$help}</p>{/if}
+    {if $object && $object->isValid()}
+      <img style="max-width: 250px" src="/media/{$object->path}" />
+    {/if}
+  </div>
+</div>
