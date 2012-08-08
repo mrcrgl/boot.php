@@ -1,5 +1,7 @@
 <?php
 
+VLoader::import('versions.utilities.string');
+
 class ComponentCrudViewModel extends VApplicationView {
 	
 	var $object_name = null;

@@ -1,7 +1,7 @@
 <?php
 
 
-require_once VLIB.DS.'versions'.DS.'string.inc.php';
+require_once VLIB.DS.'versions'.DS.'utilities'.DS.'string.inc.php';
 require_once VLIB.DS.'versions'.DS.'debug'.DS.'debug.inc.php';
 
 /**

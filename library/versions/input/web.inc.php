@@ -1,6 +1,5 @@
 <?php
 
-
 class VInputWeb extends VInput {
 	
 	public function __construct() {
@@ -10,6 +9,8 @@ class VInputWeb extends VInput {
 	
 	
 	public function get($attribute, $default=null, $method=null) {
+		
+		VLoader::import('versions.utilities.string');
 		
 		if (is_null($method)) {
 			$data =& $_REQUEST;
