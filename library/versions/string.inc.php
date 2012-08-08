@@ -43,6 +43,8 @@ VLoader::import('phputf8.strcasecmp');
  */
 abstract class VString {
 	
+	static $sanitize_chars = array();
+	
 	/**
 	 * Increment styles.
 	 *
