@@ -41,11 +41,13 @@ class ComponentAuthModelLogin extends VObject {
   
   public function doLogin($username, $password) {
     if (!Validator::is($username, 'filled')) {
-      $this->setErrorMsg("loginUserRequired");
+      #$this->setErrorMsg("loginUserRequired");
+      VMessages::_('Error', 'loginUserRequired', 'error');
       return false;
     }
     if (!Validator::is($password, 'filled')) {
-      $this->setErrorMsg("loginPassRequired");
+      #$this->setErrorMsg("loginPassRequired");
+      VMessages::_('Error', 'loginPassRequired', 'error');
       return false;
     }
     $managerClass  = $this->loginType."Manager";
@@ -54,7 +56,8 @@ class ComponentAuthModelLogin extends VObject {
     if (is_object($this->objUser) && $this->objUser->isValid()) {
       
       if ($this->strPermission && !$this->objUser->hasPermission($this->strPermission, true)) {
-        $this->setErrorMsg("permissionDenied");
+        #$this->setErrorMsg("permissionDenied");
+        VMessages::_('Error', 'permissionDenied', 'error');
         unset($this->objUser);
         return false;
       }
@@ -62,7 +65,8 @@ class ComponentAuthModelLogin extends VObject {
       $this->loginSuccessful();
       return true;
     } else {
-      $this->setErrorMsg("invalidUserPasswordCombi");
+      #$this->setErrorMsg("invalidUserPasswordCombi");
+      VMessages::_('Error', 'invalidUserPasswordCombi', 'error');
       return false;
     }
   }

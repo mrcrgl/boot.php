@@ -8,24 +8,10 @@
  */
 class VModelManagerSearch extends VModelManagerDefault {
 	
-	var $object_name = null;
-  
-  var $object = null;
-  
-  var $search_keywords = array();
+	var $search_keywords = array();
   
   
-  /**
-   * 
-   * Default constructor
-   */
-  function __construct() {
-  	
-  	$object = str_replace("Manager", "", get_class($this));
-  	$this->object_name = $object;
-  	$this->object = new $object();
-  	
-  }
+  
   
   public function getAll() {
   	if (!is_object($this->object)) {

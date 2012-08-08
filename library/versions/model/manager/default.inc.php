@@ -29,6 +29,87 @@ abstract class VModelManagerDefault extends VObject {
    
   var $ignore_object_state = false;
   
+  var $object_name = null;
+  
+  var $object = null;
+  
+  var $_filter = array();
+  
+	/**
+   * 
+   * Default constructor
+   */
+  function __construct() {
+  	
+  	$object = str_replace("Manager", "", get_class($this));
+  	$this->object_name = $object;
+  	$this->object = new $object();
+  	
+  }
+  
+  /**
+   * 
+   * Add filter
+   * @param string $column
+   * @param string $value
+   * @param string $condition
+   */
+  public function filter($column, $value=null, $condition='eq') {
+  	if (!$this->object->hasField($column)) {
+  		return false;
+  	}
+  	
+  	switch ($condition) {
+  		case "eq":
+  			$cond = '=';
+  			$value = "'".$value."'";
+  			break;
+  		case "neq":
+  			$cond = '!=';
+  			$value = "'".$value."'";
+  			break;
+  		case "lt":
+  			$cond = '>';
+  			$value = "'".$value."'";
+  			break;
+  		case "gt":
+  			$cond = '<';
+  			$value = "'".$value."'";
+  			break;
+  		case "like":
+  			$cond = '<';
+  			$value = "'".$value."'";
+  			break;
+  		case "in":
+  			$cond = 'IN';
+  			if (!is_array($value)) return false;
+  			$value = "('".implode("', '", $value)."')";
+  			break;
+  		case "not-in":
+  			$cond = 'IN';
+  			if (!is_array($value)) return false;
+  			$value = "('".implode("', '", $value)."')";
+  			break;
+  		case "null":
+  			$cond = 'IS NULL';
+  			$value = '';
+  			break;
+  		case "not-null":
+  			$cond = 'IS NOT NULL';
+  			$value = '';
+  			break;
+  	}
+  	
+  	$clause = sprintf(" (`%s` %s %s) ", $column, $cond, $value);
+  	$this->_filter[] = $clause;
+  	
+  	return true;
+  }
+  
+	public function clearFilter() {
+  	$this->$_filter = array();
+  }
+  
   /*
    * getObjects
    * 
@@ -92,6 +173,10 @@ abstract class VModelManagerDefault extends VObject {
     
   	if ($this->hotel_filter && $this->object->hasField('hotel_uid')) {
       $where .= " AND `hotel_uid` = '".$this->hotel_filter."' ";
+    }
+    
+    if (count($this->_filter)) {
+    	$where .= implode(" AND ", $this->_filter);
     }
     
     return $where;
