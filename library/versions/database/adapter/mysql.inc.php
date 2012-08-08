@@ -371,6 +371,35 @@ class VDatabaseMysql extends VDatabase {
   }
   
   /**
+   *
+   * function to get an array with all columns of givin table
+   *
+   */ 
+  function getListOfColumns($table) {
+
+    // the sql-query for getting all tables out of this db
+    $strSql = sprintf("SHOW COLUMNS FROM `%s`", $table);
+
+    // send the query to database and fetch the ressource
+    $resSqlResult = $this->query($strSql);
+    
+    // create an empty array
+    $arrTableList = array();
+
+    // loop - "make" out of each line of the ressource an array
+    while($arrTable = mysql_fetch_array($resSqlResult)) {
+    
+      // push the data into the empty array
+      array_push($arrTableList, $arrTable[0]);
+    
+    }
+    
+    // return the array, which contains now all data
+    return $arrTableList;
+    
+  }
+  
+  /**
    * Returns the version of the MySQL db used
    *
    * @return string

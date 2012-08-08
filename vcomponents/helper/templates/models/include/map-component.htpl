@@ -14,7 +14,20 @@
     <li>VModels <span class="badge badge-info">{$map.vmodels|@count}</span>
       <ul>
         {foreach from=$map.vmodels item=vmodel}
-        <li>{$vmodel} <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel}/create">DROP / CREATE</a></li>
+        <li>
+        {$vmodel.name}
+        {if $vmodel.is_installed}
+          {if $vmodel.is_uptodate}
+          <span class="label label-success">up to date</span>
+          {else}
+          <span class="label label-warning">update required!</span>&nbsp;
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel.name}/create">DROP / CREATE</a></li>
+          {/if}
+        {else}
+          <span class="label label-important">not installed!</span>&nbsp;
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$vmodel.name}/create">DROP / CREATE</a></li>
+        {/if}        
+        </li>
         {/foreach}
       </ul>
     </li>
@@ -23,7 +36,20 @@
     <li>Models <span class="badge badge-info">{$map.models|@count}</span>
       <ul>
         {foreach from=$map.models item=model}
-        <li>{$model} <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$model}/create">DROP / CREATE</a></li>
+        <li>
+        {$model.name}
+        {if $model.is_installed}
+          {if $model.is_uptodate}
+          <span class="label label-success">up to date</span>
+          {else}
+          <span class="label label-warning">update required!</span>&nbsp;
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$model.name}/create">DROP / CREATE</a></li>
+          {/if}
+        {else}
+          <span class="label label-important">not installed!</span>&nbsp;
+          <a class="btn btn-mini" href="/{$_document->getUrlPrefix()}database/{$model.name}/create">DROP / CREATE</a></li>
+        {/if}
+        
         {/foreach}
       </ul>
     </li>

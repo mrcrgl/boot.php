@@ -15,7 +15,11 @@ class ComponentHelperViewModels extends VApplicationView {
 		
 		$document->assign('map', $return);
 		
-		VMessages::_('', 'Datenbank: xy');
+		$host     = VSettings::get('database.host', 		'undef');
+		$database = VSettings::get('database.database', 'undef');
+		$user     = VSettings::get('database.user', 		'undef');
+		
+		VMessages::_('', sprintf('U\'re modifying host: %s / database: %s / user: %s', $host, $database, $user));
 	}
 	
 	public function sql_create() {
@@ -63,14 +67,27 @@ class ComponentHelperViewModels extends VApplicationView {
 		$return = array();
 		
 		$return['name'] = $name; 
+		$return['vmodels'] = array();
+		$return['models'] = array();
 		
 		$ro = new ReflectionObject($urls);
 		$models_path = (($is_root) ? realpath(dirname($ro->getFileName()).DS.'..'.DS.'models') : dirname($ro->getFileName()).DS.'models');
 		$component_root_path = (($is_root) ? null : dirname($ro->getFileName()));
 		#printf("Models coud be here: %s".NL, $models_path);
 		
-		$return['vmodels'] = $this->getRequiredModels($component_root_path);
-		$return['models'] = $this->scanModels($models_path);
+		$vmodels = $this->getRequiredModels($component_root_path);
+		$models = $this->scanModels($models_path);
+		
+		/*
+		 * array('name' => "foo", 'is_installed' => bool, 'is_uptodate' => bool)
+		 */
+		foreach ($vmodels as $model) {
+			$return['vmodels'][] = $this->checkModel($model);
+		}
+		foreach ($models as $model) {
+			$return['models'][] = $this->checkModel($model);
+		}
+		
 		
 		foreach ($urls->getPattern() as $destination) {
 			
@@ -88,6 +105,19 @@ class ComponentHelperViewModels extends VApplicationView {
 			
 			$return['components'][] = $this->parsePattern($surls, $component_ident);
 		}
+		return $return;
+	}
+	
+	private function checkModel($model) {
+		$return = array(
+			'name' 					=> $model, 
+			'is_installed' 	=> false, 
+			'is_uptodate' 	=> false
+		);
+		
+		$obj = new $model();
+		$return['is_installed'] = $obj->isSqlInstalled();
+		$return['is_uptodate']  = $obj->isSqlUpToDate();
 		return $return;
 	}
 	

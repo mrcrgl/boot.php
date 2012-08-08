@@ -1,6 +1,13 @@
 <?php
 
 class VMessages extends VObject {
+	/**
+	 * @desc Set a form message to browser
+	 * 
+	 * @param string $headline
+	 * @param string $message
+	 * @param success|info|error $type
+	 */
 	static function _($headline, $message=false, $type='info') {
 
   	$session =& VFactory::getSession();

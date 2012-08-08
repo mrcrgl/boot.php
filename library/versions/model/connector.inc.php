@@ -180,18 +180,63 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
   
-  public function getSQL($override=false) {
-  	
+  public function isSqlInstalled() {
   	$datamap = $this->_DataMap;
-  	$hexuid  = $datamap['_usehexuid'];
+  	$is_installed = true;
   	
+  	$dbo =& VFactory::getDatabase();
+  	$tables_installed = $dbo->getListOfTables();
+  	
+  	foreach ($datamap as $key => $attributes) {
+  		if (!is_array($attributes) || preg_match('/^_/', $key)) continue;
+  		
+  		#printf("Required: %s".NL, $attributes['_table']);
+  		if (!in_array($attributes['_table'], $tables_installed)) {
+  			$is_installed = false;
+  		}
+  	}
+  	
+  	
+  	return $is_installed;
+  }
+  
+	public function isSqlUpToDate() {
+  	$tablecolumns = $this->getTableColumns();
+  	$is_uptodate = true;
+  	
+  	$dbo =& VFactory::getDatabase();
+  	#$tables_installed = $dbo->getListOfTables();
+  	
+  	foreach ($tablecolumns as $table => $array_columns) {
+  		
+  		$columns = $dbo->getListOfColumns($table);
+  		
+  		if (count($columns) != count($array_columns)) {
+  			$is_uptodate = false;
+  		} else {
+	  		foreach ($array_columns as $ident => $column) {
+		  		#printf("Required column: %s.%s".NL, $table, $column);
+		  		if (!in_array($column, $columns)) {
+		  			$is_uptodate = false;
+		  		}
+	  		}
+  		}
+  		
+  	}
+  	
+  	
+  	return $is_uptodate;
+  }
+  
+  public function getTableColumns() {
+  	$datamap = $this->_DataMap;
   	$tables = array();
   	
   	foreach ($datamap as $key => $attributes) {
   		if (is_array($attributes) && !preg_match('/^_/', $key)) {
   			
   			$table = $attributes['_table'];
-			$tables[$table] = array();
+				$tables[$table] = array();
   			foreach (array('_unique', '_locale', '_key', '_value') as $special_field) {
   				if (isset($attributes[$special_field]) && strlen($attributes[$special_field]) > 0) {
   					$tables[$table][($attributes[$special_field])] = $attributes[$special_field];
@@ -212,6 +257,16 @@ abstract class VModelConnector extends VModelDefault {
   			
   		}
   	}
+  	
+  	return $tables;
+  }
+  
+  public function getSQL($override=false) {
+  	
+  	$datamap = $this->_DataMap;
+  	$hexuid  = $datamap['_usehexuid'];
+  	
+  	$tables = $this->getTableColumns();
   	
   	$return1 = array();
   	$return2 = array();
