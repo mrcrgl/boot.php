@@ -82,7 +82,7 @@ abstract class VModelDefault extends VBasic {
         return $this->getAttribute($memberName, $table);
       }
     }
-    return false;
+    return null;
   }
   
   public function getType() {
