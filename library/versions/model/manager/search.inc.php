@@ -10,9 +10,6 @@ class VModelManagerSearch extends VModelManagerDefault {
 	
 	var $search_keywords = array();
   
-  
-  
-  
   public function getAll() {
   	if (!is_object($this->object)) {
   		throw new Exception("Required object but ".gettype($this->object)." received.");

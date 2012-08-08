@@ -176,7 +176,7 @@ abstract class VModelManagerDefault extends VObject {
     }
     
     if (count($this->_filter)) {
-    	$where .= implode(" AND ", $this->_filter);
+    	$where .= " AND ".implode(" AND ", $this->_filter);
     }
     
     return $where;
