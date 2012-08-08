@@ -117,7 +117,9 @@ class ComponentHelperViewModels extends VApplicationView {
 		
 		$obj = new $model();
 		$return['is_installed'] = $obj->isSqlInstalled();
-		$return['is_uptodate']  = $obj->isSqlUpToDate();
+		if ($return['is_installed']) {
+			$return['is_uptodate']  = $obj->isSqlUpToDate();
+		}
 		return $return;
 	}
 	
