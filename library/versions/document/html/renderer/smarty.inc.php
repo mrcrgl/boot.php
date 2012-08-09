@@ -67,6 +67,25 @@ class VDocumentRendererHtmlSmarty extends Smarty {
 		$this->loadUserPlugins();
 	}
 	
+	public function unshiftTemplateDir($dir) {
+		$directories = $this->getTemplateDir();
+		array_unshift($directories, $dir);
+		$this->setTemplateDir($directories);
+	}
+	
+	public function appendTemplateDirPart($part) {
+		$directories = $this->getTemplateDir();
+		foreach ($directories as $directory) {
+			#print $directory.NL;
+			if (!substr($directory, -1) == DS) {
+				$directory = $directory.DS;
+			}
+			$directory = $directory.$part;
+			$this->unshiftTemplateDir($directory);
+		}
+		#var_dump($this->getTemplateDir());
+	}
+	
 	public function loadUserPlugins() {
 		
 		$extension_path = VLIB.DS.'Smarty'.DS.'user_plugins';

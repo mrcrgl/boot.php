@@ -130,9 +130,20 @@ class VUrl {
 					/*
 					 * Url prefix to able the component building urls
 					 */
-					#var_dump(str_replace($remaining_part, '', $chained_uri));
-					$document->setUrlPrefix( str_replace($remaining_part, '', $chained_uri) );
-					#print $document->getUrlPrefix();
+					#print "Chained: ".$chained_uri.NL;
+					#print "Remaining: ".$remaining_part.NL;
+					#print(str_replace($remaining_part, '', $chained_uri));
+					
+					if (substr($chained_uri, '-'.strlen($remaining_part)) == $remaining_part) {
+						#print "TRUE substr($chained_uri, 0, strlen($remaining_part)) == $remaining_part".NL;
+						$document->setUrlPrefix( substr($chained_uri, 0, strlen($chained_uri)-(strlen($remaining_part))) );
+					} else {
+						$document->setUrlPrefix( $chained_uri );
+					}
+					#print "URL Prefix: ".$document->getUrlPrefix().NL;
+					#print NL;
+					#$document->setUrlPrefix( str_replace($remaining_part, '', $chained_uri) );
+					
 					return $com_urls->parse($remaining_part, $chained_uri);
 					
 				} else {

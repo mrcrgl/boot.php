@@ -18,7 +18,10 @@ class ComponentCrudViewModel extends VApplicationView {
 		$this->fetchObject();
 		
 		$document =& VFactory::getDocument();
-  	$document->setTemplate('crud/create.htpl');
+		$renderer =& $document->getRenderer();
+		$renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
+		
+		$document->setTemplate('crud/create.htpl');
   	$document->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
   	
   	$input =& VFactory::getInput();
@@ -35,7 +38,10 @@ class ComponentCrudViewModel extends VApplicationView {
 		$this->fetchObject();
 		
 		$document =& VFactory::getDocument();
-  	$document->setTemplate('crud/read.htpl');
+  	$renderer =& $document->getRenderer();
+		$renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
+		
+		$document->setTemplate('crud/read.htpl');
   	$document->assign('user_defined_template', $this->getAlternateTemplate('read.htpl'));
   	
   	
@@ -45,7 +51,10 @@ class ComponentCrudViewModel extends VApplicationView {
 		$this->fetchObject();
 		
 		$document =& VFactory::getDocument();
-  	$document->setTemplate('crud/create.htpl');
+  	$renderer =& $document->getRenderer();
+		$renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
+		
+		$document->setTemplate('crud/create.htpl');
   	$document->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
   	
 		$input =& VFactory::getInput();
@@ -63,6 +72,9 @@ class ComponentCrudViewModel extends VApplicationView {
 	private function fetchObject() {
 		
   	$input =& VFactory::getInput();
+  	
+  	$parent = $input->get('parent', false, 'get');
+  	
   	$this->object_name = $input->get('object_name', null, 'get');
   	$this->object_uid = $input->get('object_uid', false, 'get');
   	$this->object_manager_name = $this->object_name.'Manager';
@@ -77,6 +89,13 @@ class ComponentCrudViewModel extends VApplicationView {
   	$this->object_manager->set('ignore_object_state', true);
   	
   	$document =& VFactory::getDocument();
+  	
+  	if ($parent) {
+  		$this->object_manager->filter($parent, $input->get($parent, null, 'get'));
+  		$document->assign($parent, $input->get($parent, null, 'get'));
+  	}
+  	
+  	
   	$document->assign('object', &$this->object);
   	$document->assign('manager', &$this->object_manager);
   	
@@ -85,7 +104,15 @@ class ComponentCrudViewModel extends VApplicationView {
 	private function getAlternateTemplate($__method) {
 		$path = strtolower(implode(DS, VString::splitCamelCase($this->object_name)));
   	
+		
   	$newpath = 'crud'.DS.substr($path, strpos($path, '/model/')+strlen('/model/')).DS.$__method;
+  	return $newpath;
+	}
+	
+	private function getAlternateTemplatePath() {
+		$path = strtolower(implode(DS, VString::splitCamelCase($this->object_name)));
+  	
+  	$newpath = 'crud'.DS.substr($path, strpos($path, '/model/')+strlen('/model/'));
   	return $newpath;
 	}
 	
