@@ -203,4 +203,5 @@ class VUrl {
 	function getPattern() {
 		return $this->pattern;
 	}
+	
 }

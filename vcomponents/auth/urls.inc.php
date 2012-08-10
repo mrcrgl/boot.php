@@ -3,7 +3,8 @@
 class ComponentAuthUrls extends VUrl {
 	
 	var $pattern = array(
-		'^/$' => 'auth.login.show'
+		'^/$' 			=> 'auth.login.show',
+		'^logout/$' => 'auth.login.logout'
 	);
 	
 }

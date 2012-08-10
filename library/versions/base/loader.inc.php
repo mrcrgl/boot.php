@@ -99,7 +99,8 @@ class VLoader {
 				else {
 					foreach (self::$extensions as $ext) {
 						if (strpos($file, $ext) !== false) {
-							self::file($__path.DS.$file);
+							#self::file($__path.DS.$file);
+							self::dicoverClassesOfFile($__path.DS.$file);
 						}
 					}
 				}
@@ -109,6 +110,23 @@ class VLoader {
 		else {
 			VDebug::report(new VDebugMessage("Directory does not exist: ".$__path), DEBUG_NOTICE, 1);
 		}
+	}
+	
+	static function dicoverClassesOfFile($file) {
+		$php_file = file_get_contents($file);
+		$tokens = token_get_all($php_file);
+		$class_token = false;
+		foreach ($tokens as $token) {
+		  if (is_array($token)) {
+		    if ($token[0] == T_CLASS) {
+		       $class_token = true;
+		    } else if ($class_token && $token[0] == T_STRING) {
+		    	VLoader::register($token[1], $file);
+		      $class_token = false;
+		    }
+		  }       
+		}
+		return true;
 	}
 	
 	/**

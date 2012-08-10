@@ -54,9 +54,14 @@ class VDocumentHtml extends VDocument {
 	 */
 	public function assignDocumentVars() {
 		$renderer =& $this->getRenderer();
+		$session  =& VFactory::getSession();
 		
 		$renderer->assign('_document', &$this);
 		
+		$login =& $session->get('login');
+  	if (is_object($login) && $login->loggedIn()) {
+  		$renderer->assign('_user', &$login->obj);
+  	}
 	}
 	
 	/**

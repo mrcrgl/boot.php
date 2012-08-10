@@ -72,7 +72,10 @@ class ComponentAuthModelLogin extends VObject {
   }
   
   public function doLogout() {
-    Instance::_unset('Login');
+    
+  	$session =& VFactory::getSession();
+  	$session->clear('login');
+  	
     unset($this->objUser);
     return true;
   }

@@ -32,7 +32,8 @@ class ComponentAuthViewLogin extends VApplicationView {
   public function verify() {
   	
   	$document =& VFactory::getDocument();
-  	$input =& VFactory::getInput();
+  	$input 		=& VFactory::getInput();
+  	$session 	=& VFactory::getSession();
   	
   	if ($input->get('do_login', false, 'post')) {
       $refLogin = new ComponentAuthModelLogin("User");
@@ -48,8 +49,9 @@ class ComponentAuthViewLogin extends VApplicationView {
       $refLogin->doLogin( $input->get('username', null, 'post'), $input->get('password', null, 'post'));
       if ($refLogin->loggedIn()) {
         $document->assign('login', true);
+        $session->set('login', &$refLogin);
       } else {
-        $document->assign('errors', $refLogin->getErrorMsgs());
+        #$document->assign('errors', $refLogin->getErrorMsgs());
         $document->assign('username', $input->get('username', null, 'post'));
         
       }
@@ -57,6 +59,25 @@ class ComponentAuthViewLogin extends VApplicationView {
     
     header('Location: '.$input->get('HTTP_REFERER', '/', 'server'));
     exit;
+  }
+  
+  public function logout() {
+  	$document =& VFactory::getDocument();
+  	$input 		=& VFactory::getInput();
+  	$session 	=& VFactory::getSession();
+  	
+  	#$document->setTemplate('login.htpl');
+  	
+  	$login =& $session->get('login');
+  	if (is_object($login)) {
+  		$login->doLogout();
+  	}
+  	
+  	
+  	VMessages::_('Ok', 'Logout erfolgreich!', 'success');
+  	
+  	header( sprintf('Location: /%s', $document->getUrlPrefix()) );
+  	exit;
   }
   /*
   public function show() {
