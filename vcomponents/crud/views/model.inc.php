@@ -56,6 +56,7 @@ class ComponentCrudViewModel extends VApplicationView {
 		
 		$document->setTemplate('crud/create.htpl');
   	$document->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
+  	$document->assign('delete_url', sprintf("/%s%s/delete", $document->getUrlPrefix(), $this->object->uid));
   	
 		$input =& VFactory::getInput();
   	if (strtolower($input->getMethod()) == 'post') {
@@ -64,9 +65,16 @@ class ComponentCrudViewModel extends VApplicationView {
 	}
 	
 	public function delete() {
+		$this->fetchObject();
+		
 		$document =& VFactory::getDocument();
-  	#$document->setTemplate('index.htpl');
+		
+		$this->object->delete();
+		
+		VMessages::_('Ok', 'L&ouml;schung erfolgreich!', 'success');
   	
+		header( sprintf("Location: /%s", $document->getUrlPrefix()) );
+  	exit;
 	}
 	
 	private function fetchObject() {
@@ -124,6 +132,12 @@ class ComponentCrudViewModel extends VApplicationView {
 			$params[$key] = $input->get($key, null, 'post');
 		}
 		#var_dump($params);
-		$this->object->update($params);
+		$bok = $this->object->update($params);
+		
+		if (!$bok) {
+			VMessages::_('Error', 'Speichern fehlgeschlagen', 'error');
+		} else {
+			VMessages::_('Ok', 'Speichern erfolgreich!', 'success');
+		}
 	}
 }
