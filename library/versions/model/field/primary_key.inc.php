@@ -2,7 +2,9 @@
 
 class VModelFieldPrimaryKey extends VModelField {
 	
+	var $primary_key = true;
 	
+	var $unique = false;
 	
 	var $validators = array('hexuid');
 	

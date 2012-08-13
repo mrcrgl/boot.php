@@ -89,6 +89,10 @@ abstract class VModelConnector extends VModelDefault {
     parent::__construct($attributes);
   }
   
+	public function getModelVersion() {
+		return 1;
+	}
+  
   public function insert($param, $what='default') {
     $this->update($param, $what);
   }

@@ -16,6 +16,9 @@
         {foreach from=$map.vmodels item=vmodel}
         <li>
         {$vmodel.name}
+        {if $vmodel.is_deprecated_layout}
+          <span class="label label-important">deprecated model layout!</span>&nbsp;
+        {/if}
         {if $vmodel.is_installed}
           {if $vmodel.is_uptodate}
           <span class="label label-success">up to date</span>&nbsp;
@@ -39,6 +42,9 @@
         {foreach from=$map.models item=model}
         <li>
         {$model.name}
+        {if $model.is_deprecated_layout}
+          <span class="label label-important">deprecated model layout!</span>&nbsp;
+        {/if}
         {if $model.is_installed}
           {if $model.is_uptodate}
           <span class="label label-success">up to date</span>&nbsp;

@@ -45,6 +45,32 @@ class Validator {
     return true;
   }
   
+  public static function checkField($field_declaration, $value) {
+  	if ($field_declaration->get('null') === false && Validator::is($value, 'null')) {
+  		printf("null is not accepted".NL);
+  		return false;
+  	}
+  	if ($field_declaration->get('blank') === false && Validator::is($value, 'blank')) {
+  		printf("blank is not accepted".NL);
+  		return false;
+  	}
+  	if (in_array($field_declaration->get('type'), array('integer', 'string', 'float', 'decimal'))) {
+	  	if (!Validator::is($value, $field_declaration->get('type'), $field_declaration->get('min_length'), $field_declaration->get('max_length'))) {
+	  		printf("%s with minlength %d and maxlength %d is not accepted".NL, $field_declaration->get('type'), $field_declaration->get('min_length'), $field_declaration->get('max_length'));
+  			return false;
+	  	}
+  	}
+  	
+  	foreach ($field_declaration->get('validators') as $validator) {
+  		if (!Validator::is($value, $validator)) {
+  			printf("$validator is required".NL);
+  			return false;
+  		}
+  	}
+  	
+  	return true;
+  } 
+  
   public static function regexp($value, $regexp, $isTrueIfEmpty=false, $isCaseSensitive=false) {
     if (!Validator::is($value, 'filled') && $isTrueIfEmpty) {
       true;
@@ -81,8 +107,35 @@ class Validator {
     return false;
   }
   
+	public static function is_string($value) {
+    if (is_string($value)) {
+      return true;
+    }
+    
+    Validator::setError("IntegerExpected");
+    return false;
+  }
+  
   public static function is_filled($value) {
     if (strlen($value) > 0) {
+      return true;
+    }
+    
+    Validator::setError("StringIsEmpty");
+    return false;
+  }
+  
+	public static function is_blank($value) {
+    if (strlen($value) == 0) {
+      return true;
+    }
+    
+    Validator::setError("StringIsEmpty");
+    return false;
+  }
+  
+	public static function is_null($value) {
+    if (is_null($value)) {
       return true;
     }
     

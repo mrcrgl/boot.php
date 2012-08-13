@@ -8,7 +8,11 @@ class VModelField extends VObject {
 	
 	var $blank = false;
 	
-	//var $choices
+	var $type = 'string';
+
+	var $min_length = false;
+	
+	var $max_length = false;
 	
 	var $db_column = null;
 	
@@ -42,9 +46,14 @@ class VModelField extends VObject {
 		
 	}
 	
-	public static function getInstance($type, $model, $column, $options=array()) {
+	public static function getInstance($model, $column, $type=null, $options=array()) {
 		
 		if (!isset(self::$_instances[$model]) || !isset(self::$_instances[$model][$column])) {
+			if (is_null($type)) {
+				// TODO Set Debug message
+				return false;
+			}
+			
 			$classname = sprintf('VModelField%s', $type);
 			VLoader::autoload($classname);
 			
@@ -60,16 +69,18 @@ class VModelField extends VObject {
 	
 	public static function prepareModel($model) {
 		
-		if (isset(self::$_instances[$model])) {
+		$model_name = get_class($model);
+		
+		if (isset(self::$_instances[$model_name])) {
 			return true;
 		}
 		
-		$class_vars = get_class_vars($model);
+		$class_vars = get_class_vars($model_name);
 		/*print "<pre>";
 		var_dump($class_vars);
 		print "</pre>";
 		*/
-		$ref =& VModelField::getInstance('PrimaryKey', $model, 'uid', array('db_column' => 'uid'));
+		#$ref =& VModelField::getInstance($model_name, 'uid', 'PrimaryKey', array('db_column' => 'uid'));
 		
 		foreach ($class_vars as $column => $declaration) {
 			if (preg_match('/^_/', $column)) continue;
@@ -113,7 +124,8 @@ class VModelField extends VObject {
 			// call the vmodel::method
 			#var_dump($options);print "<br />";
 			
-			$ref =& VModelField::getInstance($type, $model, $column, $options);
+			$ref =& VModelField::getInstance($model_name, $column, $type, $options);
+			$model->set($column, $ref->default, true);
 		}
 	}
 }

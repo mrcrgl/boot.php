@@ -1,12 +1,12 @@
 <?php
 
-class VModelFieldSmallInteger extends VModelFieldInteger {
+class VModelFieldMediumInteger extends VModelFieldInteger {
 	
 	var $type = 'integer';
+
+	var $min_value = -8388608;
 	
-	var $min_value = -32768;
-	
-	var $max_value = 32767;
+	var $max_value = 8388607;
 	
 	var $unsigned  = false;
 	

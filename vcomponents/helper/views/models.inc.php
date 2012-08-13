@@ -13,6 +13,9 @@ class ComponentHelperViewModels extends VApplicationView {
 		
 		$return = $this->parsePattern($project_urls, 'project', true);
 		
+		
+		
+		#$document->assign('db_designer', &$designer);
 		$document->assign('map', $return);
 		
 		$host     = VSettings::get('database.host', 		'undef');
@@ -43,17 +46,42 @@ class ComponentHelperViewModels extends VApplicationView {
 		
 		$model = new $classname();
 		
-		$sql = $model->getSQL(true);
-		// DROP Tables 
-		if (isset($sql[1]) && is_array($sql[1])) {
-			foreach ($sql[1] as $tmp) {
-				$dbo->userQuery($tmp);
+		if ($model->getModelVersion() == 1) {
+			$sql = $model->getSQL(true);
+			// DROP Tables 
+			if (isset($sql[1]) && is_array($sql[1])) {
+				foreach ($sql[1] as $tmp) {
+					$dbo->userQuery($tmp);
+				}
 			}
-		}
-		// CREATE Tables 
-		if (isset($sql[0]) && is_array($sql[0])) {
-			foreach ($sql[0] as $tmp) {
-				$dbo->userQuery($tmp);
+			// CREATE Tables 
+			if (isset($sql[0]) && is_array($sql[0])) {
+				foreach ($sql[0] as $tmp) {
+					$dbo->userQuery($tmp);
+				}
+			}
+		} elseif ($model->getModelVersion() == 2) {
+			$designer 		= VDatabaseDesigner::getInstance();
+			$drop_table 	= $designer->getDropTable($model);
+			$create_table = $designer->getCreateTable($model);
+			$create_index = $designer->getCreateIndex($model);
+			// DROP Tables 
+			if (isset($drop_table) && is_array($drop_table)) {
+				foreach ($drop_table as $tmp) {
+					$dbo->userQuery($tmp);
+				}
+			}
+			// CREATE Tables 
+			if (isset($create_table) && is_array($create_table)) {
+				foreach ($create_table as $tmp) {
+					$dbo->userQuery($tmp);
+				}
+			}
+			// CREATE Indexes 
+			if (isset($create_index) && is_array($create_index)) {
+				foreach ($create_index as $tmp) {
+					$dbo->userQuery($tmp);
+				}
 			}
 		}
 		
@@ -112,13 +140,26 @@ class ComponentHelperViewModels extends VApplicationView {
 		$return = array(
 			'name' 					=> $model, 
 			'is_installed' 	=> false, 
-			'is_uptodate' 	=> false
+			'is_uptodate' 	=> false,
+			'is_deprecated_layout' => false
 		);
 		
+		$designer = VDatabaseDesigner::getInstance();
+		
 		$obj = new $model();
-		$return['is_installed'] = $obj->isSqlInstalled();
+		if ($obj->getModelVersion() == 1) {
+			$return['is_installed'] = $obj->isSqlInstalled();
+			$return['is_deprecated_layout'] = true;
+		} elseif ($obj->getModelVersion() == 2) {
+			$return['is_installed'] = $designer->isInstalled($obj);
+		}
+		
 		if ($return['is_installed']) {
-			$return['is_uptodate']  = $obj->isSqlUpToDate();
+			if ($obj->getModelVersion() == 1) {
+				$return['is_uptodate'] = $obj->isSqlUpToDate();
+			} elseif ($obj->getModelVersion() == 2) {
+				$return['is_uptodate'] = $designer->isUpToDate($obj);
+			}
 		}
 		return $return;
 	}
@@ -180,7 +221,9 @@ class ComponentHelperViewModels extends VApplicationView {
 		      $temp = new $token[1]();
 		      if (isset($temp->_DataMap)) {
 		      	$classes[] = $token[1];
-		      } 
+		      }
+		      if (is_subclass_of($token[1], 'VModelStructure'))
+		      	$classes[] = $token[1];
 		    	$class_token = false;
 		    }
 		  }       

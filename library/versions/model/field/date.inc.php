@@ -2,6 +2,8 @@
 
 class VModelFieldDate extends VModelField {
 	
+	var $type = 'date';
+	
 	var $auto_now = false;
 	
 	var $auto_now_add = false;
