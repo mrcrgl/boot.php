@@ -34,6 +34,15 @@ abstract class VArray {
 	
 	static public function parseOptions($unparsed, $temp=array()) {
 		if (is_array($unparsed)) return $unparsed;
+		
+		// fetch strings in ""
+		while (preg_match('/("[^\"\"]*")/', $unparsed, $tmpmatch)) {
+			#var_dump($tmpmatch);
+			$unique = uniqid();
+			$temp[$unique] = substr($tmpmatch[1], 1, -1);
+			$unparsed = str_replace($tmpmatch[1], $unique, $unparsed);
+		}
+		
 		$unparsed = preg_replace('/[\n\t\ ]/', '', $unparsed);
 		#print $unparsed.NL;
 		

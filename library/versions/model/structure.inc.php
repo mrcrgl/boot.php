@@ -5,6 +5,8 @@ class VModelStructure extends VObject {
 	#var $_fields = array();
 	var $_valid = false;
 	
+	var $_manager = null;
+	
 	public function __construct($__uid=null) {
 		
 		$this->initialize();
@@ -76,6 +78,12 @@ class VModelStructure extends VObject {
 	}
 	
 	public function __get($__var) {
+		if ($__var == 'objects') {
+			if (is_null($this->_manager))
+				$this->_manager = new VModelManager(&$this);
+			return $this->_manager;
+		}
+		
 		// TODO var does not exist
 	}
 	
