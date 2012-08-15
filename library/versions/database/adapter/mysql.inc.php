@@ -150,7 +150,7 @@ class VDatabaseMysql extends VDatabase {
 	}
 
 	function getType() {
-	  return mysql_field_type($this->refResult);
+	  return mysqli_field_type($this->refResult);
 	}
 
   /**
@@ -164,7 +164,7 @@ class VDatabaseMysql extends VDatabase {
     if($this->resConnectionID == 0) {
       
       // connect to database and save the connection_ressource_id
-      $this->resConnectionID = mysql_connect($this->strHost, $this->strUser, $this->strPass, true);
+      $this->resConnectionID = mysqli_connect($this->strHost, $this->strUser, $this->strPass, $this->strDb);
       
       // if there is no connection - create error
       if(!$this->resConnectionID) {
@@ -173,7 +173,7 @@ class VDatabaseMysql extends VDatabase {
       } 
       
       // select the wanted database
-      if (!mysql_select_db($this->strDb, $this->resConnectionID)) {
+      if (!mysqli_select_db($this->resConnectionID, $this->strDb)) {
         //$this->sql_abort("Could not select ". $this->strDb, $this->resConnectionID);
         if ($this->ignoreDatabaseException == false)
         	throw new Exception("Could not select ". $this->strDb.' '.$this->resConnectionID);
@@ -198,7 +198,7 @@ class VDatabaseMysql extends VDatabase {
     if(!is_null($this->resConnectionID)) {
     
       // close the connection to database
-      $boolClose = mysql_close($this->resConnectionID);
+      $boolClose = mysqli_close($this->resConnectionID);
       
       // if close fails - print error message and abort
       if(!$boolClose) {  
@@ -248,7 +248,7 @@ class VDatabaseMysql extends VDatabase {
         $mtime = microtime();
       }*/
       
-      $refResult = mysql_query($strQueryString, $this->resConnectionID);
+      $refResult = mysqli_query($this->resConnectionID, $strQueryString);
       
       /*if ($this->logQuerys) {
         ENV::$SQLQueryLog[] = array(
@@ -262,8 +262,8 @@ class VDatabaseMysql extends VDatabase {
       echo $strQueryString.' - '.$this->resConnectionID.'<br />';
     }
     // set the error number and message of mysql
-    $this->intErrNumber = mysql_errno();
-    $this->strError = mysql_error();
+    $this->intErrNumber = mysqli_errno($this->resConnectionID);
+    $this->strError = mysqli_error($this->resConnectionID);
 
     // if there is no ressource - die with error message
     if(!$refResult){
@@ -299,14 +299,21 @@ class VDatabaseMysql extends VDatabase {
 		if (!$this->refResult) {
 		  return false;
 		}
-    $this->arrRecord = mysql_fetch_assoc($this->refResult);
+    $this->arrRecord = mysqli_fetch_assoc($this->refResult);
 		if (!is_array($this->arrRecord)) {
-			mysql_free_result($this->refResult);
+			mysqli_free_result($this->refResult);
 			$this->refResult = 0;
 			return false;
 		} else {
 			return true;
 		}
+	}
+	
+	function escape($value) {
+		if (!$this->resConnectionID) {
+    	$this->connect();
+    }
+		return mysqli_real_escape_string($this->resConnectionID, $value);
 	}
  
   /**
@@ -317,7 +324,7 @@ class VDatabaseMysql extends VDatabase {
   function getLastID(){
   
     // return the id of the last inserted row
-    return intval(mysql_insert_id($this->resConnectionID));
+    return intval(mysqli_insert_id($this->resConnectionID));
   
   }
   
@@ -329,7 +336,7 @@ class VDatabaseMysql extends VDatabase {
   function getNumRows() {
   
     // return the number of affected rows
-    return intval(mysql_affected_rows($this->resConnectionID));
+    return intval(mysqli_affected_rows($this->resConnectionID));
   
   }
   
@@ -358,7 +365,7 @@ class VDatabaseMysql extends VDatabase {
     $arrTableList = array();
 
     // loop - "make" out of each line of the ressource an array
-    while($arrTable = mysql_fetch_array($resSqlResult)) {
+    while($arrTable = mysqli_fetch_array($resSqlResult)) {
     
       // push the data into the empty array
       array_push($arrTableList, $arrTable[0]);
@@ -387,7 +394,7 @@ class VDatabaseMysql extends VDatabase {
     $arrTableList = array();
 
     // loop - "make" out of each line of the ressource an array
-    while($arrTable = mysql_fetch_array($resSqlResult)) {
+    while($arrTable = mysqli_fetch_array($resSqlResult)) {
     
       // push the data into the empty array
       array_push($arrTableList, $arrTable[0]);

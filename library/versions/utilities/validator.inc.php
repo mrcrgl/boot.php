@@ -46,17 +46,15 @@ class Validator {
   }
   
   public static function checkField($field_declaration, $value) {
-  	if ($field_declaration->get('null') === false && Validator::is($value, 'null')) {
-  		printf("null is not accepted".NL);
-  		return false;
+  	if ($field_declaration->get('null') === true && Validator::is($value, 'null')) {
+  		return true;
   	}
-  	if ($field_declaration->get('blank') === false && Validator::is($value, 'blank')) {
-  		printf("blank is not accepted".NL);
-  		return false;
+  	if ($field_declaration->get('blank') === true && Validator::is($value, 'blank')) {
+  		return true;
   	}
   	if (in_array($field_declaration->get('type'), array('integer', 'string', 'float', 'decimal'))) {
 	  	if (!Validator::is($value, $field_declaration->get('type'), $field_declaration->get('min_length'), $field_declaration->get('max_length'))) {
-	  		printf("%s with minlength %d and maxlength %d is not accepted".NL, $field_declaration->get('type'), $field_declaration->get('min_length'), $field_declaration->get('max_length'));
+	  		printf("%s with length %d is not accepted; minlength %d and maxlength %d expected".NL, $field_declaration->get('type'), strlen($value), $field_declaration->get('min_length'), $field_declaration->get('max_length'));
   			return false;
 	  	}
   	}

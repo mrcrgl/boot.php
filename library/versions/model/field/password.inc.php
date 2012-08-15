@@ -7,4 +7,7 @@ class VModelFieldPassword extends VModelField {
 	
 	var $max_length = 32;
 	
+	public function onSet($value) {
+		return md5($value);
+	}
 }

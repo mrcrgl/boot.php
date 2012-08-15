@@ -37,6 +37,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
   	
 	  	foreach ($columns as $column) {
 		 		if (!in_array($column, $columns_installed)) {
+		 			// TODO set debug message
 		 			print $column." not in (".implode(", ", $columns_installed).")\n";
 		 			$is_uptodate = false;
 		 		}
@@ -84,6 +85,131 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		return $sql;
 	}
 	
+	public function saveModel($model) {
+		if (!is_object($model) || !is_subclass_of(get_class($model), 'VModelStructure')) {
+			throw new Exception( sprintf("Model %s (Type: %s) is not a valid Object or parent of VModelStructure", get_class($model), get_type($model)) );
+		}
+		
+		$dbo =& VFactory::getDatabase();
+		
+		$sql = $this->getUpdateFields($model,  ((!$model->isValid()) ? 'insert' : 'update'));
+		
+		if ($dbo->userQuery($sql))
+			$model->isValid(true);
+		
+		return $model->isValid();
+	}
+	
+	public function getModel(&$model, $filter=array()) {
+		$model_name = get_class($model);
+		
+		$dbo =& VFactory::getDatabase();
+		
+		$dbo->setTable($this->getTableName($model_name));
+		$dbo->selectRows("*", $this->prepareFilter($model, $filter), "none", "1");
+		if (!$dbo->getNumRows()) {
+			return $model; // or whatever
+		}
+		$dbo->nextRecord();
+		$model->bulkSet($dbo->getRecord());
+		$model->isValid(true);
+		return $model;
+	}
+	
+	public function getModels($model, $filter=array()) {
+		$model_name = get_class($model);
+		
+		$dbo =& VFactory::getDatabase();
+		
+		$dbo->setTable($this->getTableName($model_name));
+		$dbo->selectRows("*", $this->prepareFilter($model, $filter));
+		if (!$dbo->getNumRows()) {
+			return $model; // or whatever
+		}
+		
+		$return = array();
+		$i = 0;
+		while ($dbo->nextRecord()) {
+			$return[$i] = new $model_name();
+			$return[$i]->bulkSet($dbo->getRecord());
+			$return[$i]->isValid(true);
+			$i++;
+		}
+		
+		$model->isValid(true);
+		return $return;
+	}
+	
+	public function prepareFilter($model, $filter) {
+		$dbo		=& VFactory::getDatabase();
+		$fields = $model->getFields();
+		
+		foreach ($fields as $k => $field) {
+  		$declaration =& $model->getFieldDeclaration($field);
+			$column = $declaration->get('db_column');
+  		$columns[$column] = $model->get($field);
+  		if (isset($filter[$field])) {
+  			$where[$column] = sprintf("'%s'", $dbo->escape($filter[$field]));
+  		}
+  		if ($declaration->get('primary_key', false) == true && isset($filter['pk'])) {
+  			$where[$column] = sprintf("'%s'", $dbo->escape($filter['pk']));
+  		}
+  	}
+  	
+  	$sql = "";
+  	foreach ($where as $column => $value) {
+  		$sql .= sprintf("`%s` = %s", $column, $value);
+  	}
+  	return (($sql) ? $sql : "none");
+	}
+	
+	public function getUpdateFields($model, $mode='update') {
+		$dbo					=& VFactory::getDatabase();
+		$fields 			= $model->getFields();
+		$columns			= array();
+		$declarations = array();
+		$pkeys        = array();
+		
+  	foreach ($fields as $k => $field) {
+  		$column = $model->getFieldDeclaration($field)->get('db_column');
+  		$declarations[$column] =& $model->getFieldDeclaration($field);
+  		$columns[$column] = (($mode == 'update') ? $declarations[$column]->onUpdate($model->get($field)) : $declarations[$column]->onCreate($model->get($field)) );
+  		if ($declarations[$column]->get('primary_key', false) == true) {
+  			$pkeys[$column] = $columns[$column];
+  		}
+  	}
+  	
+  	$sql = sprintf("%s %s SET \n", (($mode == 'update') ? "UPDATE" : "INSERT INTO"), $this->getTableName(get_class($model)));
+  	
+  	$keyvalues = array();
+  	foreach ($columns as $column => $value) {
+  		#print $value.NL;
+  		if (is_null($value)) {
+  			$value = 'NULL';
+  		} elseif (is_bool($value)) {
+  			$value = sprintf("'%s'", $dbo->escape((($value === false) ? 0 : 1)));
+  		} else {
+  			$value = sprintf("'%s'", $dbo->escape($value));
+  		}
+  		
+  		$keyvalues[] = sprintf("\t`%s` = %s", $column, $value);
+  		
+  	}
+  	
+  	$sql .= implode(", \n", $keyvalues);
+  	
+  	if ($mode == 'update') {
+  		
+  		$keyvalues = array();
+  		foreach ($pkeys as $column => $value) {
+  			$keyvalues[] = sprintf("\t`%s` = '%s'\n", $column, $dbo->escape($value));
+  		}
+  		$sql .= sprintf("WHERE\n %s", implode(" AND ", $keyvalues));
+  	}
+  	
+  	return $sql;
+	}
+	
 	public function getColumnDeclaration($model, $field) {
 		
 		$field_declaration = $model->getFieldDeclaration($field);
@@ -110,27 +236,27 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 				//$declaration .= sprintf("INT(%d) ", $field_declaration->get('max_length'));
 				if ($field_declaration->get('unsigned') == false) {
 					if ($field_declaration->get('min_value') >= -128 && $field_declaration->get('max_value') <= 127):
-						$declaration .= sprintf("TINYINT(%d) ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("TINYINT(%d) ", strlen($field_declaration->get('max_value'))-1);
 					elseif ($field_declaration->get('min_value') >= -32768 && $field_declaration->get('max_value') <= 32767):
-						$declaration .= sprintf("SMALLINT(%d) ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("SMALLINT(%d) ", strlen($field_declaration->get('max_value'))-1);
 					elseif ($field_declaration->get('min_value') >= -8388608 && $field_declaration->get('max_value') <= 8388607):
-						$declaration .= sprintf("MEDIUMINT(%d) ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("MEDIUMINT(%d) ", strlen($field_declaration->get('max_value'))-1);
 					elseif ($field_declaration->get('min_value') >= -2147483648 && $field_declaration->get('max_value') <= 2147483647):
-						$declaration .= sprintf("INT(%d) ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("INT(%d) ", strlen($field_declaration->get('max_value'))-1);
 					elseif ($field_declaration->get('min_value') >= -9223372036854775808 && $field_declaration->get('max_value') <= 9223372036854775807):
-						$declaration .= sprintf("BIGINT(%d) ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("BIGINT(%d) ", strlen($field_declaration->get('max_value'))-1);
 					endif;
 				} else {
 					if ($field_declaration->get('max_value') <= 255):
-						$declaration .= sprintf("TINYINT(%d) UNSIGNED ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("TINYINT(%d) UNSIGNED ", strlen($field_declaration->get('max_value'))-1);
 					elseif ($field_declaration->get('max_value') <= 65535):
-						$declaration .= sprintf("SMALLINT(%d) UNSIGNED ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("SMALLINT(%d) UNSIGNED ", strlen($field_declaration->get('max_value'))-1);
 					elseif ($field_declaration->get('max_value') <= 16777215):
-						$declaration .= sprintf("MEDIUMINT(%d) UNSIGNED ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("MEDIUMINT(%d) UNSIGNED ", strlen($field_declaration->get('max_value'))-1);
 					elseif ($field_declaration->get('max_value') <= 4294967295):
-						$declaration .= sprintf("INT(%d) UNSIGNED ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("INT(%d) UNSIGNED ", strlen($field_declaration->get('max_value'))-1);
 					elseif ($field_declaration->get('max_value') <= 18446744073709551615):
-						$declaration .= sprintf("BIGINT(%d) UNSIGNED ", $field_declaration->get('max_value'));
+						$declaration .= sprintf("BIGINT(%d) UNSIGNED ", strlen($field_declaration->get('max_value'))-1);
 					endif;
 				}
 				$declaration .= (($field_declaration->get('zerofill') == true) ? "ZEROFILL " : "");

@@ -14,6 +14,8 @@ class ComponentCrudViewModel extends VApplicationView {
 	
 	var $object_manager = null;
 	
+	var $object_layout_version = null;
+	
 	public function create() {
 		$this->fetchObject();
 		
@@ -22,7 +24,10 @@ class ComponentCrudViewModel extends VApplicationView {
 		$renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 		
 		$document->setTemplate('crud/create.htpl');
-  	$document->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
+		
+		if ($renderer->templateExists($this->getAlternateTemplate('create.htpl'))) {
+			$document->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
+		}
   	
   	$input =& VFactory::getInput();
   	if (strtolower($input->getMethod()) == 'post') {
@@ -30,7 +35,6 @@ class ComponentCrudViewModel extends VApplicationView {
   		header( sprintf("Location: /%s%s", $document->getUrlPrefix(), $this->object->uid) );
   		exit;
   	}
-  	
   	
 	}
 	
@@ -42,7 +46,9 @@ class ComponentCrudViewModel extends VApplicationView {
 		$renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 		
 		$document->setTemplate('crud/read.htpl');
-  	$document->assign('user_defined_template', $this->getAlternateTemplate('read.htpl'));
+		if ($renderer->templateExists($this->getAlternateTemplate('read.htpl'))) {
+			$document->assign('user_defined_template', $this->getAlternateTemplate('read.htpl'));
+		}
   	
   	
 	}
@@ -55,7 +61,11 @@ class ComponentCrudViewModel extends VApplicationView {
 		$renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 		
 		$document->setTemplate('crud/create.htpl');
-  	$document->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
+  	
+		if ($renderer->templateExists($this->getAlternateTemplate('create.htpl'))) {
+			$document->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
+		}
+		
   	$document->assign('delete_url', sprintf("/%s%s/delete", $document->getUrlPrefix(), $this->object->uid));
   	
 		$input =& VFactory::getInput();
@@ -85,16 +95,29 @@ class ComponentCrudViewModel extends VApplicationView {
   	
   	$this->object_name = $input->get('object_name', null, 'get');
   	$this->object_uid = $input->get('object_uid', false, 'get');
-  	$this->object_manager_name = $this->object_name.'Manager';
+  	
   	
   	if (!$this->object_name) {
   		throw new Exception( "Input object_name must be set!" );
   	}
   	
   	$this->object = new $this->object_name($this->object_uid);
-  	$this->object_manager = new $this->object_manager_name();
+  	$this->object_layout_version = $this->object->getModelVersion();
   	
-  	$this->object_manager->set('ignore_object_state', true);
+  	if ($this->object_layout_version == 1) {
+  		
+  		$this->object_manager_name = $this->object_name.'Manager';
+  		$this->object_manager = new $this->object_manager_name();
+  		$this->object_manager->set('ignore_object_state', true);
+  	
+  	} else {
+  		
+  		$this->object_manager = new VModelManagerJacket(&$this->object);
+  		
+  	}
+  	
+  	
+  	
   	
   	$document =& VFactory::getDocument();
   	
@@ -132,7 +155,13 @@ class ComponentCrudViewModel extends VApplicationView {
 			$params[$key] = $input->get($key, null, 'post');
 		}
 		#var_dump($params);
-		$bok = $this->object->update($params);
+		if ($this->object_layout_version == 1) {
+			$bok = $this->object->update($params);
+		} elseif ($this->object_layout_version == 2) {
+			$this->object->bulkSet($params);
+			$bok = $this->object->save();
+		}
+		
 		
 		if (!$bok) {
 			VMessages::_('Error', 'Speichern fehlgeschlagen', 'error');

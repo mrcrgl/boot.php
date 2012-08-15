@@ -4,7 +4,11 @@
     {include file='crud/navigation_aside.htpl'}
   </div><!--/span-->
   <div class="span9">
+    {if $user_defined_template}
     {include file=$user_defined_template}
+    {else}
+    {include file='crud/builder/create.htpl'}
+    {/if}
   </div><!--/span-->
 </div><!--/row-->
 {include file='footer.htpl'}

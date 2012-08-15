@@ -6,6 +6,8 @@ class VModelFieldPrimaryKey extends VModelField {
 	
 	var $unique = false;
 	
+	var $editable = false;
+	
 	var $validators = array('hexuid');
 	
 	public function __construct($options=array()) {

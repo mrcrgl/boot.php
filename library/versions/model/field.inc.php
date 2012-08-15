@@ -84,48 +84,47 @@ class VModelField extends VObject {
 		
 		foreach ($class_vars as $column => $declaration) {
 			if (preg_match('/^_/', $column)) continue;
-			if (!preg_match('/^(?P<type>\w+):\[(?P<options>.*)\]$/', $declaration, $matches)) {
+			if (!preg_match('/^(?P<type>\w+):(?P<options>.*)$/', $declaration, $matches)) {
 				printf("VModel column declataion layout mismatch: %s<br />", $declaration);
 				var_dump($declaration);print "<br />";
 				#throw new Exception(sprintf("VModel column declataion layout mismatch: %s", $declaration));
 			}
 			#var_dump($matches);print "<br />";
 			
+			$options = VArray::parseOptions($matches['options']);
+			
 			$type    = $matches['type'];
 			$options = array(
 				'db_column' => $column
 			);
 			
-			if (strlen($matches['options'])) {
-				$option_pairs = explode(',', $matches['options']);
-				foreach ($option_pairs as $option_pair) {
-					$option_pair = trim($option_pair);
-					#print $option_pair.NL;
-					
-					list($key, $value) = explode(':', $option_pair);
-					$key = trim($key);
-					$value = trim($value);
-					
-					if (strtolower($value) == 'true') {
-						$options[$key] = true;
-					}
-					elseif (strtolower($value) == 'false') {
-						$options[$key] = false;
-					}
-					elseif (strtolower($value) == 'null') {
-						$options[$key] = null;
-					}
-					else {
-						$options[$key] = $value;
-					}
-				}
-			}
-			
-			// call the vmodel::method
-			#var_dump($options);print "<br />";
-			
 			$ref =& VModelField::getInstance($model_name, $column, $type, $options);
 			$model->set($column, $ref->default, true);
 		}
+	}
+	
+	public function onInitialize($value) {
+		#printf("onInitialize(%s) called".NL, $value);
+		return $value;
+	}
+	
+	public function onCreate($value) {
+		#printf("onCreate(%s) called".NL, $value);
+		return $value;
+	}
+	
+	public function onUpdate($value) {
+		#printf("onUpdate(%s) called".NL, $value);
+		return $value;
+	}
+	
+	public function onSet($value) {
+		#printf("onSet(%s) called".NL, $value);
+		return $value;
+	}
+	
+	public function onGet($value) {
+		#printf("onGet(%s) called".NL, $value);
+		return $value;
 	}
 }

@@ -1,0 +1,30 @@
+{include file='includes/form/form-messages.htpl'}
+
+<form id="f1" name="f1" action="" method="post" class="form-horizontal">
+    {$csrf_token}
+    <fieldset>
+      <legend>{if $object->isValid()}{$object|@get_class} '{$object->uid}' bearbeiten{else}{$object|@get_class} hinzuf&uuml;gen{/if}</legend>
+      
+      {foreach from=$object->getFields() item=field}
+      
+        {assign var=declaration value=$object->getFieldDeclaration($field)}
+        {if $declaration->get('editable') == true}
+          {include file='includes/form/field-input.htpl' name=$field minlength=$declaration->get('min_length') maxlength=$declaration->get('max_length') validate=required label=$field value=$object->get($field)}
+        {/if}
+      
+      {/foreach}
+          
+    </fieldset>
+    
+    <div class="form-actions">
+      <input type="hidden" value="1" name="d1" />
+      <button class="btn btn-primary" data-loading-text="loading..." type="submit">speichern</button>
+      <a class="btn" data-loading-text="loading..." href="/{$_document->getUrlPrefix()}">abbrechen</a>
+      {if $delete_url}<a class="btn btn-danger" data-toggle="modal" href="#delete">l&ouml;schen</a>{/if}
+    </div>
+    
+</form>
+  
+{if $delete_url}
+{include file='includes/form/modal-delete.htpl' delete_url=$delete_url}
+{/if}

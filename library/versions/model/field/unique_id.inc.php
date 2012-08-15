@@ -10,12 +10,14 @@ class VModelFieldUniqueId extends VModelFieldPrimaryKey {
 	
 	var $max_length 	= 13;
 	
+	var $editable   	= false;
+	
 	var $validators   = array(
 		'hexuid'
 	);
 	
-	public function onCreate() {
-		
+	public function onInitialize($value) {
+		return uniqid();
 	}
 	
 }
