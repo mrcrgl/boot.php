@@ -149,8 +149,8 @@ class VModelManager extends VObject {
 			return false; // or whatever
 		}
 		$dbo->nextRecord();
-		$model->bulkSet($dbo->getRecord());
-		$model->isValid(true);
+		$this->_model->bulkSet($dbo->getRecord());
+		$this->_model->isValid(true);
 		
 		return true;
 	}
@@ -295,7 +295,7 @@ class VModelManager extends VObject {
 		
 		$fields = array();
 		foreach ($options as $varname => $direction) {
-			if (strtolower($direction) != 'asc' || strtolower($direction) != 'desc') 
+			if (strtolower($direction) != 'asc' && strtolower($direction) != 'desc') 
 				$direction = 'asc';
 			$fields[] = sprintf("`%s` %s", $this->getColumnByName($varname), ((strtolower($direction) == 'asc')) ? "ASC" : "DESC");
 		}
@@ -329,11 +329,11 @@ class VModelManager extends VObject {
 		$conditions = array();
 		
 		foreach ($options as $key => $value) {
-			print "$key -> $value".NL;
+			#print "$key -> $value".NL;
 			$condition = "";
 			
 			if (preg_match('/^(?P<name>.+)__(?P<lookup>.+)$/', $key, $matches)) {
-				var_dump($matches);
+				#var_dump($matches);
 				$varname = $matches['name'];
 				$lookup  = $matches['lookup'];
 			} else {
