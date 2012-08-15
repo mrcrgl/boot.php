@@ -592,5 +592,5 @@ class VModelManager extends VObject {
 		
 		return VString::strtolower(implode('_', $parts));
 	}
-	
+	 
 }
