@@ -1,11 +1,8 @@
 <?php
 
-$handle = opendir(dirname(__FILE__).DIRECTORY_SEPARATOR.'init');
-
-if (!$handle) die( sprintf('Cannot open directory \'%s\' to initialize the app', dirname(__FILE__).DIRECTORY_SEPARATOR.'init') );
-
-while (false !== ($file = readdir($handle))) {
-  if (preg_match('!\.inc\.php$!', $file)) {
+$files = scandir(dirname(__FILE__).DIRECTORY_SEPARATOR.'init');
+foreach ($files as $file) {
+  if (preg_match('/\.inc\.php$/', $file)) {
   	//try {
   		require dirname(__FILE__).DIRECTORY_SEPARATOR.'init'.DIRECTORY_SEPARATOR.$file;
   		
