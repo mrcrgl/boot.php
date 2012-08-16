@@ -65,9 +65,9 @@ class VModelFile extends VModelConnector {
   		mkdir($folder);
   	}
   	if (!is_dir($folder.DS.'uploads')) {
-  		mkdir($folder);
+	        mkdir($folder.DS.'uploads');
   	}
-  	
+
   	$filename = 'uploads'.DS.md5(json_encode($file)).$extension;
   	$filepath = $folder.DS.$filename;
   	
