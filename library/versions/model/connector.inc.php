@@ -202,8 +202,8 @@ abstract class VModelConnector extends VModelDefault {
   	$datamap = $this->_DataMap;
   	$is_installed = true;
   	
-  	$dbo =& VFactory::getDatabase();
-  	$tables_installed = $dbo->getListOfTables();
+  	$this->objDB =& VFactory::getDatabase();
+  	$tables_installed = $this->objDB->getListOfTables();
   	
   	foreach ($datamap as $key => $attributes) {
   		if (!is_array($attributes) || preg_match('/^_/', $key)) continue;
@@ -222,12 +222,12 @@ abstract class VModelConnector extends VModelDefault {
   	$tablecolumns = $this->getTableColumns();
   	$is_uptodate = true;
   	
-  	$dbo =& VFactory::getDatabase();
-  	#$tables_installed = $dbo->getListOfTables();
+  	$this->objDB =& VFactory::getDatabase();
+  	#$tables_installed = $this->objDB->getListOfTables();
   	
   	foreach ($tablecolumns as $table => $array_columns) {
   		
-  		$columns = $dbo->getListOfColumns($table);
+  		$columns = $this->objDB->getListOfColumns($table);
   		
   		if (count($columns) != count($array_columns)) {
   			$is_uptodate = false;
@@ -501,11 +501,11 @@ abstract class VModelConnector extends VModelDefault {
         return false;
       }
       if ( $this->isValid() ) {
-        $this->objDB->updateRow("`$fieldValue` = '".mysql_real_escape_string(stripslashes($value))."'", "`$fieldUnique` = '".$this->getUID()."' AND `$fieldKey` = '$key'");
+        $this->objDB->updateRow("`$fieldValue` = '".$this->objDB->escape(stripslashes($value))."'", "`$fieldUnique` = '".$this->getUID()."' AND `$fieldKey` = '$key'");
         $upateSuccessful = (bool)$this->objDB->getNumRows();
       }
       if ( !$upateSuccessful && !$this->rowExists("`$fieldUnique` = '".$this->getUID()."' AND `$fieldKey` = '$key'") ) {
-        $this->objDB->insertRow("`$fieldUnique`, `$fieldKey`, `$fieldValue`", "'".$this->getUID()."', '".mysql_real_escape_string(stripslashes($key))."', '".mysql_real_escape_string(stripslashes($value))."'");
+        $this->objDB->insertRow("`$fieldUnique`, `$fieldKey`, `$fieldValue`", "'".$this->getUID()."', '".$this->objDB->escape(stripslashes($key))."', '".$this->objDB->escape(stripslashes($value))."'");
       }
     }
     
@@ -530,7 +530,7 @@ abstract class VModelConnector extends VModelDefault {
   	if (isset($dbLayout['_locale'])) {
     	$where_language .= " AND `".$dbLayout['_locale']."` = '".$this->getCurrentLanguage()->uid."'";
     	$sFields = "`".$dbLayout['_locale']."`";
-    	$sValues = "'".mysql_real_escape_string(stripslashes($this->getCurrentLanguage()->uid))."'";
+    	$sValues = "'".$this->objDB->escape(stripslashes($this->getCurrentLanguage()->uid))."'";
     }
     
     /*
@@ -543,9 +543,9 @@ abstract class VModelConnector extends VModelDefault {
         
         $spacer = ($sFields == "") ? "" : ", ";
         $sFields .= $spacer."`$dst`";
-        $sValues .= $spacer."'".mysql_real_escape_string(stripslashes($param[$src]))."'";
+        $sValues .= $spacer."'".$this->objDB->escape(stripslashes($param[$src]))."'";
         $spacer = ($sUpdate == "") ? "" : ", ";
-        $sUpdate .= $spacer."`$dst` = '".mysql_real_escape_string(stripslashes($param[$src]))."'";
+        $sUpdate .= $spacer."`$dst` = '".$this->objDB->escape(stripslashes($param[$src]))."'";
       }
     }
     
