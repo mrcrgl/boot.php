@@ -11,10 +11,17 @@ class VModelManager extends VObject {
 	
 	/**
 	 * 
+	 */
+	var $_table = null;
+	
+	/**
+	 * 
 	 * the given options
 	 * @var array
 	 */
 	var $_options = array();
+	
+	//static $_instances = array();
 	
 	/**
 	 * the __constructor
@@ -23,7 +30,43 @@ class VModelManager extends VObject {
 	 */
 	public function __construct(&$model) {
 		$this->_model =& $model;
+		#printf("Manager initialized with model %s".NL, get_class($model));
+		$designer =& VDatabaseDesigner::getInstance();
+		$this->_table = $designer->getTableName(get_class($model));
 	}
+	
+	
+	public static function getInstance(&$model, &$related=null, $type='basic') {
+		/*
+		if (!isset(self::$_instances[$model]) || !isset(self::$_instances[$model][$column])) {
+			if (is_null($type)) {
+				// TODO Set Debug message
+				return false;
+			}
+			
+			$classname = sprintf('VModelField%s', $type);
+			VLoader::autoload($classname);
+			
+			if (!class_exists($classname)) {
+				die( sprintf('Invalid VModelField type received: %s', $type) );
+			}
+			
+			self::$_instances[$model][$column] = new $classname($options);
+		}
+		
+		return self::$_instances[$model][$column];
+		*/
+		
+		$classname = sprintf('VModelManager%s', VString::underscores_to_camelcase($type));
+		VLoader::autoload($classname);
+		
+		if (!class_exists($classname)) {
+			throw new Exception( sprintf('Invalid VModelField type received: %s', $type) );
+		}
+		
+		return new $classname(&$model, &$related);
+	}
+	
 	
 	/* filtering || query functions */
 	/**
@@ -221,6 +264,10 @@ class VModelManager extends VObject {
 		return $return;
 	}
 	
+	public function setTable($table) {
+		$this->_table = $table;
+	}
+	
 	/**
 	 * merge new options to existing
 	 * 
@@ -248,15 +295,16 @@ class VModelManager extends VObject {
 	 */
 	private function buildQuerySelect() {
 		
-		return sprintf(
+		$sql = sprintf(
 			"SELECT %s FROM %s WHERE %s %s %s",
 			$this->buildQueryFields(),
-			$this->getTableName(),
+			$this->_table,
 			$this->buildQueryWhere(),
 			$this->buildQueryOrder(),
 			$this->buildQueryLimit()
 		);
-		
+		#print $sql.NL;
+		return $sql;
 	}
 	
 	/**
@@ -570,27 +618,6 @@ class VModelManager extends VObject {
 			$value = $dbo->escape($value);
 		}
 		return $value;
-	}
-	
-	/**
-	 * 
-	 * @return	string		the name of models table
-	 */
-	public function getTableName() {
-		
-		$parts = VString::splitCamelCase(get_class($this->_model));
-		$parts = VArray::strip_empty_values($parts);
-		
-		foreach ($parts as $k => $part) {
-			if (strtolower($part) == 'component') {
-				unset($parts[$k]);
-			}
-			if (strtolower($part) == 'model') {
-				unset($parts[$k]);
-			}
-		}
-		
-		return VString::strtolower(implode('_', $parts));
 	}
 	 
 }

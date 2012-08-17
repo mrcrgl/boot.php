@@ -164,7 +164,7 @@ class VLoader {
 		if (substr($__classname, 0, 1) == "V") {
 			// it's a V-Class
 			$__classname = 'Versions'.VString::substr($__classname, 1);
-			$path = VString::strtolower(implode(DS, VString::splitCamelCase($__classname)));
+			$path = VString::strtolower(implode(DS, VString::explode_camelcase($__classname)));
 			$classpath = self::check_extensions(VLIB.DS.$path);
 			if ($classpath === false) {
 				$parts = explode(DS, $path);
@@ -181,7 +181,7 @@ class VLoader {
 		 */
 		elseif (substr($__classname, 0, 9) == "Component") {
 			if (strpos($__classname, 'Model')) {
-				$eparts = VString::splitCamelCase($__classname);
+				$eparts = VString::explode_camelcase($__classname);
 				foreach ($eparts as $i => $epart) {
 					if ($epart == 'Model') {
 						$eparts[$i] = 'Models';
@@ -190,7 +190,7 @@ class VLoader {
 				$__classname = implode('', $eparts);
 			}
 			
-			$path = VString::strtolower(implode(DS, VString::splitCamelCase($__classname))); // ComponentNewsModelNews
+			$path = VString::strtolower(implode(DS, VString::explode_camelcase($__classname))); // ComponentNewsModelNews
 			$path = str_replace('component/', '', $path);
 			foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $component_path) {
 				#print $component_path.DS.$path.NL;
@@ -230,7 +230,7 @@ class VLoader {
 			foreach (array(PROJECT_MODELS, VMODELS) as $paths) {
 				#print "sdfgsdfgd";
 				
-				$path = VString::strtolower(implode(DS, VString::splitCamelCase($__classname)));
+				$path = VString::strtolower(implode(DS, VString::explode_camelcase($__classname)));
 				
 				#print $path;
 				

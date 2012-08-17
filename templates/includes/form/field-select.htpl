@@ -1,0 +1,46 @@
+
+{*
+validate
+id
+name
+type
+label
+help
+minlength
+maxlength
+rangelength
+range
+min
+max
+*}
+
+{if !$option_title}
+{assign var=option_title value=uid}
+{/if}
+{if $value|@is_object}
+{assign var=value value=$value->get('uid')}
+{/if}
+{if !$id}
+{assign var=id value=$name}
+{/if}
+
+<div class="control-group">
+  <label class="control-label" for="{$id}">{text ident=$label}</label>
+  <div class="controls">
+    {if $uneditable}
+    <span class="{$class|default:"span4"} uneditable-input">{$value|default:$placeholder}</span>
+    {else}
+      <select class="{$class|default:"span4"} {$validate}" id="{$id}" name="{$name}" {if $disabled}disabled="" {/if}>
+        {if $null}
+        <option value="null" {if !$value}selected="selected"{/if}>Keine Auswahl</option>
+        {/if}
+        {if $options}
+          {foreach from=$options item=option}
+          <option value="{$option->get('uid')|escape}" {if $value == $option->get('uid')}selected="selected"{/if}>{$option->get($option_title)|escape}</option>
+          {/foreach}
+        {/if}
+      </select>
+    {/if}
+    {if $help}<p class="help-block">{text ident=$help}</p>{/if}
+  </div>
+</div>

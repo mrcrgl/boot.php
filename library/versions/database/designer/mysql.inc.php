@@ -66,7 +66,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		}
 		$sql .= sprintf("(\n%s\n)", implode(", \n", $parts));
 		
-		$sql .= sprintf(" ENGINE=MyISAM DEFAULT CHARSET=utf8;\n");
+		$sql .= sprintf(" ENGINE=InnoDB DEFAULT CHARSET=utf8;\n");
 		
 		return array($sql);
 	}
@@ -100,6 +100,13 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		return $model->isValid();
 	}
 	
+	/**
+	 * 
+	 * Enter description here ...
+	 * @param unknown_type $model
+	 * @param unknown_type $filter
+	 * @deprecated will be removed
+	 */
 	public function getModel(&$model, $filter=array()) {
 		$model_name = get_class($model);
 		
@@ -116,6 +123,13 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		return $model;
 	}
 	
+	/**
+	 * 
+	 * Enter description here ...
+	 * @param unknown_type $model
+	 * @param unknown_type $filter
+	 * @deprecated will be removed
+	 */
 	public function getModels($model, $filter=array()) {
 		$model_name = get_class($model);
 		
@@ -302,12 +316,33 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 				$field
 			);
 		}
+		if ($field_declaration->get('foreign_key') == true) {
+			
+			if ($field_declaration->get('null') == true) {
+				$addition = "ON DELETE SET NULL";
+			} else {
+				$addition = "ON DELETE NO ACTION";
+			}
+			
+			return sprintf(
+				"ALTER TABLE `%s` ADD %sINDEX %s (`%s`), ADD FOREIGN KEY (`%s`) REFERENCES `%s`(`%s`) %s;",
+				$this->getTableName(get_class($model)),
+				(($field_declaration->get('unique') == true) ? "UNIQUE " : ""),
+				sprintf("%s_key", $field),
+				$field_declaration->get('db_column'),
+				$field_declaration->get('db_column'),
+				$field_declaration->get('reference_table'),
+				$field_declaration->get('reference_pk'),
+				$addition
+			);
+			
+		}
 		return false;
 	}
 	
 	public function getTableName($model_name) {
 		
-		$parts = VString::splitCamelCase($model_name);
+		$parts = VString::explode_camelcase($model_name);
 		$parts = VArray::strip_empty_values($parts);
 		
 		foreach ($parts as $k => $part) {

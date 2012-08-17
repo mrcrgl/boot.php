@@ -79,7 +79,7 @@ abstract class VString {
    *
    * @since   2.0
    */
-  public static function splitCamelCase($string) {
+  public static function explode_camelcase($string) {
   	return preg_split('/(?<=[^A-Z_])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][^A-Z_])/x', $string);
   }
 
@@ -1039,5 +1039,15 @@ abstract class VString {
 	    chr(197).chr(189) => 'Z',
 	    chr(197).chr(190) => 'z',
     );
+	}
+	
+	public static function underscores_to_camelcase($__string) {
+		return implode('', VArray::ucfirst(explode('_', $__string)));
+	}
+	
+	public static function camelcase_to_underscores($__string) {
+		$parts = self::explode_camelcase($__string);
+		$parts = VArray::strip_empty_values($parts);
+		return self::strtolower(implode($parts));
 	}
 }

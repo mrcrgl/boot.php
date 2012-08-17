@@ -20,6 +20,7 @@ class VModelStructure extends VObject {
 	}
 	
 	private function initialize() {
+		#printf("Class initialize: %s".NL, get_class($this));
 		VModelField::prepareModel(&$this);
 		
 		foreach ($this->getFields() as $field) {
@@ -30,6 +31,13 @@ class VModelStructure extends VObject {
 	public function bulkSet($params, $bypasscheck=false) {
 		$fields = $this->getFields();
 		
+		foreach ($fields as $field) {
+			$declaration =& $this->getFieldDeclaration($field);
+			if (isset($params[($declaration->get('db_column'))])) {
+				$params[$field] = $params[($declaration->get('db_column'))];
+			}
+		}
+		#print_r($params);
 		foreach ($params as $k => $v) {
 			if (in_array($k, $fields)) {
 				$this->set($k, $v, $bypasscheck);
@@ -48,6 +56,7 @@ class VModelStructure extends VObject {
 	}
 	
 	public function set($__field, $__value, $bypasscheck=false) {
+		#print "setting field: ".$__field.' with '.$__value.NL;
 		$__value = $this->getFieldDeclaration($__field)->onSet($__value);
 		
 		if (!$bypasscheck && !$this->checkField($__field, $__value)) {
@@ -63,6 +72,7 @@ class VModelStructure extends VObject {
 		$__value = parent::get($__field);
 		if ($this->getFieldDeclaration($__field))
 			return $this->getFieldDeclaration($__field)->onGet($__value);
+		
 		return null;
 	}
 	
@@ -80,11 +90,26 @@ class VModelStructure extends VObject {
 	public function __get($__var) {
 		if ($__var == 'objects') {
 			if (is_null($this->_manager))
-				$this->_manager = new VModelManager(&$this);
+				$this->_manager = VModelManager::getInstance(&$this);
 			return $this->_manager;
 		}
+		if (substr($__var, -5, 5) == '__set') {
+			$reference = (($this->getFieldDeclaration(substr($__var, 0, -5))) ? $this->getFieldDeclaration(substr($__var, 0, -5))->get('reference') : null );
+			if ($reference) {
+				$related = new $reference(); 
+			} else {
+				$related_name = VString::underscores_to_camelcase(substr($__var, 0, -5));
+				$related = new $related_name();
+			}
+			return VModelManager::getInstance(&$this, $related, 'related');
+		}
+			
 		
 		// TODO var does not exist
+	}
+	
+	private function getRelationalManager($__related_to) {
+		
 	}
 	
 	public function getFields() {
@@ -98,6 +123,7 @@ class VModelStructure extends VObject {
 	}
 	
 	public function getFieldDeclaration($__field) {
+		#print 'getFieldDeclaration said: '.$__field.NL;
 		return VModelField::getInstance(get_class(&$this), $__field);
 	}
 	

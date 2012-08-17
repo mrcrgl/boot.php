@@ -133,7 +133,7 @@ class ComponentCrudViewModel extends VApplicationView {
 	}
 	
 	private function getAlternateTemplate($__method) {
-		$path = strtolower(implode(DS, VString::splitCamelCase($this->object_name)));
+		$path = strtolower(implode(DS, VString::explode_camelcase($this->object_name)));
   	
 		
   	$newpath = 'crud'.DS.substr($path, strpos($path, '/model/')+strlen('/model/')).DS.$__method;
@@ -141,7 +141,7 @@ class ComponentCrudViewModel extends VApplicationView {
 	}
 	
 	private function getAlternateTemplatePath() {
-		$path = strtolower(implode(DS, VString::splitCamelCase($this->object_name)));
+		$path = strtolower(implode(DS, VString::explode_camelcase($this->object_name)));
   	
   	$newpath = 'crud'.DS.substr($path, strpos($path, '/model/')+strlen('/model/'));
   	return $newpath;

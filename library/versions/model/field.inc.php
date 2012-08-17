@@ -14,6 +14,8 @@ class VModelField extends VObject {
 	
 	var $max_length = false;
 	
+	var $field_name = null;
+	
 	var $db_column = null;
 	
 	var $db_column_type = 'VARCHAR';
@@ -29,6 +31,8 @@ class VModelField extends VObject {
 	var $help_text = null;
 	
 	var $primary_key = false;
+	
+	var $foreign_key = false;
 	
 	var $unique = false;
 	
@@ -71,9 +75,9 @@ class VModelField extends VObject {
 		
 		$model_name = get_class($model);
 		
-		if (isset(self::$_instances[$model_name])) {
+		/*if (isset(self::$_instances[$model_name])) {
 			return true;
-		}
+		}*/
 		
 		$class_vars = get_class_vars($model_name);
 		/*print "<pre>";
@@ -84,21 +88,33 @@ class VModelField extends VObject {
 		
 		foreach ($class_vars as $column => $declaration) {
 			if (preg_match('/^_/', $column)) continue;
-			if (!preg_match('/^(?P<type>\w+):(?P<options>.*)$/', $declaration, $matches)) {
-				printf("VModel column declataion layout mismatch: %s<br />", $declaration);
-				var_dump($declaration);print "<br />";
-				#throw new Exception(sprintf("VModel column declataion layout mismatch: %s", $declaration));
+			
+			if (!isset(self::$_instances[$model_name][$column])) {
+				if (!preg_match('/^(?P<type>\w+):(?P<options>.*)$/', $declaration, $matches)) {
+					printf("VModel column declataion layout mismatch: %s<br />", $declaration);
+					print "Column: $column".NL;
+					var_dump($declaration);print "<br />";
+					#throw new Exception(sprintf("VModel column declataion layout mismatch: %s", $declaration));
+				}
+				#print "<br /><br />";
+				#var_dump($matches);print "<br />";
+				
+				$options = VArray::parseOptions($matches['options']);
+				
+				#var_dump($options);print "<br />";
+				
+				#print "<br /><br />";
+				
+				$type    = $matches['type'];
+				$options = array_merge_recursive($options, array('db_column' => $column, 'field_name' => $column));
+				
+				
+				#print 'prepareModel said: '.$column.NL;
+				$ref =& VModelField::getInstance($model_name, $column, $type, $options);
 			}
-			#var_dump($matches);print "<br />";
-			
-			$options = VArray::parseOptions($matches['options']);
-			
-			$type    = $matches['type'];
-			$options = array(
-				'db_column' => $column
-			);
-			
-			$ref =& VModelField::getInstance($model_name, $column, $type, $options);
+			else {
+				$ref =& VModelField::getInstance($model_name, $column);
+			}
 			$model->set($column, $ref->default, true);
 		}
 	}

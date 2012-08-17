@@ -27,6 +27,13 @@ abstract class VArray {
 		return $array;
 	}
 	
+	public static function ucfirst(&$array) {
+		foreach ($array as $k => $v) {
+			$array[$k] = ucfirst($v);
+		}
+		return $array;
+	}
+	
 	static public function get($array, $key=0, $default=null) {
 		if (!is_array($array)) return null;
 		return ((array_key_exists($key, $array)) ? $array[$key] : $default);
@@ -49,8 +56,8 @@ abstract class VArray {
 		
 		if (!preg_match('/^\[(?P<options>.*)\]$/', $unparsed, $matches)) {
 			// TODO add Debug	
-			printf("VModel column declataion layout mismatch: %s<br />", $declaration);
-			var_dump($declaration);print "<br />";
+			printf("VOPTS layout mismatch: %s<br />", $unparsed);
+			var_dump($unparsed);print "<br />";
 			#throw new Exception(sprintf("VModel column declataion layout mismatch: %s", $declaration));
 		}
 		#var_dump($matches);print "<br />";

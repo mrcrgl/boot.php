@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * @build   11.09.2008
  * @project DMTp
  * @package DefaultManager
@@ -7,6 +7,7 @@
  * @author  Marc Riegel
  * @contact riegel@it-t.de
  * 
+ * @deprecated will be removed in future
  * --
  * 
  * --
