@@ -11,6 +11,10 @@
         {if $declaration->get('foreign_key') == true}
           {newobject object=$declaration->get('reference') var=reference_obj}
           {include file='includes/form/field-select.htpl' name=$field validate=required options=$reference_obj->objects->fetch() option_title=title null=$declaration->get('null') label=$field value=$object->get($field)}
+        {elseif $declaration->get('type') == 'boolean'}
+          {include file='includes/form/field-boolean.htpl' name=$field validate=required label=$field value=$object->get($field)}
+        {elseif $declaration->get('type') == 'password'}
+          {include file='includes/form/field-input.htpl' name=$field minlength=5 maxlength=50 type=password label=$field}
         {elseif $declaration->get('many_to_many') == true}
          
         {elseif $declaration->get('editable') == true}

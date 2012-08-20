@@ -21,6 +21,13 @@ class VModelFieldDateTime extends VModelField {
 		
 	}
 	
+	public function onCreate($value) {
+		if ($this->get('auto_now_add') == true) {
+			return date("Y-m-d H:i:s");
+		}
+		return $value;
+	}
+	
 	public function onUpdate($value) {
 		if ($this->get('auto_now') == true) {
 			return date("Y-m-d H:i:s");

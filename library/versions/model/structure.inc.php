@@ -59,6 +59,11 @@ class VModelStructure extends VObject {
 		#print "setting field: ".$__field.' with '.$__value.NL;
 		$__value = $this->getFieldDeclaration($__field)->onSet($__value);
 		
+		#if (!$bypasscheck && !$this->getFieldDeclaration($__field)->get('editable')) {
+			#printf("Field '%s' is not editable.".NL, $__field);
+			#return false;
+		#}
+		
 		if (!$bypasscheck && !$this->checkField($__field, $__value)) {
 			return false;
 		}
