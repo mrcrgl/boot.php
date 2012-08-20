@@ -46,6 +46,8 @@ class ComponentHelperViewModels extends VApplicationView {
 		
 		$model = new $classname();
 		
+		$dbo->userQuery("SET foreign_key_checks = 0;");
+		
 		if ($model->getModelVersion() == 1) {
 			$sql = $model->getSQL(true);
 			// DROP Tables 
@@ -83,6 +85,8 @@ class ComponentHelperViewModels extends VApplicationView {
 					$dbo->userQuery($tmp);
 				}
 			}
+			
+			$dbo->userQuery("SET foreign_key_checks = 1;");
 		}
 		
 		VMessages::_('Success!', sprintf('Database Layout for Modal \'%s\' installed!', $classname), 'success');

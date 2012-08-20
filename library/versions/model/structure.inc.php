@@ -112,11 +112,12 @@ class VModelStructure extends VObject {
 		
 	}
 	
-	public function getFields() {
+	public function getFields($only_db_columns=false) {
 		$class_vars = get_class_vars(get_class(&$this));
 		$fields     = array();
 		foreach ($class_vars as $column => $declaration) {
 			if (preg_match('/^_/', $column)) continue;
+			if ($only_db_columns && $this->getFieldDeclaration($column)->get('type') == 'none') continue;
 			$fields[] = $column;
 		}
 		return $fields;

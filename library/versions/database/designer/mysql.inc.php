@@ -19,7 +19,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 	public function isUpToDate($model) {
 		$dbo =& VFactory::getDatabase();
 		
-  	$columns = $model->getFields();
+  	$columns = $model->getFields(true);
   	foreach ($columns as $k => $column) {
   		$declaration = $model->getFieldDeclaration($column);
   		$columns[$k] = $declaration->get('db_column');
@@ -49,11 +49,25 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
   }
 	
   public function getDropTable($model) {
-  	$table = $this->getTableName(get_class($model));
-  	return array(sprintf("DROP TABLE IF EXISTS `%s`;", $table));
+  	
+  	
+  	$dbo					=& VFactory::getDatabase();
+		$fields 			= $model->getFields();
+		$tables       = array();
+		
+		$tables[] = $this->getTableName(get_class($model));
+		
+  	foreach ($fields as $k => $field) {
+  		$declaration =& $model->getFieldDeclaration($field);
+  		if ($declaration->get('many_to_many') != true) continue;
+  		$tables[] = $declaration->get('reference_table');
+  	}
+  	
+  	
+  	return array(sprintf("DROP TABLE IF EXISTS `%s`;", implode("`, `", $tables)));
   }
   
-	public function getCreateTable($model) {
+	public function getCreateTable(&$model) {
 		
 		$table = $this->getTableName(get_class($model));
 		#printf("Table name: %s".NL, $table);
@@ -62,13 +76,43 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		
 		$parts = array();
 		foreach ($model->getFields() as $field) {
-			$parts[] = $this->getColumnDeclaration($model, $field);
+			if ($model->getFieldDeclaration($field)->get('many_to_many') == true) continue;
+			$parts[] = $this->getColumnDeclaration(&$model, $field);
 		}
 		$sql .= sprintf("(\n%s\n)", implode(", \n", $parts));
 		
 		$sql .= sprintf(" ENGINE=InnoDB DEFAULT CHARSET=utf8;\n");
 		
-		return array($sql);
+		print "<pre>";
+		var_dump(array_merge(array($sql), $this->getCreateRelatedTables(&$model))); exit;
+		print "</pre>";
+		return array_merge(array($sql), $this->getCreateRelatedTables(&$model));
+	}
+	
+	private function getCreateRelatedTables(&$model) {
+		$dbo					=& VFactory::getDatabase();
+		$fields 			= $model->getFields();
+		$columns			= array();
+		$declarations = array();
+		$tables       = array();
+		
+  	foreach ($fields as $k => $field) {
+  		$declaration =& $model->getFieldDeclaration($field);
+  		if ($declaration->get('many_to_many') != true) continue;
+  		$parts = array();
+  		$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` \n", $declaration->get('reference_table'));
+			
+  		$parts[] = sprintf("`%s` CHAR(13) NOT NULL", $declaration->get('model_pk'));
+  		$parts[] = sprintf("`%s` CHAR(13) NOT NULL", $declaration->get('reference_pk'));
+  		
+			$sql .= sprintf("(\n%s\n)", implode(", \n", $parts));
+			
+			$sql .= sprintf(" ENGINE=InnoDB DEFAULT CHARSET=utf8;\n");
+			
+			$tables[] = $sql;
+  	}
+  	
+  	return $tables;
 	}
 	
 	public function getCreateIndex($model) {
@@ -82,7 +126,40 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 			}
 		}
 		
-		return $sql;
+		$related = $this->getCreateRelatedIndex($model);
+		
+		return array_merge($sql, $related);
+	}
+	
+	private function getCreateRelatedIndex($model) {
+		$dbo					=& VFactory::getDatabase();
+		$fields 			= $model->getFields();
+		$indexes      = array();
+		
+  	foreach ($fields as $k => $field) {
+  		$declaration =& $model->getFieldDeclaration($field);
+  		if ($declaration->get('many_to_many') != true) continue;
+  		$parts = array();
+			$parts[] = sprintf("ADD UNIQUE INDEX upks (`%s`, `%s`)", $declaration->get('model_pk'), $declaration->get('reference_pk'));
+  		$parts[] = sprintf(
+  			"ADD FOREIGN KEY (`%s`) REFERENCES `%s`(`%s`) ON DELETE CASCADE", 
+  			$declaration->get('model_pk'),
+  			$this->getTableName(get_class($declaration->get('_model'))),
+  			'uid'
+  		);
+			$parts[] = sprintf(
+  			"ADD FOREIGN KEY (`%s`) REFERENCES `%s`(`%s`) ON DELETE CASCADE", 
+  			$declaration->get('reference_pk'),
+  			$this->getTableName($declaration->get('reference')),
+  			'uid'
+  		);
+  		
+  		$sql .= sprintf("ALTER TABLE `%s` %s", $declaration->get('reference_table'), implode(", \n", $parts));
+  		
+  		$indexes[] = $sql;
+  	}
+  	
+  	return $indexes;
 	}
 	
 	public function saveModel($model) {
@@ -185,6 +262,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		$pkeys        = array();
 		
   	foreach ($fields as $k => $field) {
+  		if ($model->getFieldDeclaration($field)->get('many_to_many') == true) continue;
   		$column = $model->getFieldDeclaration($field)->get('db_column');
   		$declarations[$column] =& $model->getFieldDeclaration($field);
   		$columns[$column] = (($mode == 'update') ? $declarations[$column]->onUpdate($model->get($field)) : $declarations[$column]->onCreate($model->get($field)) );
@@ -284,8 +362,33 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 				$declaration .= (($field_declaration->get('null') == true) ? "NULL " : "NOT NULL ");
 				$declaration .= (($field_declaration->get('null') == true && is_null($field_declaration->get('default'))) ? "DEFAULT NULL" : (($field_declaration->get('default') != false) ? sprintf("DEFAULT '%s'", $field_declaration->get('default')) : "DEFAULT '0.0'"));
 				break;
+			case "date":
+				$declaration .= sprintf("DATE ");
+				#$declaration .= (($field_declaration->get('auto_now') == true) ? "ON UPDATE CURRENT_TIMESTAMP " : "");
+				$declaration .= (($field_declaration->get('null') == true) ? "NULL " : "NOT NULL ");
+				$declaration .= (($field_declaration->get('null') == true && is_null($field_declaration->get('default'))) ? "DEFAULT NULL" : (($field_declaration->get('auto_now_add') == true) ? "DEFAULT CURRENT_TIMESTAMP" : ($field_declaration->get('default') != false) ? sprintf("DEFAULT '%s'", $field_declaration->get('default')) : "DEFAULT '0.0'"));
+				break;
+			case "datetime":
+				$declaration .= sprintf("TIMESTAMP ");
+				#$declaration .= (($field_declaration->get('auto_now') == true) ? "ON UPDATE CURRENT_TIMESTAMP " : "");
+				$declaration .= (($field_declaration->get('null') == true) ? "NULL " : "NOT NULL ");
+				if ($field_declaration->get('auto_now_add') == true) {
+					$declaration .= "DEFAULT CURRENT_TIMESTAMP ";
+				}
+				elseif ($field_declaration->get('null') == true && is_null($field_declaration->get('default'))) {
+					$declaration .= "DEFAULT NULL ";
+				}
+				elseif ($field_declaration->get('default') != false) {
+					$declaration .= sprintf("DEFAULT '%s' ", $field_declaration->get('default'));
+				}
+				else {
+					$declaration .= "DEFAULT '0000-00-00 00:00:00' ";
+				}
+				break;
 			case "boolean":
 				$declaration .= sprintf("BOOLEAN ");
+				break;
+			case "none":
 				break;
 			default:
 				print "unknown type: ".$field_declaration->get('type');#

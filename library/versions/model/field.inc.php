@@ -40,6 +40,8 @@ class VModelField extends VObject {
 	
 	var $validators = array();
 	
+	var $_model = null;
+	
 	static $_instances = array();
 	
 	public function __construct($options=array()) {
@@ -106,7 +108,7 @@ class VModelField extends VObject {
 				#print "<br /><br />";
 				
 				$type    = $matches['type'];
-				$options = array_merge_recursive($options, array('db_column' => $column, 'field_name' => $column));
+				$options = array_merge_recursive($options, array('_model' => &$model, 'db_column' => $column, 'field_name' => $column));
 				
 				
 				#print 'prepareModel said: '.$column.NL;
