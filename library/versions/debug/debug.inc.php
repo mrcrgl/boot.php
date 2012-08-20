@@ -20,8 +20,8 @@ class VDebug implements VDebugInterface {
 			throw new Exception("VDebug Handler ".$handler." not found!");
 		}
 		
-		#set_error_handler('VDebug::php_error_handler');
-		#set_exception_handler('VDebug::php_exception_handler');
+		set_error_handler('VDebug::php_error_handler');
+		set_exception_handler('VDebug::php_exception_handler');
 		
 		return call_user_func(self::$handler.'::init');
 	}

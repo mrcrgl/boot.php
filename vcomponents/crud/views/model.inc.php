@@ -46,10 +46,11 @@ class ComponentCrudViewModel extends VApplicationView {
 		$renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 		
 		$document->setTemplate('crud/read.htpl');
+		
 		if ($renderer->templateExists($this->getAlternateTemplate('read.htpl'))) {
+			print $this->getAlternateTemplate('read.htpl'); exit;
 			$document->assign('user_defined_template', $this->getAlternateTemplate('read.htpl'));
 		}
-  	
   	
 	}
 	
@@ -111,13 +112,10 @@ class ComponentCrudViewModel extends VApplicationView {
   		$this->object_manager->set('ignore_object_state', true);
   	
   	} else {
-  		
+  		#print "before init jacket";
   		$this->object_manager = new VModelManagerJacket(&$this->object);
-  		
+  		#print "after init jacket";
   	}
-  	
-  	
-  	
   	
   	$document =& VFactory::getDocument();
   	
@@ -135,8 +133,12 @@ class ComponentCrudViewModel extends VApplicationView {
 	private function getAlternateTemplate($__method) {
 		$path = strtolower(implode(DS, VString::explode_camelcase($this->object_name)));
   	
-		
-  	$newpath = 'crud'.DS.substr($path, strpos($path, '/model/')+strlen('/model/')).DS.$__method;
+		if (strpos($path, '/model/') !== false) {
+			$newpath = 'crud'.DS.substr($path, strpos($path, '/model/')+strlen('/model/')).DS.$__method;
+		} else {
+			$newpath = 'crud'.DS.$path.DS.$__method;
+		}
+  	
   	return $newpath;
 	}
 	
