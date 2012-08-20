@@ -15,6 +15,10 @@ class VModelFieldDateTime extends VModelField {
 	public function __construct($options=array()) {
 		parent::__construct($options);
 		
+		if ($this->get('auto_now') || $this->get('auto_now_add')) {
+			$this->set('editable', false);
+		}
+		
 	}
 	
 	public function onUpdate($value) {

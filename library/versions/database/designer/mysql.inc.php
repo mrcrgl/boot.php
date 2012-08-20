@@ -83,9 +83,9 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		
 		$sql .= sprintf(" ENGINE=InnoDB DEFAULT CHARSET=utf8;\n");
 		
-		print "<pre>";
-		var_dump(array_merge(array($sql), $this->getCreateRelatedTables(&$model))); exit;
-		print "</pre>";
+		#print "<pre>";
+		#var_dump(array_merge(array($sql), $this->getCreateRelatedTables(&$model))); exit;
+		#print "</pre>";
 		return array_merge(array($sql), $this->getCreateRelatedTables(&$model));
 	}
 	
