@@ -48,7 +48,6 @@ class ComponentCrudViewModel extends VApplicationView {
 		$document->setTemplate('crud/read.htpl');
 		
 		if ($renderer->templateExists($this->getAlternateTemplate('read.htpl'))) {
-			print $this->getAlternateTemplate('read.htpl'); exit;
 			$document->assign('user_defined_template', $this->getAlternateTemplate('read.htpl'));
 		}
   	
