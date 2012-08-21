@@ -50,9 +50,18 @@ class ComponentAuthModelLogin extends VObject {
       VMessages::_('Error', 'loginPassRequired', 'error');
       return false;
     }
-    $managerClass  = $this->loginType."Manager";
-    $objManager    = new $managerClass();
-    $this->objUser = $objManager->doLogin($username, $password);
+    
+    $user = new $this->loginType();
+    if ($user->getModelVersion() == 1) {
+    	$managerClass  = $this->loginType."Manager";
+    	$objManager    = new $managerClass();
+    	$this->objUser = $objManager->doLogin($username, $password);
+    } elseif ($user->getModelVersion() == 2) {
+    	$user->objects->filter(sprintf('[username:%s,password:%s]', $username, md5($password)))->get();
+    	$this->objUser = $user;
+    }
+    
+    
     if (is_object($this->objUser) && $this->objUser->isValid()) {
       
       if ($this->strPermission && !$this->objUser->hasPermission($this->strPermission, true)) {
