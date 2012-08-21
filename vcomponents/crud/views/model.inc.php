@@ -70,7 +70,10 @@ class ComponentCrudViewModel extends VApplicationView {
   	
 		$input =& VFactory::getInput();
   	if (strtolower($input->getMethod()) == 'post') {
-  		$this->updateObject();
+  		if ($this->updateObject()) {
+  			header( sprintf("Location: /%s%s", $document->getUrlPrefix(), $this->object->get('uid')) );
+  			exit;
+  		}
   	}
 	}
 	
@@ -183,5 +186,7 @@ class ComponentCrudViewModel extends VApplicationView {
 		} else {
 			VMessages::_('Ok', 'Speichern erfolgreich!', 'success');
 		}
+		
+		return $bok;
 	}
 }
