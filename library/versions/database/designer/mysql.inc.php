@@ -174,6 +174,9 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		if ($dbo->userQuery($sql))
 			$model->isValid(true);
 		
+		
+		#$relational_sql = $this->getRelationalInsert($model);
+		
 		return $model->isValid();
 	}
 	

@@ -1,0 +1,44 @@
+
+{*
+validate
+id
+name
+type
+label
+help
+minlength
+maxlength
+rangelength
+range
+min
+max
+*}
+
+{if !$option_title}
+{assign var=option_title value=uid}
+{/if}
+{if $value|@is_object}
+{assign var=value value=$value->get('uid')}
+{/if}
+{if !$id}
+{assign var=id value=$name}
+{/if}
+
+<div class="control-group">
+  <label class="control-label" for="{$id}">{text ident=$label}</label>
+  <div class="controls">
+    <input type="hidden" name="{$name}[]" value="" />
+    {if $options}
+      {foreach from=$options item=option}
+        <label class="checkbox">
+          <input type="checkbox" name="{$name}[]" id="{$id}_{$option->get('uid')|escape}" value="{$option->get('uid')|escape}" {if $relation_manager->has($option->get('uid'))}checked="checked"{/if} /> {$option->get($option_title)|escape}
+        </label>
+      {foreachelse}
+        <label class="checkbox">
+          Keine optionen verf&uuml;gbar!
+        </label>
+      {/foreach}
+    {/if}
+    {if $help}<p class="help-block">{text ident=$help}</p>{/if}
+  </div>
+</div>

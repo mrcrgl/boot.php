@@ -132,6 +132,15 @@ class Validator {
     return false;
   }
   
+	public static function is_array($value) {
+    if (is_array($value)) {
+      return true;
+    }
+    
+    Validator::setError("ArrayExcepted");
+    return false;
+  }
+  
 	public static function is_null($value) {
     if (is_null($value)) {
       return true;

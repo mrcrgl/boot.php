@@ -22,7 +22,7 @@ class VModelFieldManyToMany extends VModelField {
 	var $model_pk = null;
 	
 	var $validators   = array(
-		'hexuid'
+		'array'
 	);
 	
 	public function __construct($options=array()) {
@@ -51,42 +51,22 @@ class VModelFieldManyToMany extends VModelField {
 		 
 	}
 	
-	public function onCreate($value) {
-		return $this->getUniqueId($value);
-	}
+	#public function onCreate($value) {
+	#	return $this->getUniqueId($value);
+	#}
 	
-	public function onUpdate($value) {
-		return $this->getUniqueId($value);
-	}
+	#public function onUpdate($value) {
+	#	return $this->getUniqueId($value);
+	#}
 	
-	public function onSet($value) {
-		return $this->getUniqueId($value);
-	}
+	#public function onSet($value) {
+	#	return $value;
+	#}
 	
-	public function onGet($value) {
-		return $this->getReferenceObject($value);
-	}
+	#public function onGet($value) {
+	#	return $this->getReferenceObject($value);
+	#}
 	
-	public function getUniqueId($mixed) {
-		if (is_object($mixed) && $mixed->isValid()) {
-			return $mixed->get('uid');
-		}
-		elseif ( Validator::is($mixed, 'hexuid') ) {
-			return $mixed;
-		}
-		return null;
-	}
 	
-	public function getReferenceObject($mixed) {
-		if (is_object($mixed) && $mixed->isValid()) {
-			return $mixed;
-		}
-		elseif ( Validator::is($mixed, 'hexuid') ) {
-			$ref = new $this->reference();
-			$ref->objects->filter(sprintf('[uid:%s]', $mixed))->get();
-			if ($ref->isValid()) return $ref;
-		}
-		return null;
-	}
 	
 }

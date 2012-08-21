@@ -16,24 +16,74 @@ class VModelManagerRelated extends VModelManager {
 	
 	public function __construct(&$model, &$related) {
 		parent::__construct(&$model);
-		
+		#var_dump($model);
 		$this->set('related', &$related);
 		
 		$this->initializeRelation();
 	}
 	
+	public function clear() {
+		$dbo =& VDatabase::getInstance();
+		$dbo->userQuery(sprintf(
+			"DELETE FROM `%s` WHERE `%s` = '%s'",
+			$this->declaration->get('reference_table'),
+			$this->declaration->get('model_pk'),
+			$this->declaration->get('_model')->get('uid')
+		));
+	}
 	
+	public function bulkAdd($array, $truncate=true) {
+		if ($truncate) {
+			$this->clear();
+		}
+		
+		foreach ($array as $value) {
+			if (Validator::is($value, 'hexuid') || is_object($value))
+				$this->add($value);
+		}
+	}
 	
+	public function add($mixed) {
+		$mixed = ((is_object($mixed)) ? $mixed->get('uid') : $mixed);
+		
+		$dbo =& VDatabase::getInstance();
+		$dbo->userQuery(sprintf(
+			"INSERT IGNORE INTO `%s` SET `%s` = '%s', `%s` = '%s'",
+			$this->declaration->get('reference_table'),
+			$this->declaration->get('model_pk'),
+			$this->declaration->get('_model')->get('uid'),
+			$this->declaration->get('reference_pk'),
+			$mixed
+		));
+	}
+	
+	public function has($mixed) {
+		$mixed = ((is_object($mixed)) ? $mixed->get('uid') : $mixed);
+		
+		$dbo =& VDatabase::getInstance();
+		$dbo->userQuery(sprintf(
+			"SELECT * FROM `%s` WHERE `%s` = '%s' AND `%s` = '%s'",
+			$this->declaration->get('reference_table'),
+			$this->declaration->get('model_pk'),
+			$this->declaration->get('_model')->get('uid'),
+			$this->declaration->get('reference_pk'),
+			$mixed
+		));
+		
+		return (bool)$dbo->getNumRows();
+	}
 	
 	private function initializeRelation() {
 		
 		if ($this->checkRelation(&$this->_model, get_class($this->related))) {
-			print "Parent is master and related is related".NL;
+			// TODO: set debug message
+			#print "Parent is master and related is related".NL;
 			$this->reverse = false;
 			#$this->filter('');
 		}
 		elseif ($this->checkRelation(&$this->related, get_class($this->_model))) {
-			print "Parent is related and related is master / reverse mode".NL;
+			// TODO: set debug message
+			#print "Parent is related and related is master / reverse mode".NL;
 			$this->reverse = true;
 			
 			// TODO: set the group_uid at second parameter
@@ -47,7 +97,8 @@ class VModelManagerRelated extends VModelManager {
 			#$this->setTable($designer->getTableName(get_class($this->_model)));
 		}
 		else {
-			print "Nix von beidem.".NL;
+			// TODO: set debug message
+			#print "Nix von beidem.".NL;
 		}
 	}
 	
@@ -59,7 +110,7 @@ class VModelManagerRelated extends VModelManager {
 			if (!in_array(substr(get_class($declaration), 11), $this->relation_types)) {
 				continue;
 			}
-			print $declaration->get('reference');
+			#print $declaration->get('reference');
 			if ($declaration->get('reference') == $related) {
 				$this->declaration =& $declaration;
 				return true;

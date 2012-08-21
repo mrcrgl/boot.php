@@ -17,7 +17,8 @@
           {include file='includes/form/field-input.htpl' name=$field minlength=5 maxlength=50 type=password label=$field}
         {elseif $declaration->get('many_to_many') == true}
           {newobject object=$declaration->get('reference') var=reference_obj}
-          {include file='includes/form/field-checkboxes.htpl' name=$field validate=required options=$reference_obj->objects->fetch() option_title=title null=$declaration->get('null') label=$field value=$object->get($field)}
+          {assign var=field_set value="`$field`__set"} 
+          {include file='includes/form/field-checkboxes.htpl' name=$field validate=required options=$reference_obj->objects->fetch() option_title=title null=$declaration->get('null') label=$field relation_manager=$object->$field_set}
         {elseif $declaration->get('editable') == true}
           {include file='includes/form/field-input.htpl' name=$field minlength=$declaration->get('min_length') maxlength=$declaration->get('max_length') validate=required label=$field value=$object->get($field)}
         {/if}

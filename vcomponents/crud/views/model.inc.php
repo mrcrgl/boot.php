@@ -161,6 +161,20 @@ class ComponentCrudViewModel extends VApplicationView {
 		} elseif ($this->object_layout_version == 2) {
 			$this->object->bulkSet($params);
 			$bok = $this->object->save();
+			
+			/*
+			 * for ManyToMany relationships
+			 */
+			foreach ($this->object->getFields() as $field) {
+				if (!$this->object->getFieldDeclaration($field)->get('many_to_many')) continue;
+				
+				if (isset($params[$field])) {
+					$fieldset = $field.'__set';
+					$this->object->$fieldset->bulkAdd($params[$field]);
+				}
+				
+			}
+			
 		}
 		
 		
