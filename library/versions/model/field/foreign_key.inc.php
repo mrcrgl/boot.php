@@ -39,7 +39,7 @@ class VModelFieldForeignKey extends VModelFieldChar {
 		$reference_table_name = $designer->getTableName($this->get('reference'));
 		$this->set('reference_table', $reference_table_name);
 		$this->set('reference_pk', 'uid');
-		$this->set('db_column', $reference_table_name.'_'.$this->get('reference_pk'));
+		$this->set('db_column', $this->get('field_name').'_'.$reference_table_name.'_'.$this->get('reference_pk'));
 		 
 	}
 	
