@@ -77,6 +77,10 @@ class VUrl {
 			$path = $path.'/';
 		}
 		
+		/*if (substr($path, 0, 1) != '/') {
+			$path = '/'.$path;
+		}*/
+		
 		if (!$chained_uri) $chained_uri = $path;
 		
 		#printf("Class is %s".NL, get_class($this));
@@ -127,6 +131,10 @@ class VUrl {
 					$url_classname = sprintf("Component%sUrls", ucfirst($component_ident));
 					$com_urls = new $url_classname();
 					
+					if (substr($remaining_part, -1) != '/') {
+						$remaining_part = $remaining_part.'/';
+					}
+					
 					/*
 					 * Url prefix to able the component building urls
 					 */
@@ -134,6 +142,8 @@ class VUrl {
 					#print "Remaining: ".$remaining_part.NL;
 					#print(str_replace($remaining_part, '', $chained_uri));
 					
+					#print substr($chained_uri, '-'.strlen($remaining_part));
+					#printf(NL."Chained Uri: %s contains %s (length %d)".NL, $chained_uri, $remaining_part, strlen($remaining_part));
 					if (substr($chained_uri, '-'.strlen($remaining_part)) == $remaining_part) {
 						#print "TRUE substr($chained_uri, 0, strlen($remaining_part)) == $remaining_part".NL;
 						$document->setUrlPrefix( substr($chained_uri, 0, strlen($chained_uri)-(strlen($remaining_part))) );

@@ -49,7 +49,7 @@ class VDocument {
 	 * @var    string
 	 * @since  2.0
 	 */
-	public $url_prefix = '';
+	public $url_prefix = '/';
 	
 	/**
 	 * Contains the document language setting
@@ -566,6 +566,9 @@ class VDocument {
 	 * @since   2.0
 	 */
 	public function setUrlPrefix($url_prefix) {
+		if (substr($url_prefix, -1) != '/') {
+			$url_prefix = $url_prefix.'/';
+		}
 		$this->url_prefix = $url_prefix;
 
 		return $this;
