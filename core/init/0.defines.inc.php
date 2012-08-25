@@ -106,3 +106,16 @@ define('PROJECT_CACHE', PROJECT_ROOT.DS.'cache');
  * @var PROJECT_TEMPLATES Project template directory
  */
 define('PROJECT_TEMPLATES', PROJECT_ROOT.DS.'templates');
+
+
+/**
+ * @var 'HTTP_USER' User which runs the Webserver
+ */
+$http_user = posix_getpwuid(posix_getuid()); // Get http user
+define('HTTP_USER', $http_user["name"]);
+
+// Check permissions for cache directory
+if (!is_writable(PROJECT_CACHE)){
+  echo PROJECT_CACHE.' must be writeable by '.HTTP_USER.'. Exiting...';
+  exit(0);
+}
