@@ -25,7 +25,7 @@ max
     <span class="{$class|default:"span4"} uneditable-input">{$value|default:$placeholder}</span>
     {else}
       {if $type == 'textarea'}
-        <textarea rows="{$rows|default:2}" {if $disabled}disabled="" {/if} class="{$class|default:"span4"} {$validate}"{if $minlength} minlength="{$minlength}"{/if}{if $maxlength} maxlength="{$maxlength}"{/if}{if $rangelength} rangelength="{$rangelength}"{/if}{if $range} range="{$range}"{/if}{if $min} min="{$min}"{/if}{if $max} max="{$max}"{/if} id="{$id}" name="{$name}">{$value|escape}</textarea>
+        <textarea rows="{$rows|default:2}" {if $disabled}disabled="" {/if} class="{$class|default:"span4"} {$validate}"{if $minlength} minlength="{$minlength}"{/if}{if $maxlength} maxlength="{$maxlength}"{/if}{if $rangelength} rangelength="{$rangelength}"{/if}{if $range} range="{$range}"{/if}{if $min} min="{$min}"{/if}{if $max} max="{$max}"{/if} id="{$id}" name="{$name}" placeholder="{$placeholder}">{$value|escape}</textarea>
       {else}
         <input placeholder="{$placeholder}" {if $disabled}disabled="" {/if}type="{$type|default:"text"}" class="{$class|default:"span4"} {$validate}"{if $minlength} minlength="{$minlength}"{/if}{if $maxlength} maxlength="{$maxlength}"{/if}{if $rangelength} rangelength="{$rangelength}"{/if}{if $range} range="{$range}"{/if}{if $min} min="{$min}"{/if}{if $max} max="{$max}"{/if} id="{$id}" name="{$name}" value="{$value|escape}">
       {/if}
