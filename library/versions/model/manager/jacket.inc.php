@@ -9,8 +9,8 @@ class VModelManagerJacket {
 	}
 	
 	public function getAll() {
-		$designer = VDatabaseDesigner::getInstance();
-		return $designer->getModels(&$this->model);
+		
+		return $this->model->objects->fetch();
 	}
 	
 }

@@ -13,8 +13,9 @@
         <tr>
           <td>{$obj->get('uid')}</td>
           <td>{$obj->get('title', 'undef')}</td>
-          <td><a href="/{$_document->getUrlPrefix()}{$obj->uid}">bearbeiten</a></td>
+          <td><a href="/{$_document->getUrlPrefix()}{$obj->get('uid')}">bearbeiten</a></td>
         </tr>
       {/foreach}
+      
       </tbody>
     </table>
