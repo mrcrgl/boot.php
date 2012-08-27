@@ -313,6 +313,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		
 		switch($field_declaration->get('type')) {
 			case "string":
+			case "password":
 				if ($field_declaration->get('max_length') <= 64):
 					$declaration .= sprintf("CHAR(%d) ", $field_declaration->get('max_length'));
 				elseif ($field_declaration->get('max_length') <= 255):
@@ -394,6 +395,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 			case "none":
 				break;
 			default:
+				// TODO: Debug message
 				print "unknown type: ".$field_declaration->get('type');#
 				break;
 			
