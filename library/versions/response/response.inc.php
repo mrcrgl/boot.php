@@ -32,7 +32,23 @@ class VResponse {
    * @var    array  Headers
    * @since  2.0
    */
-  protected static $headers = array();
+  protected static $headers = array(
+    array('name' => 'X-Framework', 'value' => "Versions 2.0")
+  );
+
+  protected static $http_codes = array(
+    '200' => "OK",
+    '301' => "Moved Permanently",
+    '302' => "Found",
+    '303' => "See Other",
+    '304' => "Not Modified",
+    '307' => "Temporary Redirect",
+    '400' => "Bad Request",
+    '403' => "Forbidden",
+    '404' => "Not Found",
+    '405' => "Method Not Allowed",
+    '406' => "Not Acceptable"
+  );
 
   /**
    * Set/get cachable state for the response.
@@ -112,6 +128,7 @@ class VResponse {
    */
   public static function sendHeaders() {
     if (!headers_sent()) {
+
       foreach (self::$headers as $header) {
         if ('status' == strtolower($header['name'])) {
           // 'status' headers indicate an HTTP status, and need to be handled slightly differently
@@ -214,6 +231,28 @@ class VResponse {
     self::sendHeaders();
 
     return $data;
+  }
+
+  public static function error($code=404) {
+    #print $code." thrown.".NL;
+
+    self::setHeader("Status", $code);
+
+    $document =& VFactory::getDocument();
+    $renderer =& $document->getRenderer();
+    #$renderer->init();
+
+    #var_dump($document->getRenderer()->getTemplateDir());
+
+    $document->setTemplate( sprintf("error/%d.htpl", (int)$code) );
+    $document->render();
+    #var_dump($document);
+
+    self::setBody( $document->getBody() );
+
+    print self::toString(true);
+    exit;
+
   }
 
   /**

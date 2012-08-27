@@ -2,9 +2,9 @@
 
 
 class VDocumentHtml extends VDocument {
-	
+
 	var $_template = 'index.htpl';
-	
+
 	/**
    * Class constructor
    *
@@ -47,23 +47,23 @@ class VDocumentHtml extends VDocument {
 	public function getTemplate() {
 		return $this->_template;
 	}
-	
+
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public function assignDocumentVars() {
 		$renderer =& $this->getRenderer();
 		$session  =& VFactory::getSession();
-		
+
 		$renderer->assign('_document', &$this);
-		
+
 		$login =& $session->get('login');
   	if (is_object($login) && $login->loggedIn()) {
   		$renderer->assign('_user', &$login->obj);
   	}
 	}
-	
+
 	/**
 	 * Outputs the document
 	 *
@@ -77,14 +77,16 @@ class VDocumentHtml extends VDocument {
 		}
 
 		VResponse::setHeader('Content-Type', $this->_mime . ($this->_charset ? '; charset=' . $this->_charset : ''));
-		
-		if (!is_object($this->_renderer)) {
+
+		$renderer =& $this->getRenderer();
+
+		if (!is_object($renderer)) {
 			throw new Exception("No renderer instanciated");
 		}
-		
+
 		$this->assignDocumentVars();
-		
-		$data = $this->_renderer->fetch( $this->getTemplate() );
+
+		$data = $renderer->fetch( $this->getTemplate() );
 		$this->setBody($data);
 	}
 }

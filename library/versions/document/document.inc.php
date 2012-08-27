@@ -2,7 +2,7 @@
 
 
 class VDocument {
-	
+
 	/**
 	 * Document title
 	 *
@@ -26,7 +26,7 @@ class VDocument {
 	 * @since  2.0
 	 */
 	public $project_name = 'Versions 2.0 - Project';
-	
+
 	/**
 	 * Document full URL
 	 *
@@ -42,7 +42,7 @@ class VDocument {
 	 * @since  2.0
 	 */
 	public $base = '';
-	
+
 	/**
 	 * Document url_prefix URL Prefix
 	 *
@@ -50,7 +50,7 @@ class VDocument {
 	 * @since  2.0
 	 */
 	public $url_prefix = '/';
-	
+
 	/**
 	 * Contains the document language setting
 	 *
@@ -105,7 +105,7 @@ class VDocument {
 	 * @since  2.0
 	 */
 	public $_author = '';
-	
+
 	/**
 	 * Document mime type
 	 *
@@ -169,7 +169,7 @@ class VDocument {
 	 * @since  2.0
 	 */
 	public $_type = null;
-	
+
 	/**
 	 * The document renderer reference
 	 *
@@ -177,49 +177,50 @@ class VDocument {
 	 * @since  2.0
 	 */
 	public $_renderer = null;
-	
+
 	public $_body = null;
-	
+
 	public function __construct() {
-		
+
 	}
-	
+
 	public static function getInstance($type='html') {
-		
+
 		$classname = 'VDocument'.ucfirst($type);
-		
+
 		VLoader::autoload($classname);
-		
+
 		if (!class_exists($classname)) {
 			throw new Exception( sprintf('Document engine %s not found. Exiting...', $classname) );
 			//user_error()
 		}
-		
+
 		return new $classname();
 	}
-	
+
 	public function getRenderer($type='smarty') {
-		
+
 		if (!$this->_renderer) {
-		
+
 			$classname = 'VDocumentRenderer'.ucfirst($this->getType()).ucfirst($type);
-			
+
 			$path = dirname(__FILE__).DS.$this->getType().DS.'renderer'.DS.$type.'.inc.php';
-			
+
 			VLoader::register($classname, $path);
 			VLoader::autoload($classname);
-			
+
 			if (!class_exists($classname)) {
 				throw new Exception( sprintf('Document renderer %s not found. Exiting...', $classname) );
 				//user_error()
 			}
-			
+
 			$this->_renderer = new $classname();
+			$this->_renderer->init();
 		}
-		
+
 		return $this->_renderer;
 	}
-	
+
 	/**
 	 * Set the document type
 	 *
@@ -245,7 +246,7 @@ class VDocument {
 	public function getType() {
 		return $this->_type;
 	}
-	
+
 	/**
 	 * Gets a meta tag.
 	 *
@@ -314,7 +315,7 @@ class VDocument {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Adds a linked script to the page
 	 *
@@ -423,7 +424,7 @@ class VDocument {
 	public function getCharset() {
 		return $this->_charset;
 	}
-	
+
 	/**
 	 * Sets the document author
 	 *
@@ -450,7 +451,7 @@ class VDocument {
 	public function getAuthor() {
 		return $this->_author;
 	}
-	
+
 	/**
 	 * Sets the document project name
 	 *
@@ -503,7 +504,7 @@ class VDocument {
 	public function getLanguage() {
 		return $this->language;
 	}
-	
+
 /**
 	 * Sets the title of the document
 	 *
@@ -555,7 +556,7 @@ class VDocument {
 	public function getBase() {
 		return $this->base;
 	}
-	
+
 	/**
 	 * Sets the prefix URI of the document
 	 *
@@ -755,11 +756,11 @@ class VDocument {
 
 		return $this;
 	}
-	
+
 	public function getMessages($leave=false) {
 		return VMessages::getMessages();
 	}
-	
+
 	/**
 	 * Returns the lineEnd
 	 *
@@ -770,7 +771,7 @@ class VDocument {
 	public function _getLineEnd() {
 		return $this->_lineEnd;
 	}
-	
+
 	/**
 	 * Sets the string for the body
 	 *
@@ -796,7 +797,7 @@ class VDocument {
 	public function getBody() {
 		return $this->_body;
 	}
-	
+
 	/**
 	 * Sets the string used to indent HTML
 	 *
@@ -822,12 +823,12 @@ class VDocument {
 	public function _getTab() {
 		return $this->_tab;
 	}
-	
+
 	public function assign($var, $value) {
 		$renderer =& $this->getRenderer();
 		$renderer->assign($var, $value);
 	}
-	
+
 	/**
 	 * Outputs the document
 	 *
@@ -841,7 +842,7 @@ class VDocument {
 		}
 
 		VResponse::setHeader('Content-Type', $this->_mime . ($this->_charset ? '; charset=' . $this->_charset : ''));
-		
-		
+
+
 	}
 }
