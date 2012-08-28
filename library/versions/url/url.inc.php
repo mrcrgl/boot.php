@@ -94,7 +94,7 @@ class VUrl {
 			$epattern = '/'.$pattern.'/';
 
 			if (preg_match($epattern, $path, $matches, PREG_OFFSET_CAPTURE)) {
-				print "<pre>";var_dump($matches);print "</pre><br />";
+				#print "<pre>";var_dump($matches);print "</pre><br />";
 
 				foreach ($matches as $key => $match) {
 					if (!is_numeric($key)) {
@@ -111,12 +111,12 @@ class VUrl {
 				$renderer =& $document->getRenderer();
 				$object = new ReflectionObject($this);
 				$template_path = dirname($object->getFileName()).DS.'templates';
-				print "<pre>";
+				#print "<pre>";
 
 				#print $template_path.NL;
 				$renderer->unshiftTemplateDir($template_path);
- 				var_dump($renderer->getTemplateDir());
- 				print "</pre>";
+ 				#var_dump($renderer->getTemplateDir());
+ 				#print "</pre>";
 
 				// found, next level
 				if ($component_ident = $this->getDestinationComponent($destination)) {
