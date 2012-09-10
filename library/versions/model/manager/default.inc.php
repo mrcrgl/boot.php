@@ -110,7 +110,7 @@ abstract class VModelManagerDefault extends VObject {
   }
 
   public function order_by($field, $dir='ASC') {
-    if (!in_array(array('ASC', 'DESC'), strtoupper($dir))) die("Argument 2 'dir' must be ASC or DESC");
+    if (!in_array(strtoupper($dir), array('ASC', 'DESC'))) die("Argument 2 'dir' must be ASC or DESC");
 
     if (!$this->object->hasField($field)) {
       return false;
