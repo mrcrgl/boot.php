@@ -165,7 +165,7 @@ abstract class VModelManagerDefault extends VObject {
   function getOrdering() {
 
   	$order = array();
-    if ($this->object->hasField('priority')) {
+    if (count($this->_order) <= 0 && $this->object->hasField('priority')) {
       $order[] = sprintf(" `priority` ASC");
     }
 
