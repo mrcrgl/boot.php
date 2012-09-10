@@ -72,20 +72,27 @@ class VModelManagerRelated extends VModelManager {
 	      $this->declaration->get('reference_pk'),
 	      $mixed
 	  ));
+
+	  $this->clearOptions();
 	}
 
 	public function has($mixed) {
 		$mixed = ((is_object($mixed)) ? $mixed->get('uid') : $mixed);
+
+		#print $this->_model->get('uid').' - '.$mixed.NL;
 
 		$dbo =& VDatabase::getInstance();
 		$dbo->userQuery(sprintf(
 			"SELECT * FROM `%s` WHERE `%s` = '%s' AND `%s` = '%s'",
 			$this->declaration->get('reference_table'),
 			$this->declaration->get('model_pk'),
-			$this->declaration->get('_model')->get('uid'),
+			$this->_model->get('uid'),
 			$this->declaration->get('reference_pk'),
 			$mixed
 		));
+
+		$this->clearOptions();
+
 		return (bool)$dbo->getNumRows();
 	}
 
@@ -94,6 +101,7 @@ class VModelManagerRelated extends VModelManager {
 	  if ($this->checkRelation(&$this->_model, get_class($this->related))) {
 			// TODO: set debug message
 			#print "Parent is master and related is related".NL;
+			#printf("Parent: %s(%s); Related: %s(%s)".NL, get_class($this->_model), $this->_model->get('uid'), get_class($this->related), $this->related->get('uid'));
 			$this->reverse = false;
 
 		  $designer =& VDatabaseDesigner::getInstance();
@@ -134,7 +142,8 @@ class VModelManagerRelated extends VModelManager {
 			// TODO: set the group_uid at second parameter
 			#print sprintf('[%s:%s]', $this->declaration->get('db_column'), 'theuid');
 			#print get_class($this->_model);
-			parent::__construct($this->related, get_class($this->_model));
+			#$this->set('related', get_class($this->_model));
+		  parent::__construct(&$this->related, get_class($this->_model));
 
 			$this->setTable($table);
 

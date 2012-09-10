@@ -196,6 +196,8 @@ class VModelManager extends VObject {
 		$this->_model->bulkSet($dbo->getRecord());
 		$this->_model->isValid(true);
 
+    $this->clearOptions();
+
 		return true;
 	}
 
@@ -217,6 +219,8 @@ class VModelManager extends VObject {
 		$dbo =& VFactory::getDatabase();
 		$dbo->userQuery( $this->buildQuerySelect() );
 
+		$this->clearOptions();
+
 		return (bool)$dbo->getNumRows();
 	}
 
@@ -232,6 +236,9 @@ class VModelManager extends VObject {
 
 		$dbo =& VFactory::getDatabase();
 		$dbo->userQuery( $this->buildQuerySelect() );
+
+		$this->clearOptions();
+
 		return $dbo->getNumRows();
 	}
 
@@ -250,6 +257,8 @@ class VModelManager extends VObject {
 		$dbo =& VFactory::getDatabase();
 		#print $this->buildQuerySelect();
 		$dbo->userQuery( $this->buildQuerySelect() );
+		$this->clearOptions();
+
 		if (!$dbo->getNumRows()) {
 			return array(); // or whatever
 		}
@@ -281,6 +290,8 @@ class VModelManager extends VObject {
 	  $dbo =& VFactory::getDatabase();
 	  #print $this->buildQuerySelect();exit;
 	  $dbo->userQuery( $this->buildQueryDelete() );
+	  $this->clearOptions();
+
 	  return $dbo->getNumRows();
 	}
 
@@ -310,6 +321,15 @@ class VModelManager extends VObject {
 	 */
 	private function getOptions($type) {
 		return ((isset($this->_options[$type])) ? $this->_options[$type] : array());
+	}
+
+	/**
+	 * clear options
+	 *
+	 * @return 	void
+	 */
+	protected function clearOptions() {
+	  $this->_options = array();
 	}
 
 	/**
