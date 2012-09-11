@@ -13,22 +13,22 @@ VLoader::import('versions.base.object');
 class VProfiler extends VObject {
     /**
      *
-     * @var int 
+     * @var int
      */
     var $_start = 0;
- 
+
     /**
      *
-     * @var string 
+     * @var string
      */
     var $_prefix = '';
- 
+
     /**
      *
-     * @var array 
+     * @var array
      */
     var $_buffer= null;
- 
+
     /**
      * Constructor
      *
@@ -40,32 +40,32 @@ class VProfiler extends VObject {
         $this->_prefix = $prefix;
         $this->_buffer = array();
     }
- 
+
     /**
      * Returns a reference to the global Profiler object, only creating it
      * if it doesn't already exist.
      *
      * This method must be invoked as:
-     *         <pre>  $browser = & JProfiler::getInstance( $prefix );</pre>
+     *         <pre>  $browser = & VProfiler::getInstance( $prefix );</pre>
      *
      * @access public
      * @param string Prefix used to distinguish profiler objects.
      * @return VProfiler  The Profiler object.
      */
-    function &getInstance($prefix = '') {
+    public static function &getInstance($prefix = '') {
         static $instances;
- 
+
         if (!isset($instances)) {
             $instances = array();
         }
- 
+
         if (empty($instances[$prefix])) {
             $instances[$prefix] = new VProfiler($prefix);
         }
- 
+
         return $instances[$prefix];
     }
- 
+
     /**
      * Output a time mark
      *
@@ -82,11 +82,11 @@ class VProfiler extends VObject {
         if ( function_exists('memory_get_usage') ) {
             $mark    .= ', '.sprintf('%0.2f', memory_get_usage() / 1048576 ).' MB';
         }
- 
+
         $this->_buffer[] = $mark;
         return $mark;
     }
- 
+
     /**
      * Get the current time.
      *
@@ -97,7 +97,7 @@ class VProfiler extends VObject {
         list( $usec, $sec ) = explode( ' ', microtime() );
         return ((float)$usec + (float)$sec);
     }
- 
+
     /**
      * Get information about current memory usage.
      *
@@ -107,7 +107,7 @@ class VProfiler extends VObject {
      */
     function getMemory() {
         static $isWin;
- 
+
         if (function_exists( 'memory_get_usage' )) {
             return memory_get_usage();
         } else {
@@ -115,11 +115,11 @@ class VProfiler extends VObject {
             if (is_null( $isWin )) {
                 $isWin = (substr(PHP_OS, 0, 3) == 'WIN');
             }
- 
+
             // Initialize variables
             $output = array();
             $pid = getmypid();
- 
+
             if ($isWin) {
                 // Windows workaround
                 @exec( 'tasklist /FI "PID eq ' . $pid . '" /FO LIST', $output );
@@ -133,7 +133,7 @@ class VProfiler extends VObject {
             }
         }
     }
- 
+
     /**
      * Get all profiler marks.
      *
