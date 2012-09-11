@@ -54,7 +54,7 @@ class VModelManagerRelated extends VModelManager {
 			"INSERT IGNORE INTO `%s` SET `%s` = '%s', `%s` = '%s'",
 			$this->declaration->get('reference_table'),
 			$this->declaration->get('model_pk'),
-			$this->declaration->get('_model')->get('uid'),
+			$this->_model->get('uid'),
 			$this->declaration->get('reference_pk'),
 			$mixed
 		));
@@ -68,7 +68,7 @@ class VModelManagerRelated extends VModelManager {
 	      "DELETE FROM `%s` WHERE `%s` = '%s' AND `%s` = '%s' LIMIT 1",
 	      $this->declaration->get('reference_table'),
 	      $this->declaration->get('model_pk'),
-	      $this->declaration->get('_model')->get('uid'),
+	      $this->_model->get('uid'),
 	      $this->declaration->get('reference_pk'),
 	      $mixed
 	  ));

@@ -272,6 +272,8 @@ class VModelManager extends VObject {
 			$i++;
 		}
 
+		#print_r($return);
+
 		return $return;
 	}
 
