@@ -42,9 +42,9 @@ VLoader::import('phputf8.strcasecmp');
  * @since       2.0
  */
 abstract class VString {
-	
+
 	static $sanitize_chars = array();
-	
+
 	/**
 	 * Increment styles.
 	 *
@@ -830,15 +830,15 @@ abstract class VString {
   	}
   	return $result;
   }
-  
+
   /**
-   * 
+   *
    * @return string			sanitized String for urls
    * @param  string 		The String to sanitize
    */
 	public static function sanitize($__string) {
 		VString::initChars();
-		
+
 		$__string = strtr($__string, VString::$sanitize_chars);
     $__string = strtolower($__string);
     $__string = preg_replace("#&.+?;#", "", $__string);
@@ -848,12 +848,12 @@ abstract class VString {
     $__string = trim($__string, '-');
     return $__string;
 	}
-	
+
 	static function initChars() {
 		if (count(VString::$sanitize_chars) > 0) {
 			return true;
-		} 
-		
+		}
+
 		VString::$sanitize_chars = array(
 	    chr(195).chr(128) => 'A',
 	    chr(195).chr(160) => 'a',
@@ -1040,14 +1040,14 @@ abstract class VString {
 	    chr(197).chr(190) => 'z',
     );
 	}
-	
+
 	public static function underscores_to_camelcase($__string) {
 		return implode('', VArray::ucfirst(explode('_', $__string)));
 	}
-	
+
 	public static function camelcase_to_underscores($__string) {
 		$parts = self::explode_camelcase($__string);
 		$parts = VArray::strip_empty_values($parts);
-		return self::strtolower(implode($parts));
+		return self::strtolower(implode('_', $parts));
 	}
 }

@@ -5,8 +5,15 @@
     <div class="alert alert-error">
       <button class="close" data-dismiss="alert">×</button>
       <strong>404</strong> File not found!
+      {if $message}<p>{$message}</p>{/if}
     </div>
-        
+    {if $debug}
+      <div class="well">
+        <pre>
+          {$debug}
+        </pre>
+      </div>
+    {/if}
   </div>
 </div>
 

@@ -5,31 +5,31 @@
  *
  * @author Marc Riegel
  * @version 1.0
- * 
+ *
  * ---------------------------------
- * 
+ *
  * ---------------------------------
- * 
+ *
  */
 
 class ComponentAuthModelLogin extends VObject {
-  
+
   private $tsLogin    = false;
-  
+
   private $objUser    = false;
-  
+
   private $loginType  = "";
-  
+
   private $useReferer = false;
-  
+
   private $followUrl  = false;
-  
+
   private $strPermission = false;
-  
+
   public function __construct($__loginType="User") {
     $this->loginType = $__loginType;
   }
-  
+
   public function __get($__memberName) {
     if ($__memberName == 'obj') {
       if (!is_object($this->objUser)) {
@@ -38,7 +38,7 @@ class ComponentAuthModelLogin extends VObject {
       return $this->objUser;
     }
   }
-  
+
   public function doLogin($username, $password) {
     if (!Validator::is($username, 'filled')) {
       #$this->setErrorMsg("loginUserRequired");
@@ -50,7 +50,7 @@ class ComponentAuthModelLogin extends VObject {
       VMessages::_('Error', 'loginPassRequired', 'error');
       return false;
     }
-    
+
     $user = new $this->loginType();
     if ($user->getModelVersion() == 1) {
     	$managerClass  = $this->loginType."Manager";
@@ -60,17 +60,17 @@ class ComponentAuthModelLogin extends VObject {
     	$user->objects->filter(sprintf('[username:%s,password:%s]', $username, md5($password)))->get();
     	$this->objUser = $user;
     }
-    
-    
+
+
     if (is_object($this->objUser) && $this->objUser->isValid()) {
-      
+
       if ($this->strPermission && !$this->objUser->hasPermission($this->strPermission, true)) {
         #$this->setErrorMsg("permissionDenied");
         VMessages::_('Error', 'permissionDenied', 'error');
         unset($this->objUser);
         return false;
       }
-    
+
       $this->loginSuccessful();
       return true;
     } else {
@@ -79,16 +79,16 @@ class ComponentAuthModelLogin extends VObject {
       return false;
     }
   }
-  
+
   public function doLogout() {
-    
+
   	$session =& VFactory::getSession();
   	$session->clear('login');
-  	
+
     unset($this->objUser);
     return true;
   }
-  
+
   public function loggedIn() {
     if (!isset($this->objUser)) {
       return false;
@@ -102,21 +102,21 @@ class ComponentAuthModelLogin extends VObject {
     if ($this->objUser->status < 1) {
       return false;
     }
-    
+
     return true;
   }
-  
+
   private function loginSuccessful() {
     $this->registerLogin();
     $this->forwarding();
   }
-  
+
   private function registerLogin() {
     $this->tsLogin = time();
     $session =& VFactory::getSession();
     $session->set('login', &$this);
   }
-  
+
   private function forwarding() {
     $headerLocation = false;
     if ($this->useReferer == true && Validator::is($_SERVER['HTTP_REFERER'], 'filled')) {
@@ -130,18 +130,18 @@ class ComponentAuthModelLogin extends VObject {
       exit;
     }
   }
-  
+
   public function useReferer($bool=true) {
     $this->useReferer = $bool;
   }
-  
+
   public function followUrl($url=false) {
     $this->followUrl = $url;
   }
-  
+
   public function needPermission($permission=false) {
     $this->strPermission = $permission;
   }
-  
+
 }
 ?>

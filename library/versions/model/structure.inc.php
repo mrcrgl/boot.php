@@ -7,6 +7,10 @@ class VModelStructure extends VObject {
 
 	var $_manager = null;
 
+	var $_allow_cache = true;
+
+	var $_related_manager = array();
+
 	public function __construct($__uid=null) {
 
 		$this->initialize();
@@ -24,6 +28,7 @@ class VModelStructure extends VObject {
 		VModelField::prepareModel(&$this);
 
 		foreach ($this->getFields() as $field) {
+		  #print "Init field: $field".NL;
 			$this->set($field, $this->getFieldDeclaration($field)->onInitialize( $this->get($field) ), true);
 		}
 	}
@@ -99,14 +104,21 @@ class VModelStructure extends VObject {
 			return $this->_manager;
 		}
 		if (substr($__var, -5, 5) == '__set') {
-			$reference = (($this->getFieldDeclaration(substr($__var, 0, -5))) ? $this->getFieldDeclaration(substr($__var, 0, -5))->get('reference') : null );
-			if ($reference) {
-				$related = new $reference();
-			} else {
-				$related_name = VString::underscores_to_camelcase(substr($__var, 0, -5));
-				$related = new $related_name();
-			}
-			return VModelManager::getInstance(&$this, $related, 'related');
+		  #print $__var.NL;exit();
+		  if (!$this->_allow_cache || !isset($this->_related_manager[$__var])) {
+		    $reference = (($this->getFieldDeclaration(substr($__var, 0, -5))) ? $this->getFieldDeclaration(substr($__var, 0, -5))->get('reference') : null );
+		    if ($reference) {
+		      $related = new $reference();
+		    } else {
+		      $related_name = VString::underscores_to_camelcase(substr($__var, 0, -5));
+		      $related = new $related_name();
+		    }
+		    $this->_related_manager[$__var] = VModelManager::getInstance(&$this, $related, 'related');
+		  }
+		  #else { print "den jibbet schon"; }
+      #var_dump($this->_related_manager[$__var]);
+      #exit;
+			return $this->_related_manager[$__var];
 		}
 
 

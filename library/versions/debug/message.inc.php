@@ -7,6 +7,8 @@ define('DEBUG_NOTICE', 		4);
 define('DEBUG_INFO', 			5);
 define('DEBUG_MESSSAGE', 	6);
 
+
+
 /**
  * Debug Message
  *
@@ -15,40 +17,46 @@ define('DEBUG_MESSSAGE', 	6);
  * @since       2.0
  */
 class VDebugMessage {
-	
+
+  /**
+   *
+   * @var bool
+   */
+  var $valid;
+
 	/**
-	 * 
+	 *
 	 * Enter description here ...
 	 * @var unknown_type
 	 */
 	var $message;
-	
+
 	/**
-	 * 
+	 *
 	 * Enter description here ...
 	 * @var unknown_type
 	 */
 	var $level;
-	
+
 	/**
-	 * 
+	 *
 	 * Enter description here ...
 	 * @var unknown_type
 	 */
 	var $file;
-	
+
 	/**
-	 * 
+	 *
 	 * Enter description here ...
 	 * @var unknown_type
 	 */
 	var $line;
-	
+
 	/**
-	 * 
+	 *
 	 * collection of php error-codes with local definitions
 	 * source: http://www.php.net/manual/en/errorfunc.constants.php
-	 * 
+	 *
 	 * @var array php_error_codes
 	 */
 	private $php_error_codes = array(
@@ -69,11 +77,11 @@ class VDebugMessage {
 		16384		=> array(DEBUG_NOTICE, 	'E_USER_DEPRECATED'),
 		32767		=> array(DEBUG_INFO, 		'E_ALL')
 	);
-	
+
 	/**
-	 * 
+	 *
 	 * contructor of VDebugMessage
-	 * 
+	 *
 	 * @param string $message
 	 * @param integer $level
 	 * @param integer $tracelevel
@@ -81,7 +89,21 @@ class VDebugMessage {
 	 * @param integer $line
 	 */
 	function __construct($message, $level=6, $tracelevel=null, $file=null, $line=null) {
-		
+
+	  #print "Debug Level: ".VSettings::f('debug.level').NL;
+
+	  if (!defined('DEBUG_LEVEL') && VSettings::$initialized) {
+	    define('DEBUG_LEVEL',     VSettings::f('debug.level'));
+	  }
+
+	  if (defined('DEBUG_LEVEL') && (DEBUG_LEVEL === false || $level >= DEBUG_LEVEL)) {
+	    #print "DEBUG_LEVEL ".DEBUG_LEVEL." to low".NL;
+	    $this->valid = false;
+	    return false;
+	  }
+
+
+
 		/*
 		 * Array
 		 * (
@@ -90,30 +112,30 @@ class VDebugMessage {
      *  [file] => C:\WWW\index.php
      *  [line] => 2
      * )
-		 * 
+		 *
 		 */
 		if (is_null($file) && is_null($line)) {
 			$backtrace = debug_backtrace();
-			
+
 			$lv = ((!is_null($tracelevel) ? 0+$tracelevel : 0));
-			
+
 			$file = $backtrace[$lv]['file'];
 			$line = $backtrace[$lv]['line'];
 		}
-		
+
 		if (is_null($level) && isset($code) && isset($this->php_error_codes[$code])) {
 			$level = 3; //$this->php_error_codes[$code][0];
 		}
-		
+
 		$this->message 	= $message;
 		$this->level		= $level;
 		$this->file 		= (string)new VDirectory($file);
 		$this->line 		= $line;
-		
+		$this->valid    = true;
 	}
-	
+
 	function __toString() {
 		return sprintf("[%d] (%s:%d): %s".NL, $this->level, $this->file, $this->line, $this->message);
 	}
-	
+
 }

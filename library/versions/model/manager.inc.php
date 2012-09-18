@@ -196,6 +196,8 @@ class VModelManager extends VObject {
 		$this->_model->bulkSet($dbo->getRecord());
 		$this->_model->isValid(true);
 
+		$dbo->freeResult();
+
     $this->clearOptions();
 
 		return true;
@@ -219,9 +221,13 @@ class VModelManager extends VObject {
 		$dbo =& VFactory::getDatabase();
 		$dbo->userQuery( $this->buildQuerySelect() );
 
+		$exist = (bool)$dbo->getNumRows();
+
+		$dbo->freeResult();
+
 		$this->clearOptions();
 
-		return (bool)$dbo->getNumRows();
+		return $exist;
 	}
 
 	/**
@@ -237,9 +243,13 @@ class VModelManager extends VObject {
 		$dbo =& VFactory::getDatabase();
 		$dbo->userQuery( $this->buildQuerySelect() );
 
+		$rows = $dbo->getNumRows();
+
+		$dbo->freeResult();
+
 		$this->clearOptions();
 
-		return $dbo->getNumRows();
+		return $rows;
 	}
 
 	/**
@@ -271,6 +281,8 @@ class VModelManager extends VObject {
 			$return[$i]->isValid(true);
 			$i++;
 		}
+
+		$dbo->freeResult();
 
 		#print_r($return);
 
@@ -646,7 +658,13 @@ class VModelManager extends VObject {
 	 * @return	string		sql table column of given field
 	 */
 	private function getColumnByName($varname) {
+	  #print get_class($this->_model);
+#die();
 		$declaration =& $this->_model->getFieldDeclaration($varname);
+		if ($varname == 'collection') {
+		  #var_dump(VModelField::$_instances);
+		  #die();
+		}
 		if (!isset($this->related) && !$declaration)
 			throw new Exception(sprintf("Model %s does not contains a field named '%s'", get_class($this->_model), $varname));
 

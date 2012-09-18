@@ -233,7 +233,7 @@ class VResponse {
     return $data;
   }
 
-  public static function error($code=404) {
+  public static function error($code=404, $message=null, $debug=null) {
     #print $code." thrown.".NL;
 
     self::setHeader("Status", $code);
@@ -244,13 +244,19 @@ class VResponse {
 
     #var_dump($document->getRenderer()->getTemplateDir());
 
+    $document->assign('message', $message);
+    if (!is_null($debug) && VSettings::f('default.debug')) {
+      $document->assign('debug', $debug);
+    }
     $document->setTemplate( sprintf("error/%d.htpl", (int)$code) );
     $document->render();
-    #var_dump($document);
+
+    #var_dump($document);exit;
 
     self::setBody( $document->getBody() );
 
-    print self::toString(true);
+    ob_clean();
+    print self::toString(false);
     exit;
 
   }

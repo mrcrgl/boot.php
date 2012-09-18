@@ -169,6 +169,7 @@ class VDatabaseMysql extends VDatabase {
       // if there is no connection - create error
       if(!$this->resConnectionID) {
         //$this->sql_abort("No Connection-Id - connection failed");
+        #$this->sql_abort('Could not connect to database.');
         throw new Exception("No Connection-Id - connection failed");
       }
 
@@ -223,7 +224,9 @@ class VDatabaseMysql extends VDatabase {
     $message .= sprintf("<b>Database error:</b> %s<br>\n", $strMessage);
     $message .= sprintf("<b>MySQL Error</b>: %s (%s)<br>\n",$this->intErrNumber,$this->strError);
     $message .= sprintf("<br>Host: {$this->strHost}<br>Database: {$this->strDb}<br>User: {$this->strUser}<br>PW: **** <br>");
-    throw new Exception($message);
+    VResponse::error(500, 'Database error.', $message);
+
+    #throw new Exception();
 
   }
 
@@ -239,7 +242,7 @@ class VDatabaseMysql extends VDatabase {
 
 
       if (VSettings::f('default.debug')) {
-        $profiler = VProfiler::getInstance('db');
+        //$profiler = VProfiler::getInstance('db');
       }
 
     	if (!$this->resConnectionID) {
@@ -257,7 +260,7 @@ class VDatabaseMysql extends VDatabase {
       $refResult = mysqli_query($this->resConnectionID, $strQueryString);
 
       if (VSettings::f('default.debug')) {
-        $profiler->mark($strQueryString);
+        //$profiler->mark($strQueryString);
       }
 
       /*if ($this->logQuerys) {

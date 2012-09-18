@@ -3,9 +3,9 @@
 <div class="row">
   <div class="span6 offset3">
     <div class="alert alert-error">
-      <button class="close" data-dismiss="alert">×</button>
-      <strong>403</strong> Forbidden!
-      {if $message}<p>{$message}</p>{/if}
+      <button class="close" data-dismiss="alert">&cross;</button>
+      <strong>500</strong> Server internal Error!
+      {if $message}<p><small>{$message}</small></p>{/if}
     </div>
     {if $debug}
       <div class="well">

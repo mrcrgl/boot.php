@@ -3,8 +3,8 @@
  * @package     Versions.core
  * @subpackage  Session
  *
- * @copyright   
- * @license     
+ * @copyright
+ * @license
  */
 
 // Register the session storage class with the loader
@@ -95,7 +95,7 @@ class VSession extends VObject {
 			session_unset();
 			session_destroy();
 		}
-		
+
 		// set default sessios save handler
 		ini_set('session.save_handler', 'files');
 
@@ -105,15 +105,15 @@ class VSession extends VObject {
 		// create handler
 		$this->_store = VSessionStorage::getInstance($store, $options);
 		#var_dump($this->_store);
-		
+
 		// set options
 		$this->_setOptions($options);
-		
+
 		$this->_setCookieParams();
 
 		// load the session
 		$this->_start();
-		
+
 		// initialise the session
 		$this->_setCounter();
 		$this->_setTimers();
@@ -122,8 +122,8 @@ class VSession extends VObject {
 
 		// perform security checks
 		$this->_validate();
-		
-		
+
+
 	}
 
 	/**
@@ -148,7 +148,7 @@ class VSession extends VObject {
 	 */
 	public static function getInstance($handler, $options) {
 		if (!is_object(self::$instance)) {
-			
+
 			self::$instance = new VSession($handler, $options);
 		}
 
@@ -272,6 +272,8 @@ class VSession extends VObject {
 		}
 
 		if (isset($_SESSION[$namespace][$name])) {
+		  if (!is_object ($_SESSION[$namespace][$name]) && gettype ($_SESSION[$namespace][$name]) == 'object')
+		    return ($_SESSION[$namespace][$name] = unserialize (serialize ($_SESSION[$namespace][$name])));
 			return $_SESSION[$namespace][$name];
 		}
 		return $default;

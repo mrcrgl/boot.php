@@ -97,7 +97,7 @@ class VModelManagerRelated extends VModelManager {
 	}
 
 	private function initializeRelation() {
-
+    #exit;
 	  if ($this->checkRelation(&$this->_model, get_class($this->related))) {
 			// TODO: set debug message
 			#print "Parent is master and related is related".NL;
@@ -123,29 +123,49 @@ class VModelManagerRelated extends VModelManager {
 		elseif ($this->checkRelation(&$this->related, get_class($this->_model))) {
 			// TODO: set debug message
 			#print "Parent is related and related is master / reverse mode".NL;
+		  #printf("Parent: %s(%s); Related: %s(%s)".NL, get_class($this->_model), $this->_model->get('uid'), get_class($this->related), $this->related->get('uid'));
+
 			$this->reverse = true;
 
+			/*
+			 * ManyToMany
+			 */
+		  if(get_class($this->declaration) == 'VModelFieldManyToMany') {
 
-		  $designer =& VDatabaseDesigner::getInstance();
-		  $table = $this->declaration->get('reference_table');
-		  $table .= sprintf(
-	        " LEFT JOIN %s ON (%s.%s = %s.%s) ",
-	        $designer->getTableName(get_class($this->related)),
-	        $designer->getTableName(get_class($this->related)),
-	        'uid',
-	        $this->declaration->get('reference_table'),
-	        $this->declaration->get('model_pk')
-	    );
+		    $designer =& VDatabaseDesigner::getInstance();
+		    $table = $this->declaration->get('reference_table');
+		    $table .= sprintf(
+		        " LEFT JOIN %s ON (%s.%s = %s.%s) ",
+		        $designer->getTableName(get_class($this->related)),
+		        $designer->getTableName(get_class($this->related)),
+		        'uid',
+		        $this->declaration->get('reference_table'),
+		        $this->declaration->get('model_pk')
+		    );
 
-		  $this->filter( sprintf('[%s:%s]', $this->declaration->get('reference_pk'), $this->_model->uid) );
+		    $this->filter( sprintf('[%s:%s]', $this->declaration->get('reference_pk'), $this->_model->uid) );
 
-			// TODO: set the group_uid at second parameter
-			#print sprintf('[%s:%s]', $this->declaration->get('db_column'), 'theuid');
-			#print get_class($this->_model);
-			#$this->set('related', get_class($this->_model));
-		  parent::__construct(&$this->related, get_class($this->_model));
+		    // TODO: set the group_uid at second parameter
+		    #print sprintf('[%s:%s]', $this->declaration->get('db_column'), 'theuid');
+		    #print get_class($this->_model);
+		    #$this->set('related', get_class($this->_model));
+		    parent::__construct(&$this->related, get_class($this->_model));
+		    #exit;
+		    $this->setTable($table);
 
-			$this->setTable($table);
+		  }
+
+		  /*
+		   * ForeignKey
+		   */
+		  elseif (get_class($this->declaration) == 'VModelFieldForeignKey') {
+		    $filter = sprintf('[%s:%s]', $this->declaration->get('db_column'), $this->_model->uid);
+		    parent::__construct(&$this->related, get_class($this->_model));
+		    $this->filter($filter);
+		  }
+
+
+
 
 			// Only for ForeignKeys
 			#$designer =& VDatabaseDesigner::getInstance();
