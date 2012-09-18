@@ -241,8 +241,8 @@ class VDatabaseMysql extends VDatabase {
 
 
 
-      if (VSettings::f('default.debug')) {
-        //$profiler = VProfiler::getInstance('db');
+      if (VSettings::f('database.debug')) {
+        $profiler = VProfiler::getInstance('db');
       }
 
     	if (!$this->resConnectionID) {
@@ -259,8 +259,8 @@ class VDatabaseMysql extends VDatabase {
 
       $refResult = mysqli_query($this->resConnectionID, $strQueryString);
 
-      if (VSettings::f('default.debug')) {
-        //$profiler->mark($strQueryString);
+      if (VSettings::f('database.debug')) {
+        $profiler->mark($strQueryString);
       }
 
       /*if ($this->logQuerys) {
