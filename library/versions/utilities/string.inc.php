@@ -1046,6 +1046,9 @@ abstract class VString {
 	}
 
 	public static function camelcase_to_underscores($__string) {
+
+	  VLoader::import('versions.utilities.array');
+
 		$parts = self::explode_camelcase($__string);
 		$parts = VArray::strip_empty_values($parts);
 		return self::strtolower(implode('_', $parts));

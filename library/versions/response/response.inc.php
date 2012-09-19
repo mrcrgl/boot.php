@@ -258,7 +258,14 @@ class VResponse {
     ob_clean();
     print self::toString(false);
     exit;
+  }
 
+  public static function redirect($to, $code=303) {
+    if (!isset(self::$http_codes[$code])) return false;
+
+    header(sprintf("HTTP/1.1 %d %s", $code, self::$http_codes[$code]));
+    header(sprintf("Location: %s", $to));
+    exit;
   }
 
   /**
