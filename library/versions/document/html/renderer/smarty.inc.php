@@ -89,7 +89,7 @@ class VDocumentRendererHtmlSmarty extends Smarty {
 	public function loadUserPlugins() {
 
 		$extension_path = VLIB.DS.'Smarty'.DS.'user_plugins';
-		foreach (array('function', 'modifier', 'block') as $type) {
+		foreach (array('function', 'compiler', 'modifier', 'block') as $type) {
 			$prefix = 'smarty_'.$type.'_';
 
 			$plugins = VSettings::f('smarty.'.$type);

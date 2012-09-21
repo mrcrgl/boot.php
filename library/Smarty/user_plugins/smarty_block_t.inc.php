@@ -71,14 +71,17 @@ function smarty_gettext_strarg($str)
  *   - count - The item count for plural mode (3rd parameter of ngettext())
  */
 function smarty_block_t($params, $text, &$smarty) {
-	$text = stripslashes($text);
+	if (empty($text)) return null;
 
-	// set escape mode
+  $text = stripslashes($text);
+
+  // set escape mode
 	if (isset($params['escape'])) {
 		$escape = $params['escape'];
 		unset($params['escape']);
 	}
 
+	#print_r($params);
 	// set plural version
 	if (isset($params['plural'])) {
 		$plural = $params['plural'];
@@ -87,20 +90,32 @@ function smarty_block_t($params, $text, &$smarty) {
 		// set count
 		if (isset($params['count'])) {
 			$count = $params['count'];
-			unset($params['count']);
+			#unset($params['count']);
 		}
 	}
 
-	// use plural if required parameters are set
-	if (isset($count) && isset($plural)) {
-		$text = ngettext($text, $plural, $count);
-	} else { // use normal
-		$text = gettext($text);
+	if (isset($params['assign'])) {
+	  $assign = $params['assign'];
+	  unset($params['assign']);
 	}
+
+	#return $plural;
+	// use plural if required parameters are set
+	if (isset($count) && isset($plural) && $count > 1) {
+		$text = $plural;
+	} /*else { // use normal
+		$text = gettext($text);
+	}*/
+
+
 
 	// run strarg if there are parameters
 	if (count($params)) {
-		$text = smarty_gettext_strarg($text, $params);
+	  foreach ($params as $key => $value) {
+	    #print $key;
+	    $text = str_replace('%'.$key, $value, $text);
+	  }
+		#$text = smarty_gettext_strarg($text, $params);
 	}
 
 	if (!isset($escape) || $escape == 'html') { // html escape, default
@@ -118,6 +133,11 @@ function smarty_block_t($params, $text, &$smarty) {
 				break;
 		}
 	}
+
+  if (isset($assign)) {
+    $smarty->assign($assign, $text);
+    return null;
+  }
 
 	return $text;
 }
