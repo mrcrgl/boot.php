@@ -21,6 +21,12 @@ class VModelManager extends VObject {
 	 */
 	var $_options = array();
 
+	/**
+	 *
+	 * @var unknown_type
+	 */
+	var $_debug = false;
+
 	//static $_instances = array();
 
 	/**
@@ -160,6 +166,12 @@ class VModelManager extends VObject {
 		return $this;
 	}
 
+	public function debug($bool) {
+	  $this->_debug = (bool)$bool;
+
+	  return $this;
+	}
+
 	/* single model functions */
 
 	public function clear() {
@@ -264,6 +276,8 @@ class VModelManager extends VObject {
 
 		$model_name = $this->_model_name; #get_class($this->_model);
 
+		#var_dump($this->_options);
+
 		$dbo =& VFactory::getDatabase();
 		#print $this->buildQuerySelect();
 		$dbo->userQuery( $this->buildQuerySelect() );
@@ -361,7 +375,11 @@ class VModelManager extends VObject {
 			$this->buildQueryOrder(),
 			$this->buildQueryLimit()
 		);
-		#print $sql.NL;
+
+		if ($this->_debug) {
+		  print $sql.NL;
+		}
+
 		return $sql;
 	}
 

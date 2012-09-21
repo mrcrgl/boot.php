@@ -1,52 +1,38 @@
 {include file='header.htpl'}
 
 <div class="row">
-  <div class="span6 offset3">
+  <div class="span4 offset4 well">
+    <legend>{t}Please Sign In{/t}</legend>
     {include file='includes/form/form-messages.htpl'}
   
-    {if $login}
-          <span class="formSignOK">!</span><p class="formMsg">Sie wurden erfolgreich angemeldet.</p>
-        {else}
-          {if $err_login}
-            <span class="formSignError">!</span><p class="formMsg">Bei der Anmeldung trat ein Fehler auf: {$err_login}</p>
-          {/if}
-          {*if $error}
-            {include file='includes/snip-alert.htpl' message=$error type='warning'}
-          {/if*}
-    <form class="form-horizontal" action="" method="POST">
+    <form class="" action="" method="POST" accept-charset="UTF-8">
       {$csrf_token}
       
-      <fieldset>
-        <legend>{*text ident='LOGIN'*}</legend>
+      <input type="text" id="username" class="span4" name="username" placeholder="{t}Username{/t}" />
+      <input type="password" id="password" class="span4" name="password" placeholder="{t}Password{/t}" />
         
-        {include file='includes/form/field-input.htpl' name='username' minlength=3 validate=required label=LOGIN_USERNAME help=LOGIN_USERNAME_HELP}
+      <input type="hidden" value="1" name="formSent">
         
-        {include file='includes/form/field-input.htpl' name='password' minlength=3 validate=required label=LOGIN_PASSWORD help=LOGIN_PASSWORD_HELP type=password}
-        
-        <input type="hidden" value="1" name="formSent">
-        
-        {if $smarty.post.requested_view && $smarty.post.requested_view != ""}
-          <input type="hidden" name="requested_view" value="{$smarty.post.requested_view}" />
+      {if $smarty.post.requested_view && $smarty.post.requested_view != ""}
+        <input type="hidden" name="requested_view" value="{$smarty.post.requested_view}" />
+      {else}
+        {if $requested_view && $requested_view != ""}
+          <input type="hidden" name="requested_view" value="{$requested_view}">
         {else}
-          {if $requested_view && $requested_view != ""}
-            <input type="hidden" name="requested_view" value="{$requested_view}">
-          {else}
-            <input type="hidden" name="requested_view" value="{$default_landing_page}">
-          {/if}
+          <input type="hidden" name="requested_view" value="{$default_landing_page}">
         {/if}
-        <input type="hidden" name="do_login" value="{$smarty.now}" />
+      {/if}
+      <input type="hidden" name="do_login" value="{$smarty.now}" />
         
-        <input type="hidden" value="3" name="formID">
+      <input type="hidden" value="3" name="formID">
         
-        
-        
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">{text ident='BTN_LOGIN'}</button>
-          <button class="btn">{text ident='BTN_ABORT'}</button>
-        </div>
-      </fieldset>
+      <label class="checkbox">
+        <input type="checkbox" name="remember" value="1"> {t}Remember Me{/t}
+      </label>
+      
+      <button type="submit" class="btn btn-info btn-block">{t}Login{/t}</button>
+      
     </form>
-    {/if}
   </div>
 </div>
 

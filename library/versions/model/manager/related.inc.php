@@ -117,7 +117,8 @@ class VModelManagerRelated extends VModelManager {
 		  $this->setTable($table);
 		  $this->setModelName(get_class($this->related));
 
-			$this->filter( sprintf('[%s:%s]', $this->declaration->get('model_pk'), $this->_model->get('uid')) );
+		  #print sprintf('[%s:%s]', $this->declaration->get('model_pk'), $this->_model->get('uid'));
+			$this->filter( sprintf('[%s:%s]', 'uid', $this->_model->get('uid')) );
 
 		}
 		elseif ($this->checkRelation(&$this->related, get_class($this->_model))) {
