@@ -189,6 +189,16 @@ class Validator {
     return false;
   }
 
+  public static function is_username($value) {
+
+    if (preg_match('/^[0-9a-zA-Z\._-]{5,50}$/', $value)) {
+      return true;
+    }
+
+    Validator::setError("InvalidUsername");
+    return false;
+  }
+
   public static function is_ip($value) {
     if (filter_var($value, FILTER_VALIDATE_IP)) {
       return true;

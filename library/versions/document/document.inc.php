@@ -188,7 +188,9 @@ class VDocument {
 
 		$classname = 'VDocument'.ucfirst($type);
 
-		VLoader::autoload($classname);
+		if (!class_exists($classname)) {
+		  VLoader::autoload($classname);
+		}
 
 		if (!class_exists($classname)) {
 			throw new Exception( sprintf('Document engine %s not found. Exiting...', $classname) );
