@@ -23,6 +23,13 @@ class VModelManager extends VObject {
 
 	/**
 	 *
+	 * the given options
+	 * @var array
+	 */
+	var $_options_sticky = array();
+
+	/**
+	 *
 	 * @var unknown_type
 	 */
 	var $_debug = false;
@@ -164,6 +171,13 @@ class VModelManager extends VObject {
 		$this->importOptions(array('filter'=> $options));
 
 		return $this;
+	}
+
+	public function filterSticky($options=array()) {
+	  $options = VArray::parseOptions($options);
+	  $this->importOptions(array('filter'=> $options), true);
+
+	  return $this;
 	}
 
 	public function debug($bool) {
@@ -337,8 +351,10 @@ class VModelManager extends VObject {
 	 * @param 	array		 $options
 	 * @return 	void
 	 */
-	private function importOptions($options=array()) {
+	private function importOptions($options=array(), $sticky=false) {
 		$this->_options = array_merge_recursive($this->_options, $options);
+		if ($sticky)
+		  $this->_options_sticky = array_merge_recursive($this->_options_sticky, $options);
 	}
 
 	/**
@@ -357,7 +373,7 @@ class VModelManager extends VObject {
 	 * @return 	void
 	 */
 	protected function clearOptions() {
-	  $this->_options = array();
+	  $this->_options = $this->_options_sticky;
 	}
 
 	/**

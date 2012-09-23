@@ -116,9 +116,8 @@ class VModelManagerRelated extends VModelManager {
 		  );
 		  $this->setTable($table);
 		  $this->setModelName(get_class($this->related));
-
 		  #print sprintf('[%s:%s]', $this->declaration->get('model_pk'), $this->_model->get('uid'));
-			$this->filter( sprintf('[%s:%s]', 'uid', $this->_model->get('uid')) );
+			$this->filterSticky( sprintf('[%s:%s]', $this->declaration->get('model_pk'), $this->_model->get('uid')) );
 
 		}
 		elseif ($this->checkRelation(&$this->related, get_class($this->_model))) {
@@ -144,7 +143,7 @@ class VModelManagerRelated extends VModelManager {
 		        $this->declaration->get('model_pk')
 		    );
 
-		    $this->filter( sprintf('[%s:%s]', $this->declaration->get('reference_pk'), $this->_model->uid) );
+		    $this->filterSticky( sprintf('[%s:%s]', $this->declaration->get('reference_pk'), $this->_model->uid) );
 
 		    // TODO: set the group_uid at second parameter
 		    #print sprintf('[%s:%s]', $this->declaration->get('db_column'), 'theuid');
