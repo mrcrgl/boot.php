@@ -1,8 +1,16 @@
 <?php
 
 class VText {
-	public static function _($string, $jsSafe = false, $interpretBackSlashes = true, $script = false) {
+
+  static $localization = null;
+
+  public static function _($string, $options=array()) {
 		// TODO integrate Language System
-		return $string;
+
+    if (!self::$localization) {
+      self::$localization =& VLocalization::getInstance();
+    }
+
+		return self::$localization->_($string, &$options);
 	}
 }

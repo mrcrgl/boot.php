@@ -1,0 +1,82 @@
+{include file='header.htpl'}
+
+<h1>Translation</h1>
+
+{include file='includes/form/form-messages.htpl'}
+
+{if !$is_disabled}
+
+<div class="row">
+  <div class="span2 offset10">
+    <a href="/{$_document->getUrlPrefix()}translation/cache_clear" class="btn btn-danger">Clear Cache</a>
+  </div>
+</div>
+
+<form class="form-horizontal" method="post" action="/{$_document->getUrlPrefix()}translation/save">
+{$csrf_token}
+<input type="hidden" name="to" value="{$to}" />
+
+<div class="row">
+
+  <div class="span6">
+    <legend>From language: {$from}</legend>
+    
+    {*$from_data|@var_dump*}
+  </div>
+  
+  <div class="span6">
+    <legend>To language: {$to}</legend>
+    
+    {*$to_data|@var_dump*}
+  </div>
+  
+
+</div>
+
+{foreach from=$from_data item=from_area key=area}
+  <div class="row">
+    <div class="span12" style="text-align: center">
+      <h3>Area: {$area}</h3>
+    </div>
+  </div>
+  {foreach from=$from_area key=hash item=ct}
+  <div class="row">
+
+    <div class="span6">
+      {include file='includes/form/field-input.htpl' uneditable=true label='Text' value=$ct.t}
+      {if $ct.p}
+      {include file='includes/form/field-input.htpl' uneditable=true label='Plural' value=$ct.p}
+      {/if}
+      {if $ct.n}
+      {include file='includes/form/field-input.htpl' uneditable=true label='None' value=$ct.n}
+      {/if}
+    </div>
+    
+    <div class="span6">
+      {assign var=text_name value="_$area[$hash][t]"}
+      {include file='includes/form/field-input.htpl' name=$text_name label='Text' value=$to_data[$area][$hash].t}
+      {if $ct.p}
+      {assign var=plural_name value="_$area[$hash][p]"}
+      {include file='includes/form/field-input.htpl' name=$plural_name label='Plural' value=$to_data[$area][$hash].p}
+      {/if}
+      {if $ct.n}
+      {assign var=none_name value="_$area[$hash][n]"}
+      {include file='includes/form/field-input.htpl' name=$none_name label='None' value=$to_data[$area][$hash].n}
+      {/if}
+    </div>
+      
+  </div>
+  <div class="row">
+    <div class="span12"><hr /></div>
+  </div>
+   
+  {/foreach} 
+{/foreach}
+
+<button type="submit">submit</button>
+
+</form>
+
+{/if}
+
+{include file='footer.htpl'}

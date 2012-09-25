@@ -413,7 +413,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 				$this->getTableName(get_class($model)),
 				(($field_declaration->get('unique') == true) ? "UNIQUE " : ""),
 				sprintf("%s_key", $field),
-				$field
+				$field_declaration->get('db_column')
 			);
 		}
 		if ($field_declaration->get('primary_key') == true) {
@@ -421,7 +421,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 				"ALTER TABLE `%s` ADD PRIMARY KEY %s (`%s`);",
 				$this->getTableName(get_class($model)),
 				sprintf("%s_pk", $field),
-				$field
+				$field_declaration->get('db_column')
 			);
 		}
 		if ($field_declaration->get('foreign_key') == true) {

@@ -6,19 +6,32 @@ function t() {
 
 class VLocalization extends VObject {
 
+  /**
+   * Available locales
+   *
+   * @var array Locales
+   */
   var $locales = array(
     'en' => 'en_US',
     'de' => 'de_DE'
   );
 
-  var $locale = null;
+  var $enabled = array();
+
+  /**
+   * The users locale
+   *
+   * @var string 2 char locale
+   */
+  var $user_locale = 'en';
 
   static $_instance = null;
 
   public function __construct() {
     // fetch cookie or default
 
-    $this->set('locale', $this->getUserLocale());
+    $this->set('enabled', VSettings::f('localization.locales', array('foo')));
+    $this->set('user_locale', $this->getUserLocale());
 
   }
 
@@ -27,7 +40,7 @@ class VLocalization extends VObject {
     if (!isset(self::$_instance) && !is_object(self::$_instance)) {
 
       if (is_null($type)) {
-        $type = VSettings::f('localization.engine', 'gettext');
+        $type = VSettings::f('localization.engine', 'none');
       }
 
       $classname = sprintf('VLocalization%s', ucfirst($type));
@@ -50,35 +63,55 @@ class VLocalization extends VObject {
 
 
 
-  public static function _() {
+  /*
+   * public function _() {
     $self =& self::getInstance();
     return call_user_func_array(array($self, 'translate'), func_get_args());
   }
+   */
 
   public function setLocale($locale) {
     if (!$this->isLocale($locale)) return false;
-
     $this->setUserLocale($locale);
 
-    $this->set('locale', $locale);
+    $this->set('user_locale', $locale);
     return $locale;
   }
 
   public function getLocale($ietf=false) {
-    return (($ietf) ? $this->locales[($this->get('locale'))] : $this->get('locale'));
+    return (($ietf) ? $this->locales[($this->get('user_locale'))] : $this->get('user_locale'));
   }
 
   public function isLocale($locale) {
-    return (bool)isset($this->locale[$locale]);
+    return (bool)(isset($this->locales[$locale]) && in_array($locale, $this->enabled));
   }
 
   public function setUserLocale($locale) {
     $cookie = VInput::getInstance('cookie');
-    $cookie->set('locale', $locale, (60*60*24*365));
+    $cookie->set('user_locale', $locale, time()+(60*60*24*365), '/');
   }
 
   public function getUserLocale() {
+
+    $default_lang = null;
+    $browser_lang = strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
+    if ($this->isLocale($browser_lang)) {
+      $default_lang = $browser_lang;
+    }
+
+    if (is_null($default_lang)) {
+      $default_lang = VSettings::f('localization.default_locale', 'en');
+    }
+
     $input =& VInput::getInstance('cookie');
-    return $input->get('locale', VSettings::f('localization.default', 'en'), 'cookie');
+    return $input->get('user_locale', $default_lang, 'cookie');
+  }
+
+  public function record() {
+
+  }
+
+  public function _($string, $options=array()) {
+    return $string;
   }
 }

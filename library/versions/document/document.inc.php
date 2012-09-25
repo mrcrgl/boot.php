@@ -57,7 +57,7 @@ class VDocument {
 	 * @var    string
 	 * @since  2.0
 	 */
-	public $language = 'de-de';
+	public $language = null;
 
 	/**
 	 * Document generator
@@ -504,6 +504,12 @@ class VDocument {
 	 * @since   2.0
 	 */
 	public function getLanguage() {
+
+	  if (VSettings::f('localization.engine', 'none') != 'none') {
+	    $localization =& VLocalization::getInstance();
+	    return $localization->getLocale();
+	  }
+
 		return $this->language;
 	}
 
@@ -530,7 +536,7 @@ class VDocument {
 	 * @since   2.0
 	 */
 	public function getTitle() {
-		return $this->title;
+		return (($this->title) ? sprintf("%s - %s", $this->title, VSettings::f('default.title', 'Versions 2.0 project')) : VSettings::f('default.title', 'Versions 2.0 project') );
 	}
 
 	/**

@@ -73,66 +73,15 @@ function smarty_gettext_strarg($str)
 function smarty_block_t($params, $text, &$smarty) {
 	if (empty($text)) return null;
 
-  $text = stripslashes($text);
-
-  // set escape mode
-	if (isset($params['escape'])) {
-		$escape = $params['escape'];
-		unset($params['escape']);
-	}
-
-	#print_r($params);
-	// set plural version
-	if (isset($params['plural'])) {
-		$plural = $params['plural'];
-		unset($params['plural']);
-
-		// set count
-		if (isset($params['count'])) {
-			$count = $params['count'];
-			#unset($params['count']);
-		}
-	}
-
 	if (isset($params['assign'])) {
 	  $assign = $params['assign'];
 	  unset($params['assign']);
 	}
 
-	#return $plural;
-	// use plural if required parameters are set
-	if (isset($count) && isset($plural) && $count > 1) {
-		$text = $plural;
-	} /*else { // use normal
-		$text = gettext($text);
-	}*/
+  $text = stripslashes($text);
 
-
-
-	// run strarg if there are parameters
-	if (count($params)) {
-	  foreach ($params as $key => $value) {
-	    #print $key;
-	    $text = str_replace('%'.$key, $value, $text);
-	  }
-		#$text = smarty_gettext_strarg($text, $params);
-	}
-
-	if (!isset($escape) || $escape == 'html') { // html escape, default
-	   $text = nl2br(htmlspecialchars($text));
-   } elseif (isset($escape)) {
-		switch ($escape) {
-			case 'javascript':
-			case 'js':
-				// javascript escape
-				$text = str_replace('\'', '\\\'', stripslashes($text));
-				break;
-			case 'url':
-				// url escape
-				$text = urlencode($text);
-				break;
-		}
-	}
+  $localization =& VLocalization::getInstance();
+  $text = $localization->_($text, $params);
 
   if (isset($assign)) {
     $smarty->assign($assign, $text);

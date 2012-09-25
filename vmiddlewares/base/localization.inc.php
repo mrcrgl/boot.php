@@ -13,17 +13,17 @@ class VMiddlewareBaseLocalization extends VMiddleware {
       #printf("REQUEST_URI: %s".NL, $_SERVER['REQUEST_URI']);
       #printf("LOCALE: %s".NL, $locale);
 
-      if ($localization->get('locale') != $locale) {
-        if (!$localization->setUserLocale($locale)) {
+      if ($localization->getLocale() != $locale) {
+        if (!$localization->setLocale($locale)) {
           #print "foo?";
-          VResponse::redirect(sprintf("/%s%s", $localization->get('locale'), $_SERVER['REQUEST_URI']));
+          VResponse::redirect(sprintf("/%s%s", $localization->getLocale(), $_SERVER['REQUEST_URI']));
           exit;
         }
       }
 	  }
 
 	  else {
-	    VResponse::redirect(sprintf("/%s%s", $localization->get('locale'), $_SERVER['REQUEST_URI']));
+	    VResponse::redirect(sprintf("/%s%s", $localization->getLocale(), $_SERVER['REQUEST_URI']));
 	    exit;
 	  }
 
@@ -33,6 +33,15 @@ class VMiddlewareBaseLocalization extends VMiddleware {
 	  $localization =& VLocalization::getInstance();
 		$document =& VFactory::getDocument();
 
-		$document->setUrlPrefix( sprintf("%s/%s", $localization->get('locale'), (($document->getUrlPrefix() == '/') ? '' : $document->getUrlPrefix())) );
+		$document->setUrlPrefix( sprintf("%s/%s", $localization->getLocale(), (($document->getUrlPrefix() == '/') ? '' : $document->getUrlPrefix())) );
+	}
+
+	public function onBeforeQuit() {
+	  if (VSettings::f('localization.record', false)) {
+  	  $localization =& VLocalization::getInstance();
+  	  $localization->record();
+	  }
+	  #var_dump(apc_fetch($_SERVER['HTTP_HOST']));
+	  #die('fi');
 	}
 }

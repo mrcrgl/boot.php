@@ -106,6 +106,10 @@ class ComponentAuthModelLogin extends VObject {
     return true;
   }
 
+  public function setUser($user) {
+    $this->objUser = $user;
+  }
+
   private function loginSuccessful() {
     $this->registerLogin();
     $this->forwarding();

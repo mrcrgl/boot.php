@@ -105,6 +105,15 @@ class Validator {
     return false;
   }
 
+  public static function is_float($value) {
+    if (is_numeric($value)) {
+      return true;
+    }
+
+    Validator::setError("FloatExpected");
+    return false;
+  }
+
 	public static function is_string($value) {
     if (is_string($value)) {
       return true;

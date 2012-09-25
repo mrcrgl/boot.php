@@ -2,37 +2,39 @@
 
 <div class="row">
   <div class="span4 offset4 well">
-    <legend>{t}Please Sign In{/t}</legend>
-    {include file='includes/form/form-messages.htpl'}
-  
-    <form class="" action="" method="POST" accept-charset="UTF-8">
-      {$csrf_token}
-      
-      <input type="text" id="username" class="span4" name="username" placeholder="{t}Username{/t}" />
-      <input type="password" id="password" class="span4" name="password" placeholder="{t}Password{/t}" />
+    <fieldset>
+      <legend>{t}Please Sign In{/t}</legend>
+      {include file='includes/form/form-messages.htpl'}
+    
+      <form class="" action="" method="POST" accept-charset="UTF-8">
+        {$csrf_token}
         
-      <input type="hidden" value="1" name="formSent">
-        
-      {if $smarty.post.requested_view && $smarty.post.requested_view != ""}
-        <input type="hidden" name="requested_view" value="{$smarty.post.requested_view}" />
-      {else}
-        {if $requested_view && $requested_view != ""}
-          <input type="hidden" name="requested_view" value="{$requested_view}">
+        <input type="text" id="username" class="span4" name="username" placeholder="{t}Username{/t}" />
+        <input type="password" id="password" class="span4" name="password" placeholder="{t}Password{/t}" />
+          
+        <input type="hidden" value="1" name="formSent">
+          
+        {if $smarty.post.requested_view && $smarty.post.requested_view != ""}
+          <input type="hidden" name="requested_view" value="{$smarty.post.requested_view}" />
         {else}
-          <input type="hidden" name="requested_view" value="{$default_landing_page}">
+          {if $requested_view && $requested_view != ""}
+            <input type="hidden" name="requested_view" value="{$requested_view}">
+          {else}
+            <input type="hidden" name="requested_view" value="{$default_landing_page}">
+          {/if}
         {/if}
-      {/if}
-      <input type="hidden" name="do_login" value="{$smarty.now}" />
+        <input type="hidden" name="do_login" value="{$smarty.now}" />
+          
+        <input type="hidden" value="3" name="formID">
+          
+        <label class="checkbox">
+          <input type="checkbox" name="remember" value="1"> {t}Remember Me{/t}
+        </label>
         
-      <input type="hidden" value="3" name="formID">
+        <button type="submit" class="btn btn-info btn-block">{t}Login{/t}</button>
         
-      <label class="checkbox">
-        <input type="checkbox" name="remember" value="1"> {t}Remember Me{/t}
-      </label>
-      
-      <button type="submit" class="btn btn-info btn-block">{t}Login{/t}</button>
-      
-    </form>
+      </form>
+    </fieldset>
   </div>
 </div>
 

@@ -56,8 +56,7 @@ class VModelStructure extends VObject {
 	}
 
 	public function load($pk) {
-		$designer = VDatabaseDesigner::getInstance();
-  	$group = $designer->getModel(&$this, array('pk'=>$pk));
+	  $this->objects->get(sprintf('[filter:[uid:%s]]', $pk));
 	}
 
 	public function set($__field, $__value, $bypasscheck=false) {

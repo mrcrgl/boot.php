@@ -161,7 +161,7 @@ class VModelManagerRelated extends VModelManager {
 		  elseif (get_class($this->declaration) == 'VModelFieldForeignKey') {
 		    $filter = sprintf('[%s:%s]', $this->declaration->get('db_column'), $this->_model->uid);
 		    parent::__construct(&$this->related, get_class($this->_model));
-		    $this->filter($filter);
+		    $this->filterSticky($filter);
 		  }
 
 
