@@ -61,7 +61,7 @@ class VModelStructure extends VObject {
 
 	public function set($__field, $__value, $bypasscheck=false) {
 		#print "setting field: ".$__field.' with '.$__value.NL;
-		$__value = $this->getFieldDeclaration($__field)->onSet($__value);
+		$__value = $this->getFieldDeclaration($__field)->onSet($__value, &$this);
 
 		#if (!$bypasscheck && !$this->getFieldDeclaration($__field)->get('editable')) {
 			#printf("Field '%s' is not editable.".NL, $__field);
@@ -79,8 +79,14 @@ class VModelStructure extends VObject {
 
 	public function get($__field) {
 		$__value = parent::get($__field);
-		if ($this->getFieldDeclaration($__field))
-			return $this->getFieldDeclaration($__field)->onGet($__value);
+		$declaration =& $this->getFieldDeclaration($__field);
+
+		if (!method_exists($declaration, 'onGet'))
+		  return null;
+		  #print "Dieses Feld kennt die Methode nciht: ".$__field;
+
+		if ($declaration && is_object($declaration))
+			return $declaration->onGet($__value, &$this);
 
 		return null;
 	}
@@ -141,7 +147,10 @@ class VModelStructure extends VObject {
 
 	public function getFieldDeclaration($__field) {
 		#print 'getFieldDeclaration said: '.$__field.NL;
-		return VModelField::getInstance(get_class(&$this), $__field);
+		$declaration =& VModelField::getInstance(get_class(&$this), $__field);
+    #$declaration->_ref = $this;
+
+	  return $declaration;
 	}
 
 	public function checkFields() {

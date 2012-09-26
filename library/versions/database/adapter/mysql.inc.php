@@ -181,9 +181,9 @@ class VDatabaseMysql extends VDatabase {
       }
 
       // set connection collation
-      if ( isset($this->queryForceUnicode) && $this->queryForceUnicode == true ) {
+      #if ( isset($this->queryForceUnicode) && $this->queryForceUnicode == true ) {
         $this->setConnectionCollationUnicode();
-      }
+      #}
     }
 
   }
@@ -454,6 +454,7 @@ class VDatabaseMysql extends VDatabase {
       $this->query("SET character_set_client = utf8");
       $this->query("SET character_set_results = utf8");
       $this->query("SET character_set_connection = utf8");
+      #$this->query("SET names = utf8");
     }
     return true;
   }

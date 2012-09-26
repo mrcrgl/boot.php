@@ -42,6 +42,8 @@ class VModelField extends VObject {
 
 	var $_model = null;
 
+	var $_ref = null;
+
 	static $_instances = array();
 
 	public function __construct($options=array()) {
@@ -133,22 +135,22 @@ class VModelField extends VObject {
 		return $value;
 	}
 
-	public function onCreate($value) {
+	public function onCreate($value, &$model) {
 		#printf("onCreate(%s) called".NL, $value);
 		return $value;
 	}
 
-	public function onUpdate($value) {
+	public function onUpdate($value, &$model) {
 		#printf("onUpdate(%s) called".NL, $value);
 		return $value;
 	}
 
-	public function onSet($value) {
+	public function onSet($value, &$model) {
 		#printf("onSet(%s) called".NL, $value);
 		return $value;
 	}
 
-	public function onGet($value) {
+	public function onGet($value, &$model) {
 		#printf("onGet(%s) called".NL, $value);
 		return $value;
 	}

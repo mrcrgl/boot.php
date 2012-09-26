@@ -846,6 +846,11 @@ abstract class VString {
     $__string = preg_replace("#\s+#", "-", $__string);
     $__string = preg_replace("#-+#", "-", $__string);
     $__string = trim($__string, '-');
+
+    if (empty($__string)) {
+      return "identifier";
+    }
+
     return $__string;
 	}
 

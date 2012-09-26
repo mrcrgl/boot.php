@@ -171,6 +171,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 
 		$sql = $this->getUpdateFields($model,  ((!$model->isValid()) ? 'insert' : 'update'));
 
+
 		if ($dbo->userQuery($sql))
 			$model->isValid(true);
 
@@ -268,7 +269,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
   	  if ($model->getFieldDeclaration($field)->get('many_to_many') == true) continue;
   		$column = $model->getFieldDeclaration($field)->get('db_column');
   		$declarations[$column] =& $model->getFieldDeclaration($field);
-  		$columns[$column] = (($mode == 'update') ? $declarations[$column]->onUpdate($model->get($field)) : $declarations[$column]->onCreate($model->get($field)) );
+  		$columns[$column] = (($mode == 'update') ? $declarations[$column]->onUpdate($model->get($field), &$model) : $declarations[$column]->onCreate($model->get($field), &$model) );
   		if ($declarations[$column]->get('primary_key', false) == true) {
   			$pkeys[$column] = $columns[$column];
   		}
