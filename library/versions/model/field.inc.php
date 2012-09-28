@@ -85,9 +85,10 @@ class VModelField extends VObject {
     #print "fooo";die("prepareModel called");
 		$model_name =& $model->getClass();
 
-		if (isset(self::$_instances[$model_name])/* && count(self::$_instances[$model_name]) == count($model->getFields())*/) {
-			return true;
-		}
+	  // INFO: This produces an error. defaults were not set and declaration was saved to db
+		#if (isset(self::$_instances[$model_name])/* && count(self::$_instances[$model_name]) == count($model->getFields())*/) {
+		#	return true;
+		#}
 
 		#$class_vars = get_class_vars($model_name);
 		/*print "<pre>";

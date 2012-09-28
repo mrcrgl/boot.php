@@ -41,7 +41,9 @@ class VApplicationController extends VObject {
 			throw new Exception( sprintf("Controller '%s' not found!", $controller) );
 		}
 
-		VLoader::import('versions.utilities.array');
+		if (!class_exists('VArray')) {
+		  VLoader::import('versions.utilities.array');
+		}
 
 		$ref = new $controller();
 		$ref->set('component_root', dirname( VArray::get(VLoader::$registred, $controller) ));
