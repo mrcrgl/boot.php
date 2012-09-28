@@ -83,21 +83,23 @@ class VModelField extends VObject {
 
 	public static function prepareModel(&$model) {
     #print "fooo";die("prepareModel called");
-		$model_name = get_class(&$model);
+		$model_name =& $model->getClass();
 
-		/*if (isset(self::$_instances[$model_name])) {
+		if (isset(self::$_instances[$model_name])/* && count(self::$_instances[$model_name]) == count($model->getFields())*/) {
 			return true;
-		}*/
+		}
 
-		$class_vars = get_class_vars($model_name);
+		#$class_vars = get_class_vars($model_name);
 		/*print "<pre>";
 		var_dump($class_vars);
 		print "</pre>";
 		*/
 		#$ref =& VModelField::getInstance($model_name, 'uid', 'PrimaryKey', array('db_column' => 'uid'));
 
-		foreach ($class_vars as $column => $declaration) {
-			if (preg_match('/^_/', $column)) continue;
+		foreach ($model->getFields() as $column) {
+			if (substr($column, 0, 1) == '_') continue;
+
+			$declaration =& $model->$column;
 
 			if (!isset(self::$_instances[$model_name][$column])) {
 				if (!preg_match('/^(?P<type>\w+):(?P<options>.*)$/', $declaration, $matches)) {
@@ -110,18 +112,18 @@ class VModelField extends VObject {
 				#var_dump($matches);print "<br />";
 
 
-				$options = VArray::parseOptions($matches['options']);
+				$options = VArray::parseOptions(&$matches['options']);
 
 				#var_dump($options);print "<br />";
 
 				#print "<br /><br />";
 
-				$type    = $matches['type'];
-				$options = array_merge_recursive($options, array('_model' => &$model, 'db_column' => $column, 'field_name' => $column));
-
+				$options['_model']     =& $model;
+				$options['db_column']  =  $column;
+				$options['field_name'] =  $column;
 
 				#print 'prepareModel said: '.$column.NL;
-				$ref =& VModelField::getInstance($model_name, $column, $type, $options);
+				$ref =& VModelField::getInstance($model_name, $column, $matches['type'], $options);
 			}
 			else {
 				$ref =& VModelField::getInstance($model_name, $column);

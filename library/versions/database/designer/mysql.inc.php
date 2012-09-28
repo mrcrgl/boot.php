@@ -199,7 +199,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 			return $model; // or whatever
 		}
 		$dbo->nextRecord();
-		$model->bulkSet($dbo->getRecord());
+		$model->bulkSet($dbo->getRecord(), true);
 		$model->isValid(true);
 		return $model;
 	}
@@ -225,8 +225,8 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
 		$return = array();
 		$i = 0;
 		while ($dbo->nextRecord()) {
-			$return[$i] = new $model_name();
-			$return[$i]->bulkSet($dbo->getRecord());
+			$return[$i] = new $model_name(); //VModelStorage::_($model_name);
+			$return[$i]->bulkSet($dbo->getRecord(), true);
 			$return[$i]->isValid(true);
 			$i++;
 		}

@@ -13,7 +13,8 @@ class VModelFieldSlug extends VModelField {
 	}
 
 	public function onSet($value=null, &$model) {
-	  if ($value) {
+	  #print $value.NL;
+	  if ($value && substr($value, 0, 4) != 'Slug') {
 		  return $this->generateSlug($value, &$model);
 	  }
 	  return $value;
@@ -41,6 +42,10 @@ class VModelFieldSlug extends VModelField {
 		  $slug = substr($slug, 0, 47);
 		}
 
+		while (substr($slug, -1) == '-') {
+		  $slug = substr($slug, 0, -1);
+		}
+
 		$slug_base = $slug;
 		$i = 1;
 
@@ -48,10 +53,10 @@ class VModelFieldSlug extends VModelField {
 		  return $slug;
 		}
 
-		$class = get_class($this->get('_model'));
-		$model = new $class();
-		while ($model->objects->filter(sprintf('[%s:%s]', $this->get('field_name'), $slug))->count() > 0) {
-      $model = new $class();
+		$class = $model->getClass();
+		$vmodel = new $class();
+		while ($vmodel->objects->filter(sprintf('[%s:%s]', $this->get('field_name'), $slug))->count() > 0) {
+      //$model = new $class();
       $slug = sprintf('%s-%d', $slug_base, $i);
       $i++;
 		}

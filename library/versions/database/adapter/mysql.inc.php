@@ -300,7 +300,8 @@ class VDatabaseMysql extends VDatabase {
 	}
 
 	function freeResult() {
-	  mysqli_free_result($this->refResult);
+	  if ($this->refResult)
+	    mysqli_free_result($this->refResult);
 	}
 	/*function userQuery($strQueryString) {
     return $this->query($strQueryString);

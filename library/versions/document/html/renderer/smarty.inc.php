@@ -94,19 +94,21 @@ class VDocumentRendererHtmlSmarty extends Smarty {
 
 			$plugins = VSettings::f('smarty.'.$type);
 
-			foreach ($plugins as $plugin) {
+			if ($plugins && count($plugins)) {
+  			foreach ($plugins as $plugin) {
 
-				$function = $prefix.$plugin;
-				$file = $extension_path.DS.$function.'.inc.php';
+  				$function = $prefix.$plugin;
+  				$file = $extension_path.DS.$function.'.inc.php';
 
-				if (!is_file($file)) {
-					VDebug::_(new VDebugMessage("Smarty plugin: $file not found."));
-					continue;
-				}
+  				if (!is_file($file)) {
+  					VDebug::_(new VDebugMessage("Smarty plugin: $file not found."));
+  					continue;
+  				}
 
-				include $file;
+  				include $file;
 
-				$this->registerPlugin($type, $plugin, $function);
+  				$this->registerPlugin($type, $plugin, $function);
+  			}
 			}
 		}
 

@@ -98,29 +98,31 @@ class VModelManagerRelated extends VModelManager {
 
 	private function initializeRelation() {
     #exit;
-	  if ($this->checkRelation(&$this->_model, get_class($this->related))) {
+    $related_class =& $this->related->getClass();
+	  if ($this->checkRelation(&$this->_model, $related_class)) {
 			// TODO: set debug message
 			#print "Parent is master and related is related".NL;
 			#printf("Parent: %s(%s); Related: %s(%s)".NL, get_class($this->_model), $this->_model->get('uid'), get_class($this->related), $this->related->get('uid'));
 			$this->reverse = false;
 
 		  $designer =& VDatabaseDesigner::getInstance();
+		  $table_name = $designer->getTableName($related_class);
 		  $table = $this->declaration->get('reference_table');
 		  $table .= sprintf(
 		      " LEFT JOIN %s ON (%s.%s = %s.%s) ",
-		      $designer->getTableName(get_class($this->related)),
-		      $designer->getTableName(get_class($this->related)),
+		      $table_name,
+		      $table_name,
 		      'uid',
 		      $this->declaration->get('reference_table'),
 		      $this->declaration->get('reference_pk')
 		  );
 		  $this->setTable($table);
-		  $this->setModelName(get_class($this->related));
+		  $this->setModelName($related_class);
 		  #print sprintf('[%s:%s]', $this->declaration->get('model_pk'), $this->_model->get('uid'));
 			$this->filterSticky( sprintf('[%s:%s]', $this->declaration->get('model_pk'), $this->_model->get('uid')) );
 
 		}
-		elseif ($this->checkRelation(&$this->related, get_class($this->_model))) {
+		elseif ($this->checkRelation(&$this->related, $this->_model->getClass())) {
 			// TODO: set debug message
 			#print "Parent is related and related is master / reverse mode".NL;
 		  #printf("Parent: %s(%s); Related: %s(%s)".NL, get_class($this->_model), $this->_model->get('uid'), get_class($this->related), $this->related->get('uid'));
@@ -133,11 +135,12 @@ class VModelManagerRelated extends VModelManager {
 		  if(get_class($this->declaration) == 'VModelFieldManyToMany') {
 
 		    $designer =& VDatabaseDesigner::getInstance();
+		    $table_name =& $designer->getTableName($this->related->getClass());
 		    $table = $this->declaration->get('reference_table');
 		    $table .= sprintf(
 		        " LEFT JOIN %s ON (%s.%s = %s.%s) ",
-		        $designer->getTableName(get_class($this->related)),
-		        $designer->getTableName(get_class($this->related)),
+		        $table_name,
+		        $table_name,
 		        'uid',
 		        $this->declaration->get('reference_table'),
 		        $this->declaration->get('model_pk')
@@ -149,7 +152,7 @@ class VModelManagerRelated extends VModelManager {
 		    #print sprintf('[%s:%s]', $this->declaration->get('db_column'), 'theuid');
 		    #print get_class($this->_model);
 		    #$this->set('related', get_class($this->_model));
-		    parent::__construct(&$this->related, get_class($this->_model));
+		    parent::__construct(&$this->related, $this->_model->getClass());
 		    #exit;
 		    $this->setTable($table);
 
@@ -160,7 +163,7 @@ class VModelManagerRelated extends VModelManager {
 		   */
 		  elseif (get_class($this->declaration) == 'VModelFieldForeignKey') {
 		    $filter = sprintf('[%s:%s]', $this->declaration->get('db_column'), $this->_model->uid);
-		    parent::__construct(&$this->related, get_class($this->_model));
+		    parent::__construct(&$this->related, $this->_model->getClass());
 		    $this->filterSticky($filter);
 		  }
 
@@ -180,6 +183,11 @@ class VModelManagerRelated extends VModelManager {
 	private function checkRelation(&$model, $related) {
 		foreach ($model->getFields() as $field) {
 			$declaration =& $model->getFieldDeclaration($field);
+
+			if (!$declaration) {
+			  #print $field." will fucken.".NL;
+			  continue;
+			}
 
 			// strip prefix: VModelField and check for relational fields
 			if (!in_array(substr(get_class($declaration), 11), $this->relation_types)) {

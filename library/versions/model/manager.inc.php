@@ -45,8 +45,8 @@ class VModelManager extends VObject {
 		$this->_model =& $model;
 		#printf("Manager initialized with model %s".NL, get_class($model));
 		$designer =& VDatabaseDesigner::getInstance();
-		$this->_table = $designer->getTableName(get_class($model));
-		$this->_model_name = get_class($this->_model);
+		$this->_table = $designer->getTableName($model->getClass());
+		$this->_model_name = $model->getClass();
 	}
 
 
@@ -219,7 +219,7 @@ class VModelManager extends VObject {
 			return false; // or whatever
 		}
 		$dbo->nextRecord();
-		$this->_model->bulkSet($dbo->getRecord());
+		$this->_model->bulkSet($dbo->getRecord(), true);
 		$this->_model->isValid(true);
 
 		$dbo->freeResult();
@@ -288,9 +288,6 @@ class VModelManager extends VObject {
 		$options = VArray::parseOptions($options);
 		$this->importOptions($options);
 
-		$model_name = $this->_model_name; #get_class($this->_model);
-
-		#var_dump($this->_options);
 
 		$dbo =& VFactory::getDatabase();
 		#print $this->buildQuerySelect();
@@ -304,7 +301,7 @@ class VModelManager extends VObject {
 		$return = array();
 		$i = 0;
 		while ($dbo->nextRecord()) {
-		  $return[$i] = new $model_name();
+		  $return[$i] = new $this->_model_name(); //VModelStorage::_($this->_model_name);
 			$return[$i]->bulkSet($dbo->getRecord(), true);
 			$return[$i]->isValid(true);
 			$i++;

@@ -2,13 +2,13 @@
 
 
 /**
- * 
+ *
  * Default object with error handling
  * @author marc
  *
  */
 class VObject {
-	
+
 	/**
 	 * An array of error messages or JExceptions objects.
 	 *
@@ -38,7 +38,7 @@ class VObject {
 	public function __toString() {
 		return get_class($this);
 	}
-	
+
 	/**
 	 * Sets a default value if not alreay assigned
 	 *
@@ -127,8 +127,7 @@ class VObject {
 	 * @return  array  Array of error messages or JErrors.
 	 *
 	 */
-	public function getErrors()
-	{
+	public function getErrors() {
 		return $this->_errors;
 	}
 

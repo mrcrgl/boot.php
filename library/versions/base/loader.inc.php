@@ -12,89 +12,90 @@ require_once VLIB.DS.'versions'.DS.'debug'.DS.'debug.inc.php';
  * @since       2.0
  */
 class VLoader {
-	
+
 	static $extensions = array('.inc.php', '.class.php', '.php');
-	
+
 	/**
 	 * Array of manually registred classes
 	 * @var array
 	 */
 	static $registred = array();
-	
+
 	/**
 	 * Array of imported classes
 	 * @var array
 	 */
 	static $imported = array();
-	
+
 	/**
 	 * The init() class
-	 * 
+	 *
 	 * @return void
 	 */
 	static function init() {
-		
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * The file() class
-	 * 
+	 *
 	 * @param string $__file
 	 */
 	static function file($__file) {
 		if (is_file($__file) && !in_array($__file, self::$imported)) {
 			require_once $__file;
 			array_push(self::$imported, $__file);
-			VDebug::_(new VDebugMessage("Loaded file: ".$__file, DEBUG_MESSSAGE));
+			// TODO: Lšsung finden.
+			#VDebug::_(new VDebugMessage("Loaded file: ".$__file, DEBUG_MESSSAGE));
 			return true;
 		} else {
-			VDebug::_(new VDebugMessage("File not found: ".$__file, DEBUG_ERROR));
+			#VDebug::_(new VDebugMessage("File not found: ".$__file, DEBUG_ERROR));
 			return false;
 		}
 	}
-	
+
 	/**
-	 * 
-	 * The import() class 
-	 * 
+	 *
+	 * The import() class
+	 *
 	 * @see 	get_class_path
 	 * @param string $__dotted_identifier
 	 */
 	static function import($__dotted_identifier) {
 		return self::get_class_path($__dotted_identifier);
 	}
-	
-	
+
+
 	/**
-	 * 
+	 *
 	 * Scans a directory for files and include them
-	 * 
+	 *
 	 * @param string $__path
-	 * 
+	 *
 	 * @param boolean $recursive
 	 */
 	static function discover($__path, $recursive = false) {
 		if (is_dir($__path)) {
-			
+
 			VDebug::report(new VDebugMessage("Discover directory: ".$__path), DEBUG_NOTICE, 1);
-			
+
 			foreach (scandir($__path) as $file) {
-				
+
 				/*
 				 * skip . and ..
 				 */
 				if ($file == '.' || $file == '..') continue;
-				
+
 				/*
 				 * if file is a directory and recursive is true, walk trough it
-				 */  
+				 */
 				if (is_dir($file) && $recursive == true) {
 					self::discover($__path.DS.$file, $recursive);
 				}
-				
+
 				/*
-				 * look for a valid extension and include the file 
+				 * look for a valid extension and include the file
 				 */
 				else {
 					foreach (self::$extensions as $ext) {
@@ -104,14 +105,14 @@ class VLoader {
 						}
 					}
 				}
-				
+
 			}
 		}
 		else {
 			VDebug::report(new VDebugMessage("Directory does not exist: ".$__path), DEBUG_NOTICE, 1);
 		}
 	}
-	
+
 	static function dicoverClassesOfFile($file) {
 		$php_file = file_get_contents($file);
 		$tokens = token_get_all($php_file);
@@ -124,16 +125,16 @@ class VLoader {
 		    	VLoader::register($token[1], $file);
 		      $class_token = false;
 		    }
-		  }       
+		  }
 		}
 		return true;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Autoload layer for PHP's magic function __autoload()
 	 * @param string $__classname
-	 * 
+	 *
 	 * @return string Path
 	 */
 	static function autoload($__classname) {
@@ -141,16 +142,16 @@ class VLoader {
 		$path = self::get_class_path($__classname);
 		if (!$path) {
 			VDebug::report(new VDebugMessage("Class '".$__classname."' not found! Could not find file."), DEBUG_ERROR);
-		} 
+		}
 		elseif (!class_exists($__classname)) {
 			VDebug::report(new VDebugMessage("Class '".$__classname."' not found! File found at '". $path ."' but class does not exist."), DEBUG_ERROR);
 		}
-		
+
 		return $path;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Enter description here ...
 	 * @param string $__classname
 	 */
@@ -172,10 +173,10 @@ class VLoader {
 				$parts[] = $last;
 				$classpath = self::check_extensions(VLIB.DS.implode(DS, $parts));
 			}
-			
+
 			return $classpath;
 		}
-		
+
 		/*
 		 * components
 		 */
@@ -189,7 +190,7 @@ class VLoader {
 				}
 				$__classname = implode('', $eparts);
 			}
-			
+
 			$path = VString::strtolower(implode(DS, VString::explode_camelcase($__classname))); // ComponentNewsModelNews
 			$path = str_replace('component/', '', $path);
 			foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $component_path) {
@@ -206,14 +207,14 @@ class VLoader {
 					return $classpath;
 				}
 			}
-			
+
 		}
 		/*
 		 * trying to get the path
 		 */
 		elseif (strpos($__classname, '.') !== false) {
 			$parts = explode('.', $__classname);
-			
+
 			if (is_dir(VLIB.DS.$parts[0])) {
 				$path = self::check_extensions( VLIB.DS.implode(DS, $parts) );
 				if ($path === false) {
@@ -223,17 +224,17 @@ class VLoader {
 				}
 				return $path;
 			}
-			
+
 		}
 		// Models
 		else {
 			foreach (array(PROJECT_MODELS, VMODELS) as $paths) {
 				#print "sdfgsdfgd";
-				
+
 				$path = VString::strtolower(implode(DS, VString::explode_camelcase($__classname)));
-				
+
 				#print $path;
-				
+
 				$classpath = self::check_extensions($paths.DS.$path);
 				if ($classpath === false) {
 					$parts = explode(DS, $path);
@@ -241,18 +242,18 @@ class VLoader {
 					$parts[] = $last;
 					$classpath = self::check_extensions($paths.DS.implode(DS, $parts));
 				}
-				
+
 				if ($classpath) return $classpath;
 			}
-				
+
 			// TODO Debugging, incorrect class_path layout
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * The check_extension() class
 	 * @param string $__part
 	 */
@@ -266,11 +267,11 @@ class VLoader {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Registers a class with a correspondenting file
-	 * 
+	 *
 	 * @param string $__classname
 	 * @param string $__path
 	 * @return void
@@ -280,9 +281,9 @@ class VLoader {
 			self::$registred[$__classname] = $__path;
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * The load_objects() class
 	 */
 	static function load_objects() {

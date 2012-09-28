@@ -166,7 +166,7 @@ class VLocalizationDefault extends VLocalization {
       $k = $this->getKey();
     }
 
-    $c =& $this->getCache();
+    $c = $this->getCache();
     if (isset($c[$k][$h]))
       return $c[$k][$h];
 
@@ -217,14 +217,14 @@ class VLocalizationDefault extends VLocalization {
   }
 
   public function inCache($h, $k) {
-    $c =& $this->getCache();
+    $c = $this->getCache();
     #var_dump($c);
     return (bool)isset($c[$k][$h]);
   }
 
   public function saveFiles($c=null) {
     if (null === $c) {
-      $c =& $this->getCache();
+      $c = $this->getCache();
     }
 
     if (!is_dir($this->get('file_path')))
@@ -255,7 +255,7 @@ class VLocalizationDefault extends VLocalization {
     $locs = scandir($this->get('file_path'));
 
     if (!$return) {
-      $c =& $this->getCache();
+      $c = $this->getCache();
     } else {
       $c = array();
     }
@@ -313,9 +313,7 @@ class VLocalizationDefault extends VLocalization {
     if (is_null($locale))
       $locale =& $this->get('fallback_locale');
 
-    if (is_null($component))
-      $component =& $this->get('component');
-    return $locale.$this->get('key_sep').$component;
+    return $locale.$this->get('key_sep').((is_null($component)) ? $this->get('component') : $component);
   }
 
   public function getHash(&$ct) {
