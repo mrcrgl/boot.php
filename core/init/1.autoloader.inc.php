@@ -2,7 +2,7 @@
 
 
 
-require VLIB.DS.'versions'.DS.'base'.DS.'loader.inc.php';
+require_once VLIB.DS.'versions'.DS.'base'.DS.'loader.inc.php';
 VLoader::init();
 
 VLoader::register('VProfiler', VLIB.DS.'versions'.DS.'debug'.DS.'profiler.inc.php');
