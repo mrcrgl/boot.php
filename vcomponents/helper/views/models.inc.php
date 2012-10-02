@@ -143,11 +143,15 @@ class ComponentHelperViewModels extends VApplicationView {
 		/*
 		 * array('name' => "foo", 'is_installed' => bool, 'is_uptodate' => bool)
 		 */
-		foreach ($vmodels as $model) {
-			$return['vmodels'][] = $this->checkModel($model);
+		if (count($vmodels)) {
+			foreach ($vmodels as $model) {
+				$return['vmodels'][] = $this->checkModel($model);
+			}
 		}
-		foreach ($models as $model) {
-			$return['models'][] = $this->checkModel($model);
+		if (count($models)) {
+			foreach ($models as $model) {
+				$return['models'][] = $this->checkModel($model);
+			}
 		}
 
 

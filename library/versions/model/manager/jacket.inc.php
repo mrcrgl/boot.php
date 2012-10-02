@@ -9,7 +9,6 @@ class VModelManagerJacket {
 	}
 	
 	public function getAll() {
-		
 		return $this->model->objects->fetch();
 	}
 	

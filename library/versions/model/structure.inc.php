@@ -23,7 +23,7 @@ class VModelStructure extends VObject {
 
 		$this->initialize();
 
-		if (!is_null($__uid)) $this->load($__uid);
+		if (Validator::is($__uid, 'hexuid')) $this->load($__uid);
 
 	}
 

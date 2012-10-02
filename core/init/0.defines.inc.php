@@ -111,8 +111,13 @@ define('PROJECT_TEMPLATES', PROJECT_ROOT.DS.'templates');
 /**
  * @var 'HTTP_USER' User which runs the Webserver
  */
-$http_user = posix_getpwuid(posix_getuid()); // Get http user
-define('HTTP_USER', $http_user["name"]);
+if (function_exists('posix_getuid')) {
+	$http_user = posix_getpwuid(posix_getuid()); // Get http user
+	define('HTTP_USER', $http_user["name"]);
+} else {
+	define('HTTP_USER', ":undef:");
+}
+
 
 // Check permissions for cache directory
 if (!is_writable(PROJECT_CACHE)){

@@ -46,7 +46,7 @@ class VLoader {
 		if (is_file($__file) && !in_array($__file, self::$imported)) {
 			require_once $__file;
 			array_push(self::$imported, $__file);
-			// TODO: Lšsung finden.
+			// TODO: Lï¿½sung finden.
 			#VDebug::_(new VDebugMessage("Loaded file: ".$__file, DEBUG_MESSSAGE));
 			return true;
 		} else {
@@ -192,9 +192,9 @@ class VLoader {
 			}
 
 			$path = VString::strtolower(implode(DS, VString::explode_camelcase($__classname))); // ComponentNewsModelNews
-			$path = str_replace('component/', '', $path);
+			$path = str_replace('component'.DS, '', $path);
+			#print $path;
 			foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $component_path) {
-				#print $component_path.DS.$path.NL;
 				$classpath = self::check_extensions($component_path.DS.$path);
 				if ($classpath === false) {
 					$parts = explode(DS, $path);

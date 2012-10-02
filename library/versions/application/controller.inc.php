@@ -35,7 +35,8 @@ class VApplicationController extends VObject {
 			throw new Exception( sprintf("Controller for component '%s' not found or component does not exist!", $component) );
 		}
 
-		VLoader::autoload($controller);
+		if (!class_exists($controller))
+			VLoader::autoload($controller);
 
 		if (!class_exists($controller)) {
 			throw new Exception( sprintf("Controller '%s' not found!", $controller) );
