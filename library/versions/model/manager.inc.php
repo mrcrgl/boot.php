@@ -383,7 +383,7 @@ class VModelManager extends VObject {
 		$sql = sprintf(
 			"SELECT %s FROM %s WHERE %s %s %s",
 			$this->buildQueryFields(),
-			$this->_table,
+			((!strpos($this->_table, ' ')) ? sprintf("`%s`", $this->_table) : $this->_table),
 			$this->buildQueryWhere(),
 			$this->buildQueryOrder(),
 			$this->buildQueryLimit()

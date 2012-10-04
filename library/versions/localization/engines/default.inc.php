@@ -116,7 +116,7 @@ class VLocalizationDefault extends VLocalization {
     if (!is_null($ct['n']) && $count == 0) {
       return $this->parse($ct['n'], $options);
     }
-    elseif (!is_null($ct['p']) && $count < 1) {
+    elseif (!is_null($ct['p']) && $count != 1) { // TODO: for "none" translation
       return $this->parse($ct['p'], $options);
     }
     else {
