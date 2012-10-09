@@ -284,6 +284,10 @@ class VResponse {
   protected static function compress($data) {
     $encoding = self::clientEncoding();
 
+    if (!VSettings::f('default.use_gzip')) {
+    	return $data;
+    }
+    
     if (!$encoding) {
       return $data;
     }

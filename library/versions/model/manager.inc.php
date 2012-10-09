@@ -405,8 +405,8 @@ class VModelManager extends VObject {
 
 	  $sql = sprintf(
 	      "DELETE FROM %s WHERE %s %s",
-	      $this->_table,
-	      $this->buildQueryWhere(),
+	      ((!strpos($this->_table, ' ')) ? sprintf("`%s`", $this->_table) : $this->_table),
+		$this->buildQueryWhere(),
 	      $this->buildQueryLimit()
 	  );
 	  #print $sql.NL;

@@ -275,7 +275,7 @@ class VDatabaseDesignerMysql extends VDatabaseDesigner {
   		}
   	}
 
-  	$sql = sprintf("%s %s SET \n", (($mode == 'update') ? "UPDATE" : "INSERT INTO"), $this->getTableName(get_class($model)));
+  	$sql = sprintf("%s `%s` SET \n", (($mode == 'update') ? "UPDATE" : "INSERT INTO"), $this->getTableName(get_class($model)));
 
   	$keyvalues = array();
   	foreach ($columns as $column => $value) {
