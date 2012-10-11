@@ -529,7 +529,7 @@ class VModelManager extends VObject {
 					break;
 
 				case "in":
-					if (!is_array($value)) throw new Exception(sprintf("Lookup '%s' needs an array as value", $lookup));
+					if (!Validator::is($value, 'array')) throw new Exception(sprintf("Lookup '%s' needs an array as value", $lookup));
 					$condition = sprintf(
 						"`%s` IN ('%s')",
 						$this->getColumnByName($varname),
@@ -602,7 +602,7 @@ class VModelManager extends VObject {
 					break;
 
 				case "range":
-					if (!is_array($value)) throw new Exception(sprintf("Lookup '%s' needs an array as value", $lookup));
+					if (!Validator::is($value, 'array')) throw new Exception(sprintf("Lookup '%s' needs an array as value", $lookup));
 					if (count($value) != 2) throw new Exception(sprintf("Lookup '%s' needs exactly to array values", $lookup));
 					$condition = sprintf(
 						"`%s` BETWEEN '%s' AND '%s'",
@@ -709,7 +709,7 @@ class VModelManager extends VObject {
 	 */
 	private function prepareValue($value) {
 
-		if (is_array($value)) {
+		if (Validator::is($value, 'array')) {
 			foreach ($value as $k => $v) {
 				$value[$k] = $this->prepareValue($v);
 			}

@@ -49,7 +49,7 @@ class VInputFiles extends VInput {
 	protected function decodeData(array $data) {
 		$result = array();
 
-		if (is_array($data[0])) {
+		if (Validator::is($data[0], 'array')) {
 			foreach ($data[0] as $k => $v) {
 				$result[$k] = $this->decodeData(array($data[0][$k], $data[1][$k], $data[2][$k], $data[3][$k], $data[4][$k]));
 			}

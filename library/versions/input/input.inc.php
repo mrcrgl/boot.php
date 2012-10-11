@@ -8,7 +8,7 @@
  * @since       2.0
  */
 class VInput {
-	
+
 	/**
 	 * Options array for the VInput instance.
 	 *
@@ -40,7 +40,7 @@ class VInput {
 	 * @since  2.0
 	 */
 	protected $inputs = array();
-	
+
 	/**
 	 * Constructor.
 	 *
@@ -50,7 +50,7 @@ class VInput {
 	 * @since   2.0
 	 */
 	public function __construct($source = null, array $options = array()) {
-		
+
 		if (is_null($source))	{
 			if (strtolower(PHP_SAPI) == 'cli') {
 				$cli = new VInputCli($options);
@@ -58,8 +58,8 @@ class VInput {
 			} else {
 				$this->data = & $_REQUEST;
 			}
-			
-			
+
+
 		} else {
 			$this->data = & $source;
 		}
@@ -67,24 +67,24 @@ class VInput {
 		// Set the options for the class.
 		$this->options = $options;
 	}
-	
+
 	static public function getInstance($type=null) {
-		
+
 		if (!$type) {
 			$type = self::getInputType();
 		}
-		
+
 		$classname = 'VInput'.ucfirst($type);
-		
+
 		VLoader::autoload($classname);
-		
+
 		if (!class_exists($classname)) {
 			throw new Exception( sprintf('Input engine %s not found. Exiting...', $classname) );
 		}
-		
+
 		return new $classname();
 	}
-	
+
 	protected static function getInputType() {
 		if (strtolower(PHP_SAPI) == 'cli') {
 			return 'cli';
@@ -92,7 +92,7 @@ class VInput {
 			return 'web';
 		}
 	}
-	
+
 	/**
 	 * Magic method to get an input object
 	 *
@@ -115,7 +115,7 @@ class VInput {
 
 		// TODO throw an exception
 	}
-	
+
 	/**
 	 * Gets a value from the input data.
 	 *
@@ -149,7 +149,7 @@ class VInput {
 		$results = array();
 
 		foreach ($vars as $k => $v)	{
-			if (is_array($v)) {
+			if (Validator::is($v, 'array')) {
 				if (is_null($datasource))	{
 					$results[$k] = $this->getArray($v, $this->get($k, null, 'array'));
 				}	else {
@@ -216,5 +216,5 @@ class VInput {
 		$method = strtoupper($_SERVER['REQUEST_METHOD']);
 		return $method;
 	}
-	
+
 }

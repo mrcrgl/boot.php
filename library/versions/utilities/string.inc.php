@@ -103,7 +103,7 @@ abstract class VString {
   	$styleSpec = isset(self::$incrementStyles[$style]) ? self::$incrementStyles[$style] : self::$incrementStyles['default'];
 
   	// Regular expression search and replace patterns.
-  	if (is_array($styleSpec[0])){
+  	if (Validator::is($styleSpec[0], 'array')){
   		$rxSearch = $styleSpec[0][0];
   		$rxReplace = $styleSpec[0][1];
   	}	else {
@@ -111,7 +111,7 @@ abstract class VString {
   	}
 
   	// New and old (existing) sprintf formats.
-  	if (is_array($styleSpec[1])) {
+  	if (Validator::is($styleSpec[1], 'array')) {
   		$newFormat = $styleSpec[1][0];
   		$oldFormat = $styleSpec[1][1];
   	}	else {

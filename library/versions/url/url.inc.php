@@ -42,7 +42,10 @@ class VUrl {
 	}
 
 	public function splitDestination($destination, $publish_args=true) {
-		if (is_array($destination)) {
+		if (!class_exists('Validator'))
+		  VLoader::import('versions.utilities.validator');
+
+	  if (Validator::is($destination, 'array')) {
  			$temp = $destination;
  			$args = array();
  			if (isset($temp[1])) $args = $temp[1];
@@ -58,7 +61,8 @@ class VUrl {
 
 	public function parse($request_uri=null, $chained_uri=null) {
 
-		VLoader::import('versions.utilities.array');
+	  if (!class_exists('VArray'))
+		  VLoader::import('versions.utilities.array');
 
 		#if ($use_own_pattern) {
 		#	print_r("parse() class is %s".NL, get_class($this));
@@ -197,8 +201,10 @@ class VUrl {
 	}
 
 	public function register($expression, $destination=null) {
+	  if (!class_exists('Validator'))
+	    VLoader::import('versions.utilities.validator');
 
-		if (is_array($expression)) {
+		if (Validator::is($expression, 'array')) {
 			foreach ($expression as $pattern => $dest) {
 				$this->register($pattern, $dest);
 			}

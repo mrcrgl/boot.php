@@ -118,7 +118,8 @@ class VLoader {
 		$tokens = token_get_all($php_file);
 		$class_token = false;
 		foreach ($tokens as $token) {
-		  if (is_array($token)) {
+		  // NOTE: this runs heavy count of times
+		  if ((array) $token === $token) {
 		    if ($token[0] == T_CLASS) {
 		       $class_token = true;
 		    } else if ($class_token && $token[0] == T_STRING) {

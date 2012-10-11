@@ -3,8 +3,8 @@
  * @package     Versions.core
  * @subpackage  Filter
  *
- * @copyright   
- * @license     
+ * @copyright
+ * @license
  */
 
 VLoader::import('versions.base.object');
@@ -221,7 +221,7 @@ class VFilterInput extends VObject {
 
   		default:
   			// Are we dealing with an array?
-  			if (is_array($source)) {
+  			if (Validator::is($source, 'array')) {
   				foreach ($source as $key => $value) {
   					// filter element for XSS and other 'bad' code etc.
   					if (is_string($value)) {
@@ -572,7 +572,7 @@ class VFilterInput extends VObject {
   protected function _decode($source) {
   	static $ttr;
 
-  	if (!is_array($ttr)) {
+  	if (!Validator::is($ttr, 'array')) {
   		// Entity decode
   		$trans_tbl = get_html_translation_table(HTML_ENTITIES);
   		foreach ($trans_tbl as $k => $v) {

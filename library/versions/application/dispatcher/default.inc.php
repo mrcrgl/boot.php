@@ -91,19 +91,19 @@ class RequestDispatcher {
 	public function __construct() {
 
 	}
-	
+
 	public function getViewName() {
 		if (is_object($this->_view)) {
 			return (string)$this->_view;
 		}
 		return false;
 	}
-	
+
 	public function processRequest($requestArgs = false) {
 		/**
 		 * if $requestArgs eq false, this is no Ajax Request
 		 */
-		$this->prepareProcessRequest((is_array($requestArgs)) ? $requestArgs : false);
+		$this->prepareProcessRequest((Validator::is($requestArgs, 'array')) ? $requestArgs : false);
 		$activeView = $this->getRequestView();
 		$this->prepareNavigation($activeView);
 		$this->changeView($activeView);
@@ -113,7 +113,7 @@ class RequestDispatcher {
 	protected function prepareProcessRequest($requestArgs) {
 		//print_r($requestArgs);
 		$this->prepareEnv();
-		if (!is_array($requestArgs)) {
+		if (!Validator::is($requestArgs, 'array')) {
 			$this->checkBrowser();
 			$this->prepareParam();
 			$this->checkRedirect();
@@ -141,17 +141,17 @@ class RequestDispatcher {
 	}
 
 	protected final function prepareParam() {
-		if (is_array($_POST)) {
+		if (Validator::is($_POST, 'array')) {
 			foreach ($_POST as $key => $value) {
 				$this->_POST[$key] = $value;
 			}
 		}
-		if (is_array($_SERVER)) {
+		if (Validator::is($_SERVER, 'array')) {
 			foreach ($_SERVER as $key => $value) {
 				$this->_SERVER[$key] = $value;
 			}
 		}
-		if (is_array($_FILES)) {
+		if (Validator::is($_FILES, 'array')) {
 			foreach ($_FILES as $key => $value) {
 				$this->_FILES[$key] = $value;
 			}
@@ -161,12 +161,12 @@ class RequestDispatcher {
 
 	protected final function prepareAjaxParam($requestArgs) {
 		$iPOST = $requestArgs[2];
-		if (is_array($iPOST)) {
+		if (Validator::is($iPOST, 'array')) {
 			foreach ($iPOST as $key => $value) {
 				$this->_POST[$key] = $value;
 			}
 		}
-		if (is_array($_SERVER)) {
+		if (Validator::is($_SERVER, 'array')) {
 			foreach ($_SERVER as $key => $value) {
 				$this->_SERVER[$key] = $value;
 			}
@@ -176,14 +176,14 @@ class RequestDispatcher {
 	}
 
 	protected final function checkBrowser() {
-		
+
 		$browser_info = $this->getUserAgent();
-		
+
 		if ($browser_info['browser'] == 'MSIE' && ($browser_info['version'] < 8) ) {
 			VFactory::getTemplate()->display('incompatible_user_agent.htpl');
 			exit;
 		}
-		
+
 	}
 
 	protected final function checkRedirect() {
@@ -383,7 +383,7 @@ class RequestDispatcher {
 
 	protected function checkLoginRequired($_view) {
 		#VFactory::getTemplate()->assign('default_landing_page');
-		if ((is_array($this->arrView[$_view][1]) || $this->arrView[$_view][1] == true) && !VInstance::f('Login')->loggedIn()) {
+		if ((Validator::is($this->arrView[$_view][1], 'array') || $this->arrView[$_view][1] == true) && !VInstance::f('Login')->loggedIn()) {
 			if (!in_array(strtolower($this->_SERVER['REQUEST_URI']), array('/', '/index.html'))) {
 				VFactory::getTemplate()->assign('requested_view', $this->_SERVER['REQUEST_URI']);
 				VFactory::getTemplate()->assign('error', "loginRequired");
@@ -399,7 +399,7 @@ class RequestDispatcher {
 	protected function checkPermission($_view) {
 		$hasPermission = false;
 
-		if (!is_array($this->arrView[$_view][1])) {
+		if (!Validator::is($this->arrView[$_view][1], 'array')) {
 			return true;
 		}
 
@@ -428,7 +428,7 @@ class RequestDispatcher {
 	protected function setDebugging() {
 		if ( VSettings::f('default.debug', false) ) {
 			/* TODO
-			 * 
+			 *
 			 * VFactory::getTemplate()->assign('debug', ENV::$debug);
 			VFactory::getTemplate()->assign('count_read_querys', ENV::$countSQLQuerys['r']);
 			VFactory::getTemplate()->assign('count_write_querys', ENV::$countSQLQuerys['w']);
@@ -439,31 +439,7 @@ class RequestDispatcher {
 	}
 
 	protected function smartyAutoParse() {
-		/* TODO
-		 * 
-		 * if (is_array(ENV::$parse)) {
-			foreach (ENV::$parse as $key => $value) {
-				VFactory::getTemplate()->assign($key, $value);
-			}
-		}
 
-		if (is_array(ENV::$parseFnc)) {
-			foreach (ENV::$parseFnc as $key => $value) {
-				if (function_exists($value)) {
-					VFactory::getTemplate()->register_function($key, $value);
-				}
-			}
-		}
-		if (is_array(ENV::$parseSrc)) {
-			foreach (ENV::$parseSrc as $key => $value) {
-				VFactory::getTemplate()->register_resource($key, $value);
-			}
-		}
-		if (is_array(ENV::$parseModifier)) {
-			foreach (ENV::$parseModifier as $key => $value) {
-				VFactory::getTemplate()->register_modifier($key, $value);
-			}
-		}*/
 	}
 
 	protected final function startSession() {

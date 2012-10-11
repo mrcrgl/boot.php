@@ -27,12 +27,12 @@ class Validator {
   }
 
   public static function is($value, $processor, $minlen=false, $maxlen=false) {
-    if ($minlen && strlen($value) < $minlen) {
+    if ($minlen !== false && strlen($value) < $minlen) {
       Validator::setError("MinLengthExceeded");
       return false;
     }
 
-    if ($maxlen && strlen($value) > $maxlen) {
+    if ($maxlen !== false && strlen($value) > $maxlen) {
       Validator::setError("MaxLengthExceeded");
       return false;
     }
@@ -142,7 +142,7 @@ class Validator {
   }
 
 	public static function is_array($value) {
-    if (is_array($value)) {
+    if ((array)$value === $value) {
       return true;
     }
 

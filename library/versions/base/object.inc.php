@@ -156,7 +156,7 @@ class VObject {
 	 * @see     set()
 	 */
 	public function setProperties($properties) {
-		if (is_array($properties) || is_object($properties)) {
+		if (Validator::is($properties, 'array') || Validator::is($properties, 'object')) {
 			foreach ((array) $properties as $k => $v) {
 				// Use the set function which might be overridden.
 				$this->set($k, $v);

@@ -1,25 +1,15 @@
 <?php
 /**
- * @package     Joomla.Platform
- * @subpackage  Session
- *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
- */
-
-defined('JPATH_PLATFORM') or die;
-
-/**
  * Memcache session storage handler for PHP
  *
  * -- Inspired in both design and implementation by the Horde memcache handler --
  *
- * @package     Joomla.Platform
+ * @package     Versions
  * @subpackage  Session
  * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
  * @since       11.1
  */
-class JSessionStorageMemcache extends JSessionStorage
+class VSessionStorageMemcache extends VSessionStorage
 {
 	/**
 	 * Resource for the current memcached connection.
@@ -63,7 +53,7 @@ class JSessionStorageMemcache extends JSessionStorage
 
 		$config = JFactory::getConfig();
 		$params = $config->get('memcache_settings');
-		if (!is_array($params))
+		if (!Validator::is($params, 'array'))
 		{
 			$params = unserialize(stripslashes($params));
 		}

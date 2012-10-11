@@ -3,23 +3,23 @@
  * @build   27.01.2009
  * @project DMTp
  * @package Instance
- * 
+ *
  * @author  Marc Riegel
  * @contact mr@riegel.it
- * 
+ *
  * --
- * 
+ *
  * --
  */
 class VInstance {
   static $arrInstances = array();
-  
+
   public final function __construct() { }
-  
+
   public final function __clone() { }
-  
-  static final function loadPersistent() { 
-    if (isset($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance']) && is_array($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'])) {
+
+  static final function loadPersistent() {
+    if (isset($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance']) && Validator::is($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'], 'array')) {
       foreach ($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'] as $ident => $reference) {
         self::_new($reference, $ident);
         # TODO
@@ -27,17 +27,17 @@ class VInstance {
       }
     }
   }
-  
+
   static final function f($__memberName) {
     if (isset(self::$arrInstances[$__memberName])) {
       return self::$arrInstances[$__memberName];
     }
     return false;
   }
-  
+
   static final function _new($reference, $ident=false, $persistent=false) {
     if (!$ident) {
-      $ident = get_class($reference); 
+      $ident = get_class($reference);
     }
     if (!$ident) {
       return false;
@@ -47,14 +47,14 @@ class VInstance {
       $_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'][$ident] = &$reference;
     }
   }
-  
+
   static final function _unset($ident) {
     if (isset($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'][$ident])) {
       unset($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'][$ident]);
     }
     unset (self::$arrInstances[$ident]);
   }
-  
+
   static final function _unsetNonPersistent() {
     foreach (self::$arrInstances as $ident => $reference) {
       if (!isset($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'][$ident])) {

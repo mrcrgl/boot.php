@@ -317,7 +317,7 @@ class VDatabaseMysql extends VDatabase {
 		  return false;
 		}
     $this->arrRecord = mysqli_fetch_assoc($this->refResult);
-		if (!is_array($this->arrRecord)) {
+		if (!Validator::is($this->arrRecord, 'array')) {
 			mysqli_free_result($this->refResult);
 			$this->refResult = 0;
 			return false;

@@ -85,12 +85,12 @@ abstract class VModelManagerDefault extends VObject {
   			break;
   		case "in":
   			$cond = 'IN';
-  			if (!is_array($value)) return false;
+  			if (!Validator::is($value, 'array')) return false;
   			$value = "('".implode("', '", $value)."')";
   			break;
   		case "not-in":
   			$cond = 'IN';
-  			if (!is_array($value)) return false;
+  			if (!Validator::is($value, 'array')) return false;
   			$value = "('".implode("', '", $value)."')";
   			break;
   		case "null":
