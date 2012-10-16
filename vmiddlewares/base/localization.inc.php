@@ -25,10 +25,11 @@ class VMiddlewareBaseLocalization extends VMiddleware
     {
         $localization =& VLocalization::getInstance();
         
-        if (preg_match('/^\/([a-z]{2})\/(.{0,255})/', 
-                       $_SERVER['REQUEST_URI'], 
-                       $matches
-                       )) {
+        if (preg_match(
+            '/^\/([a-z]{2})\/(.{0,255})/', 
+            $_SERVER['REQUEST_URI'], 
+            $matches
+        )) {
 
             $locale = $matches[1];
             $_SERVER['REQUEST_URI'] = '/'.$matches[2];
