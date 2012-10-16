@@ -10,7 +10,7 @@
  * @package   Versions.Middleware
  * @version   1.0
  */
-class VMiddlewareBaseSession extends VMiddleware 
+class VMiddlewareBaseSession extends VMiddleware
 {
     
     /**

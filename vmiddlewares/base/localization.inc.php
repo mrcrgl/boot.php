@@ -11,7 +11,8 @@
  * @package   Versions.Middleware
  * @version   1.0
  */
-class VMiddlewareBaseLocalization extends VMiddleware {
+class VMiddlewareBaseLocalization extends VMiddleware
+{
 
     /**
      * onBeforeRoute()
@@ -19,7 +20,8 @@ class VMiddlewareBaseLocalization extends VMiddleware {
      * 
      * @return void
      */
-    public function onBeforeRoute() {
+    public function onBeforeRoute()
+    {
         $localization =& VLocalization::getInstance();
         
         if (preg_match('/^\/([a-z]{2})\/(.{0,255})/', $_SERVER['REQUEST_URI'], $matches)) {
@@ -46,7 +48,8 @@ class VMiddlewareBaseLocalization extends VMiddleware {
      * 
      * @return void
      */
-    public function onBeforePrepareView() {
+    public function onBeforePrepareView()
+    {
         $localization =& VLocalization::getInstance();
         $document =& VFactory::getDocument();
 
@@ -59,7 +62,8 @@ class VMiddlewareBaseLocalization extends VMiddleware {
      * 
      * @return void
      */
-    public function onBeforeQuit() {
+    public function onBeforeQuit()
+    {
         if (VSettings::f('localization.record', false)) {
             $localization =& VLocalization::getInstance();
             $localization->record();
