@@ -1,238 +1,331 @@
 <?php
-
+/**
+ * @author Marc Riegel
+ */
 
 VLoader::import('versions.base.object');
 
-class VApplicationController extends VObject {
+/**
+ * The main Application Controller
+ *
+ * @author marc
+ *
+ */
+class VApplicationController extends VObject
+{
+
+  /**
+   *
+   * @var unknown_type
+   */
+    static private $_aComponents = null;
+
+    /**
+     *
+     * @var unknown_type
+     */
+    var $sDefaultView             = null;
+
+    /**
+     *
+     * @var unknown_type
+     */
+    var $sComponentRoot         = null;
+
+    /**
+     *
+     * @var unknown_type
+     */
+    var $sComponentName         = null;
+
+    /**
+     *
+     */
+    var $sComponentSettings = null;
+
+    /**
+     *
+     * @var unknown_type
+     */
+    var $sRequestViewClassname = null;
+
+    /**
+     *
+     * @var unknown_type
+     */
+    var $sRequestViewMethod = null;
+
+    /**
+     * Constructor
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+
+    }
+
+    static public function getInstance($sComponent=null)
+    {
+
+        if (!$sComponent) {
+            $oInput =& VFactory::getInput();
+            $sComponent = $oInput->get('_vc', 'default', 'get');
+        }
+
+        $sControllerClassname = self::getControllerByPrefix($sComponent);
+
+        if (!Validator::is($sControllerClassname, 'filled')) {
+            $sMessage = sprintf(
+                "Controller for component '%s' not " .
+                "found or component does not exist!",
+                $sComponent
+            );
+            throw new Exception($sMessage);
+        }
+
+        if (!class_exists($sControllerClassname))
+            VLoader::autoload($sControllerClassname);
+
+        if (!class_exists($sControllerClassname)) {
+            $sMessage = sprintf(
+                "Controller '%s' not found!",
+                $sControllerClassname
+            );
+            throw new Exception($sMessage);
+        }
+
+        if (!class_exists('VArray')) {
+          VLoader::import('versions.utilities.array');
+        }
+
+        $oCurrentController = new $sControllerClassname();
+
+        $oCurrentController->set(
+            'sComponentRoot',
+            dirname(VArray::get(VLoader::$registred, $sControllerClassname))
+        );
+
+        $oCurrentController->set('sComponentName', $sComponent);
 
-	static private $components = null;
+        $oConfig = new VSettingsIni();
+        $oConfig->init(
+            $oCurrentController->get('sComponentRoot'),
+            'controller'
+        );
 
-	var $default_view 			= null;
+        $oCurrentController->set('sComponentSettings', $oConfig);
 
-	var $component_root 		= null;
+        return $oCurrentController;
+    }
 
-	var $component_name 		= null;
+    static public function getControllerByPrefix($sPrefix)
+    {
+        if (!self::$_aComponents) {
+            self::scanComponents();
+        }
 
-	var $component_settings = null;
+        VLoader::import('versions.utilities.array');
 
-	var $request_view_classname = null;
+        $sPath = VArray::get(self::$_aComponents, $sPrefix);
 
-	var $request_view_method = null;
+        return $sPath;
+    }
 
-	public function __construct() {
+    static public function scanComponents()
+    {
+        self::$_aComponents = array();
 
+        foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $sPath) {
 
-	}
+            if (is_dir($sPath)) {
 
-	static public function getInstance($component=null) {
+                foreach (scandir($sPath) as $sComponentDir) {
+                    if ($sComponentDir == '.' || $sComponentDir == '..')
+                        continue;
 
-		if (!$component) {
-			$input =& VFactory::getInput();
-			$component = $input->get('_vc', 'default', 'get');
-		}
+                    if (!is_dir($sPath.DS.$sComponentDir))
+                        continue;
 
-		$controller = self::getControllerByPrefix($component);
+                    if (!is_file($sPath.DS.$sComponentDir.DS.'controller.ini'))
+                        continue;
 
-		if (!Validator::is($controller, 'filled')) {
-			throw new Exception( sprintf("Controller for component '%s' not found or component does not exist!", $component) );
-		}
+                    if (!is_file($sPath.DS.$sComponentDir.DS.'urls.inc.php'))
+                        continue;
 
-		if (!class_exists($controller))
-			VLoader::autoload($controller);
 
-		if (!class_exists($controller)) {
-			throw new Exception( sprintf("Controller '%s' not found!", $controller) );
-		}
+                    $oConfig = new VSettingsIni();
+                    $oConfig->init(
+                        $sPath.DS.$sComponentDir,
+                        'controller'
+                    );
 
-		if (!class_exists('VArray')) {
-		  VLoader::import('versions.utilities.array');
-		}
+                    $sAlias   = $config->get(
+                        'controller.alias',
+                        $sComponentDir
+                    );
 
-		$ref = new $controller();
-		$ref->set('component_root', dirname( VArray::get(VLoader::$registred, $controller) ));
-		$ref->set('component_name', $component);
+                    // TODO: unused?
+                    /*
+                    $file     = $sPath.DS
+                              . $sComponentDir.DS
+                              . $oConfig->get(
+                                  'controller.file',
+                                  'controller.inc.php'
+                                );
+                    */
+                    $sClassname = sprintf(
+                        'Component%sController',
+                        ucfirst($sComponentDir)
+                    );
 
-		$config = new VSettingsIni();
-		$config->init($ref->get('component_root'), 'controller');
+                    self::$_aComponents[$sAlias] = $sClassname;
+                }
 
-		$ref->set('component_settings', $config);
+            }
+        }
+    }
 
-		return $ref;
-	}
+    public function handleRequest()
+    {
 
-	static public function getControllerByPrefix($prefix) {
-		if (!self::$components) {
-			self::scanComponents();
-		}
+        VMiddleware::trigger('onBeforePrepareRequest');
+        $this->prepareRequest();
+        VMiddleware::trigger('onAfterPrepareRequest');
 
-		VLoader::import('versions.utilities.array');
+        VMiddleware::trigger('onBeforeProcessRequest');
+        $this->processRequest();
+        VMiddleware::trigger('onAfterProcessRequest');
 
-		$path = VArray::get(self::$components, $prefix);
+        /* switch to response */
+        VMiddleware::trigger('onBeforePrepareResponse');
+        $this->prepareResponse();
+        VMiddleware::trigger('onAfterPrepareResponse');
 
-		return $path;
-	}
+        VMiddleware::trigger('onBeforePrintResponse');
+        $this->printResponse();
+        VMiddleware::trigger('onAfterPrintResponse');
 
-	static public function scanComponents() {
-		self::$components = array();
+        VMiddleware::trigger('onBeforeQuit');
+        $this->quit();
 
-		foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $path) {
+    }
 
-			if (is_dir($path)) {
+    public function prepareRequest()
+    {
+        $sViewIdent = $this->getRequestView();
+        $oDocument =& VFactory::getDocument();
+        #$renderer =& $oDocument->getRenderer();
+        #$renderer->init();
 
-				foreach (scandir($path) as $component_dir) {
-					if ($component_dir == '.' || $component_dir == '..') continue;
-					if (!is_dir($path.DS.$component_dir)) continue;
+        $sFilename = $this->sComponentRoot.DS.'views'.DS.$sViewIdent;
 
-					if (!is_file($path.DS.$component_dir.DS.'controller.ini')) continue;
+        // Import view file
+        if (!VLoader::check_extensions($sFilename)) {
+            // Throw 404
+          VResponse::error(404);
+        }
 
-					if (!is_file($path.DS.$component_dir.DS.'urls.inc.php')) continue;
 
+        $sViewClassname = $this->getViewClassname($sViewIdent);
 
-					$config = new VSettingsIni();
-					$config->init($path.DS.$component_dir, 'controller');
+        $sMethod = $this->getRequestMethod();
 
-					$alias 	= $config->get('controller.alias', $component_dir);
-					$file 	= $path.DS.$component_dir.DS.$config->get('controller.file', 'controller.inc.php');
+        $this->set('sRequestViewClassname', $sViewClassname);
+        $this->set('sRequestViewMethod', $sMethod);
 
-					$classname = sprintf('Component%sController', ucfirst($component_dir));
-					#$url_classname = 'ComponentUrls'.ucfirst($component_dir);
+    }
 
-					/* get urls */
-					/*VLoader::register($url_classname, $path.DS.$component_dir.DS.'urls.inc.php');*/
-					/*$urls = new $url_classname();*/
+    public function processRequest()
+    {
 
-					/*$url =& VFactory::getUrl();
-					$url->register( $urls->getPattern() );*/
+        $sViewClassname = $this->get('sRequestViewClassname');
+        $sMethod        = $this->get('sRequestViewMethod');
 
-					#VLoader::register($classname, $file);
 
-					self::$components[$alias] = $classname;
-				}
+        $oView = new $sViewClassname();
 
-			}
-		}
-	}
+        if (!method_exists($oView, $sMethod)) {
+            $sMessage = sprintf(
+                "Method '%s' not registred in view '%s'",
+                $sMethod,
+                $sViewClassname
+            );
+            throw new Exception($sMessage);
+        }
 
-	public function handleRequest() {
+        // prepare
+        VMiddleware::trigger('onBeforePrepareView');
+        $oView->prepare();
+        VMiddleware::trigger('onAfterPrepareView');
 
-		VMiddleware::trigger('onBeforePrepareRequest');
-		$this->prepareRequest();
-		VMiddleware::trigger('onAfterPrepareRequest');
+        // process method
+        VMiddleware::trigger('onBeforeProcessView');
+        $oView->$sMethod();
+        VMiddleware::trigger('onAfterProcessView');
 
-		VMiddleware::trigger('onBeforeProcessRequest');
-		$this->processRequest();
-		VMiddleware::trigger('onAfterProcessRequest');
+        // cleanup
+        VMiddleware::trigger('onBeforeCleanupView');
+        $oView->cleanup();
+        VMiddleware::trigger('onAfterCleanupView');
 
-		/* switch to response */
-		VMiddleware::trigger('onBeforePrepareResponse');
-		$this->prepareResponse();
-		VMiddleware::trigger('onAfterPrepareResponse');
 
-		VMiddleware::trigger('onBeforePrintResponse');
-		$this->printResponse();
-		VMiddleware::trigger('onAfterPrintResponse');
+    }
 
-		VMiddleware::trigger('onBeforeQuit');
-		$this->quit();
+    public function prepareResponse()
+    {
 
-	}
+        $oDocument =& VFactory::getDocument();
+        $oDocument->render();
 
-	public function prepareRequest() {
-		$view_ident = $this->getRequestView();
-		$document =& VFactory::getDocument();
-		#$renderer =& $document->getRenderer();
-		#$renderer->init();
+        VResponse::setBody($oDocument->getBody());
 
-		// Import view file
-		if (!VLoader::check_extensions($this->component_root.DS.'views'.DS.$view_ident)) {
-			// Throw 404
-		  VResponse::error(404);
-		}
+    }
 
+    public function printResponse()
+    {
 
-		$view = $this->getViewClassname( $view_ident );
+        print VResponse::toString(true);
 
-		$method = $this->getRequestMethod();
+    }
 
-		$this->set('request_view_classname', $view);
-		$this->set('request_view_method', $method);
+    public function getRequestView()
+    {
 
-	}
+        $oInput =& VFactory::getInput();
+        $sViewIdent = $oInput->get('_vv', $this->sDefaultView, 'get');
 
-	public function processRequest() {
+        // Throw 404
+        if (!$sViewIdent) VResponse::error(404);
 
-		$view_class = $this->get('request_view_classname');
-		$method			= $this->get('request_view_method');
+        return $sViewIdent;
+    }
 
+    public function getRequestMethod()
+    {
 
-		$view = new $view_class();
+        $oInput =& VFactory::getInput();
+        $sMethod = $oInput->get('_vm', 'show', 'get');
 
-		if (!method_exists($view, $method))
-			throw new Exception( sprintf("Method '%s' not registred in view '%s'", $method, $view_class) );
+        // Throw 404
+        if (!$sMethod) VResponse::error(404);
 
+        return $sMethod;
+    }
 
-		// prepare
-		VMiddleware::trigger('onBeforePrepareView');
-		$view->prepare();
-		VMiddleware::trigger('onAfterPrepareView');
+    public function getViewClassname($sViewIdent)
+    {
+        $sClassname = sprintf(
+            'Component%sView%s',
+            ucfirst($this->get('sComponentName')),
+            ucfirst($sViewIdent)
+        );
 
-		// process method
-		VMiddleware::trigger('onBeforeProcessView');
-		$view->$method();
-		VMiddleware::trigger('onAfterProcessView');
+        return $sClassname;
+    }
 
-		// cleanup
-		VMiddleware::trigger('onBeforeCleanupView');
-		$view->cleanup();
-		VMiddleware::trigger('onAfterCleanupView');
-
-
-	}
-
-	public function prepareResponse() {
-
-		$document =& VFactory::getDocument();
-		$document->render();
-
-		VResponse::setBody( $document->getBody() );
-
-	}
-
-	public function printResponse() {
-
-		print VResponse::toString(true);
-
-	}
-
-	public function getRequestView() {
-
-		$input =& VFactory::getInput();
-		$view_ident = $input->get('_vv', $this->default_view, 'get');
-
-		// Throw 404
-		if (!$view_ident) VResponse::error(404);
-
-		return $view_ident;
-	}
-
-	public function getRequestMethod() {
-
-		$input =& VFactory::getInput();
-		$method = $input->get('_vm', 'show', 'get');
-
-		// Throw 404
-		if (!$method) VResponse::error(404);
-
-		return $method;
-	}
-
-	public function getViewClassname($view_ident) {
-		$classname = sprintf('Component%sView%s', ucfirst($this->get('component_name')), ucfirst($view_ident));
-
-		return $classname;
-	}
-
-	public function quit() {
-		exit(0);
-	}
+    public function quit()
+    {
+        exit(0);
+    }
 }
