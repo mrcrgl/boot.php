@@ -1,7 +1,19 @@
 <?php
-
+/**
+ * @desc	Load this Middleware to enable CSRF Protection
+ *
+ * @author	mriegel
+ * @package	Versions.Middleware
+ * @version	1.0
+ */
 class VMiddlewareProtectionCsrf extends VMiddleware {
 
+	/**
+	 * onBeforeRoute()
+	 * Checks on request method POST the csrf token, if it doesnt compare set reponsecode to 500
+	 * 
+	 * @return void
+	 */
 	function onBeforeRoute() {
 		// check for POST and Token
 
@@ -9,9 +21,7 @@ class VMiddlewareProtectionCsrf extends VMiddleware {
 		$session =& VFactory::getSession();
 
 		if (strtolower($input->getMethod()) == 'post') {
-			#print_r($_POST);
-			#print NL;
-			#print_r($_SESSION);
+			
 			$need_token = $session->get('session.csrf_token');
 			$csrf_key = $session->get('session.csrf_key');
 			$got_token  = $input->get($csrf_key, null, 'post');
@@ -24,6 +34,12 @@ class VMiddlewareProtectionCsrf extends VMiddleware {
 
 	}
 
+	/**
+	 * onBeforePrepareResponse()
+	 * Generate new CSRF token, store it to session and assign to template
+	 * 
+	 * @return void
+	 */
 	function onBeforePrepareResponse() {
 		// generate token and assign to template
 
@@ -33,19 +49,9 @@ class VMiddlewareProtectionCsrf extends VMiddleware {
 		$csrf_key   = VPassword::create(rand(16, 32));
 
 		$session =& VFactory::getSession();
-		#print session_id().NL;
-		#printf("Old CSRF: %s : %s".NL, $session->get('session.csrf_key'), $session->get('session.csrf_token'));
-
+		
 		$session->set('session.csrf_token', $csrf_token);
 		$session->set('session.csrf_key', $csrf_key);
-
-		#print "<pre>";
-		#var_dump($session);
-		#print "</pre>";
-
-		#print "Session new? ".(($session->isNew()) ? 'Ja' : 'Nein').NL;
-		#printf("Generate CSRF: %s : %s".NL, $csrf_key, $csrf_token);
-		#print_r($_SESSION);
 
 		$document =& VFactory::getDocument();
 		$document->assign('csrf_token', sprintf("<input type='hidden' name='%s' value='%s' />", $csrf_key, $csrf_token));
