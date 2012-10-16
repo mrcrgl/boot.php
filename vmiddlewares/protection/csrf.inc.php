@@ -16,8 +16,6 @@ class VMiddlewareProtectionCsrf extends VMiddleware {
 	 * @return void
 	 */
 	function onBeforeRoute() {
-		// check for POST and Token
-
 		$input =& VFactory::getInput();
 		$session =& VFactory::getSession();
 
@@ -28,7 +26,7 @@ class VMiddlewareProtectionCsrf extends VMiddleware {
 			$got_token  = $input->get($csrf_key, null, 'post');
 
 			if ($got_token != $need_token) {
-				// TODO: Error page
+				// Go to error page
 				VResponse::error(500, "Invalid CSRF Token received. Your request is blocked due security reasons. Please go back and try again.");
 			}
 		}
@@ -42,8 +40,6 @@ class VMiddlewareProtectionCsrf extends VMiddleware {
 	 * @return void
 	 */
 	function onBeforePrepareResponse() {
-		// generate token and assign to template
-
 		VLoader::import('versions.utilities.password');
 
 		$csrf_token = VPassword::create(rand(32, 64));

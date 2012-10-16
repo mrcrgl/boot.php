@@ -16,11 +16,6 @@ class VMiddlewareBaseSession extends VMiddleware {
 	 * @return void
 	 */
 	public function onBeforeRoute() {
-		/*if (isset($_POST["PHPSESSID"])) {
-		  session_id($_POST["PHPSESSID"]);
-		}
-		
-		session_start();*/
 		$session =& VFactory::getSession();
 	}
 	
