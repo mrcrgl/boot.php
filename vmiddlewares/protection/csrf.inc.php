@@ -23,7 +23,8 @@ class VMiddlewareProtectionCsrf extends VMiddleware
 
     /**
      * onBeforeRoute()
-     * Checks on request method POST the csrf token, if it doesnt compare set reponsecode to 500
+     * Checks on request method POST the csrf token, 
+     * if it doesnt compare set reponsecode to 500
      * 
      * @return void
      */
@@ -36,12 +37,13 @@ class VMiddlewareProtectionCsrf extends VMiddleware
             
             $sNeedToken = $oSession->get('session.csrf_token');
             $sCsrfKey = $oSession->get('session.csrf_key');
-            $got_token  = $oInput->get($sCsrfKey, null, 'post');
+            $sGotToken  = $oInput->get($sCsrfKey, null, 'post');
 
-            if ($got_token != $sNeedToken) {
+            if ($sGotToken != $sNeedToken) {
                 
-                $sMessage = "Invalid CSRF Token received. Your request is blocked "
-                          . "due security reasons. Please go back and try again.";
+                $sMessage = "Invalid CSRF Token received. Your request "
+                          . "is blocked due security reasons. Please go "
+                          . "back and try again.";
                 // Go to error page
                 VResponse::error(
                     500, 
