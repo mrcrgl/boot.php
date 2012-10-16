@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @desc	Load this Middleware to enable Localization
  * 			and prepare URLs with language tags

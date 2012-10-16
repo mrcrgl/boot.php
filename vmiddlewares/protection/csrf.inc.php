@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @desc	Load this Middleware to enable CSRF Protection
  *

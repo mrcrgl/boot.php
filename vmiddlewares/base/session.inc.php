@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @desc	Load this Middleware to Start and Close PHP Sessions
  * 
