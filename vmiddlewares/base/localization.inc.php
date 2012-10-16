@@ -24,19 +24,31 @@ class VMiddlewareBaseLocalization extends VMiddleware
     {
         $localization =& VLocalization::getInstance();
         
-        if (preg_match('/^\/([a-z]{2})\/(.{0,255})/', $_SERVER['REQUEST_URI'], $matches)) {
+        if (preg_match(
+                '/^\/([a-z]{2})\/(.{0,255})/', 
+                $_SERVER['REQUEST_URI'], 
+                $matches
+            )) {
 
             $locale = $matches[1];
             $_SERVER['REQUEST_URI'] = '/'.$matches[2];
 
             if ($localization->getLocale() != $locale) {
                 if (!$localization->setLocale($locale)) {
-                    VResponse::redirect(sprintf("/%s%s", $localization->getLocale(), $_SERVER['REQUEST_URI']));
+                    VResponse::redirect(sprintf(
+                        "/%s%s", 
+                        $localization->getLocale(), 
+                        $_SERVER['REQUEST_URI']
+                    ));
                     exit;
                 }
             }
         } else {
-            VResponse::redirect(sprintf("/%s%s", $localization->getLocale(), $_SERVER['REQUEST_URI']));
+            VResponse::redirect(sprintf(
+                "/%s%s",
+                $localization->getLocale(),
+                $_SERVER['REQUEST_URI']
+            ));
             exit;
         }
 
@@ -53,12 +65,17 @@ class VMiddlewareBaseLocalization extends VMiddleware
         $localization =& VLocalization::getInstance();
         $document =& VFactory::getDocument();
 
-        $document->setUrlPrefix( sprintf("%s/%s", $localization->getLocale(), (($document->getUrlPrefix() == '/') ? '' : $document->getUrlPrefix())) );
+        $document->setUrlPrefix(sprintf(
+            "%s/%s",
+            $localization->getLocale(),
+            (($document->getUrlPrefix() == '/') ? '' : $document->getUrlPrefix())
+        ));
     }
 
     /**
      * onBeforeQuit()
-     * For development uses: Fetches all Text Strings and store it to the translation storage
+     * For development uses: Fetches all Text Strings 
+     * and store it to the translation storage
      * 
      * @return void
      */
