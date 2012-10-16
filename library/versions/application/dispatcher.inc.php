@@ -1,8 +1,6 @@
 <?php
 
 
-
-
 VLoader::register('Validator', VLIB.DS.'versions'.DS.'utilities'.DS.'validator.inc.php');
 VLoader::discover(dirname(__FILE__).DS.'dispatcher');
 
