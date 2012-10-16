@@ -160,7 +160,7 @@ class VApplicationController extends VObject
                         'controller'
                     );
 
-                    $sAlias   = $config->get(
+                    $sAlias = $oConfig->get(
                         'controller.alias',
                         $sComponentDir
                     );
