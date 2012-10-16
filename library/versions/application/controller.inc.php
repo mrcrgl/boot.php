@@ -20,6 +20,7 @@ class VApplicationController extends VObject {
 
 	public function __construct() {
 
+
 	}
 
 	static public function getInstance($component=null) {
