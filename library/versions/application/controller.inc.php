@@ -1,5 +1,6 @@
 <?php
 
+
 VLoader::import('versions.base.object');
 
 class VApplicationController extends VObject {
