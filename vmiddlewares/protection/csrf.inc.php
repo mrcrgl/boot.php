@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * Enable Middleware: CSRF.
+ * 
  * @desc      Load this Middleware to enable CSRF Protection
  *
  * @author    mriegel

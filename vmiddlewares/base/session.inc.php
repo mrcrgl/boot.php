@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * Enable Middleware: Session.
+ * 
  * @desc      Load this Middleware to Start and Close PHP Sessions
  * 
  * @author    mriegel
@@ -12,7 +14,7 @@ class VMiddlewareBaseSession extends VMiddleware {
     /**
      * Starts new Session.
      * 
-     * @return	void
+     * @return void
      */
     public function onBeforeRoute() {
         $session =& VFactory::getSession();
@@ -21,7 +23,7 @@ class VMiddlewareBaseSession extends VMiddleware {
     /**
      * Write-close new Session.
      * 
-     * @return	void
+     * @return void
      */
     public function onBeforeQuit() {
         session_write_close();
