@@ -36,20 +36,22 @@ class VMiddlewareBaseLocalization extends VMiddleware
 
             if ($localization->getLocale() != $locale) {
                 if (!$localization->setLocale($locale)) {
-                    VResponse::redirect(sprintf(
-                        "/%s%s", 
-                        $localization->getLocale(), 
+                    $sRedirectTo = sprintf(
+                        "/%s%s",
+                        $localization->getLocale(),
                         $_SERVER['REQUEST_URI']
-                    ));
+                    );
+                    VResponse::redirect($sRedirectTo);
                     exit;
                 }
             }
         } else {
-            VResponse::redirect(sprintf(
+            $sRedirectTo = sprintf(
                 "/%s%s",
                 $localization->getLocale(),
                 $_SERVER['REQUEST_URI']
-            ));
+            );
+            VResponse::redirect($sRedirectTo);
             exit;
         }
 
@@ -66,11 +68,12 @@ class VMiddlewareBaseLocalization extends VMiddleware
         $localization =& VLocalization::getInstance();
         $document =& VFactory::getDocument();
 
-        $document->setUrlPrefix(sprintf(
+        $sUrlPrefix = sprintf(
             "%s/%s",
             $localization->getLocale(),
-            (($document->getUrlPrefix() == '/') ? '' : $document->getUrlPrefix())
-        ));
+            ($document->getUrlPrefix() == '/') ? '' : $document->getUrlPrefix()
+        );
+        $document->setUrlPrefix($sUrlPrefix);
     }
 
     /**
