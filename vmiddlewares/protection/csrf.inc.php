@@ -18,7 +18,8 @@
  * @package   Versions.Middleware
  * @version   1.0
  */
-class VMiddlewareProtectionCsrf extends VMiddleware {
+class VMiddlewareProtectionCsrf extends VMiddleware
+{
 
     /**
      * onBeforeRoute()
@@ -26,19 +27,26 @@ class VMiddlewareProtectionCsrf extends VMiddleware {
      * 
      * @return void
      */
-    function onBeforeRoute() {
-        $input =& VFactory::getInput();
-        $session =& VFactory::getSession();
+    function onBeforeRoute()
+    {
+        $oInput =& VFactory::getInput();
+        $oSession =& VFactory::getSession();
 
-        if (strtolower($input->getMethod()) == 'post') {
+        if (strtolower($oInput->getMethod()) == 'post') {
             
-            $need_token = $session->get('session.csrf_token');
-            $csrf_key = $session->get('session.csrf_key');
-            $got_token  = $input->get($csrf_key, null, 'post');
+            $sNeedToken = $oSession->get('session.csrf_token');
+            $sCsrfKey = $oSession->get('session.csrf_key');
+            $got_token  = $oInput->get($sCsrfKey, null, 'post');
 
-            if ($got_token != $need_token) {
+            if ($got_token != $sNeedToken) {
+                
+                $sMessage = "Invalid CSRF Token received. Your request is blocked "
+                          . "due security reasons. Please go back and try again.";
                 // Go to error page
-                VResponse::error(500, "Invalid CSRF Token received. Your request is blocked due security reasons. Please go back and try again.");
+                VResponse::error(
+                    500, 
+                    $sMessage
+                );
             }
         }
 
@@ -50,19 +58,26 @@ class VMiddlewareProtectionCsrf extends VMiddleware {
      * 
      * @return void
      */
-    function onBeforePrepareResponse() {
+    function onBeforePrepareResponse()
+    {
         VLoader::import('versions.utilities.password');
 
-        $csrf_token = VPassword::create(rand(32, 64));
-        $csrf_key   = VPassword::create(rand(16, 32));
+        $sCsrfToken = VPassword::create(rand(32, 64));
+        $sCsrfKey   = VPassword::create(rand(16, 32));
 
-        $session =& VFactory::getSession();
+        $oSession =& VFactory::getSession();
         
-        $session->set('session.csrf_token', $csrf_token);
-        $session->set('session.csrf_key', $csrf_key);
+        $oSession->set('session.csrf_token', $sCsrfToken);
+        $oSession->set('session.csrf_key', $sCsrfKey);
 
+        $sHiddenField = sprintf(
+            "<input type='hidden' name='%s' value='%s' />", 
+            $sCsrfKey,
+            $sCsrfToken
+        );
+        
         $document =& VFactory::getDocument();
-        $document->assign('csrf_token', sprintf("<input type='hidden' name='%s' value='%s' />", $csrf_key, $csrf_token));
+        $document->assign('csrf_token', $sHiddenField);
     }
 
 }
