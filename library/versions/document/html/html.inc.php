@@ -1,6 +1,10 @@
 <?php
-
-
+/**
+ *
+ *
+ * @author marc
+ *
+ */
 class VDocumentHtml extends VDocument {
 
 	var $_template = 'index.htpl';
