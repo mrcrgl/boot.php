@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Enable Middleware: Localization.
  * 

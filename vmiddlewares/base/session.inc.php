@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Enable Middleware: Session.
  * 
@@ -9,14 +10,16 @@
  * @package   Versions.Middleware
  * @version   1.0
  */
-class VMiddlewareBaseSession extends VMiddleware {
+class VMiddlewareBaseSession extends VMiddleware 
+{
     
     /**
      * Starts new Session.
      * 
      * @return void
      */
-    public function onBeforeRoute() {
+    public function onBeforeRoute()
+    {
         $session =& VFactory::getSession();
     }
 
@@ -25,7 +28,8 @@ class VMiddlewareBaseSession extends VMiddleware {
      * 
      * @return void
      */
-    public function onBeforeQuit() {
+    public function onBeforeQuit()
+    {
         session_write_close();
     }
 }
