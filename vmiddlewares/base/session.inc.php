@@ -11,7 +11,7 @@ class VMiddlewareBaseSession extends VMiddleware {
 	
 	/**
 	 * Method onBeforeRoute()
-	 * @desc	Starts new Session
+	 * Starts new Session
 	 * 
 	 * @return	void
 	 */
@@ -21,7 +21,7 @@ class VMiddlewareBaseSession extends VMiddleware {
 	
 	/**
 	 * Method onBeforeQuit()
-	 * @desc	Write-close new Session
+	 * Write-close new Session
 	 * 
 	 * @return	void
 	 */
