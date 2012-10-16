@@ -16,7 +16,8 @@ class VMiddlewareBaseLocalization extends VMiddleware
 
     /**
      * onBeforeRoute()
-     * checks for localization tag in url, redirect with default if its not available
+     * checks for localization tag in url, redirect 
+     * with default if its not available
      * 
      * @return void
      */
@@ -24,11 +25,10 @@ class VMiddlewareBaseLocalization extends VMiddleware
     {
         $localization =& VLocalization::getInstance();
         
-        if (preg_match(
-                '/^\/([a-z]{2})\/(.{0,255})/', 
-                $_SERVER['REQUEST_URI'], 
-                $matches
-            )) {
+        if (preg_match('/^\/([a-z]{2})\/(.{0,255})/', 
+                       $_SERVER['REQUEST_URI'], 
+                       $matches
+                       )) {
 
             $locale = $matches[1];
             $_SERVER['REQUEST_URI'] = '/'.$matches[2];
