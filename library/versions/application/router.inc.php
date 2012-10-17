@@ -2,6 +2,7 @@
 
 
 class VApplicationRouter {
+    
 	
 	public function route() {
 		
