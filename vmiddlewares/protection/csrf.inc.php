@@ -2,30 +2,29 @@
 /**
  * Enable Middleware: CSRF.
  *
- * @desc      Load this Middleware to enable CSRF Protection
+ * Load this Middleware to enable CSRF Protection
  *
- * @author    mriegel
- * @package   Versions.Middleware
- * @version   1.0
+ * @author  Marc Riegel
+ * @package Versions.Middleware
+ * @version 1.0
  */
 
 /**
  * Enable Middleware: CSRF.
- *
- * @desc      Load this Middleware to enable CSRF Protection
- *
- * @author    mriegel
- * @package   Versions.Middleware
- * @version   1.0
+ * 
+ * @name    VMiddlewareProtectionCsrf
+ * @package Versions.Middleware
+ * @see     VMiddleware
  */
 class VMiddlewareProtectionCsrf extends VMiddleware
 {
 
     /**
-     * onBeforeRoute()
+     * Event fired before Route.
+     * 
      * Checks on request method POST the csrf token, 
      * if it doesnt compare set reponsecode to 500
-     * 
+     *
      * @return void
      */
     function onBeforeRoute()
@@ -44,18 +43,20 @@ class VMiddlewareProtectionCsrf extends VMiddleware
                 $sMessage = "Invalid CSRF Token received. Your request "
                           . "is blocked due security reasons. Please go "
                           . "back and try again.";
-                // Go to error page
+                // Go to error page.
                 VResponse::error(
                     500, 
                     $sMessage
                 );
             }
+            
         }
 
     }
 
     /**
-     * onBeforePrepareResponse()
+     * Event fired before preparing Response.
+     * 
      * Generate new CSRF token, store it to session and assign to template
      * 
      * @return void
