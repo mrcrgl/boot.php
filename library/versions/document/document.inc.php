@@ -872,8 +872,8 @@ class VDocument
 
     public function assign($var, $value)
     {
-        $renderer =& $this->getRenderer();
-        $renderer->assign($var, $value);
+        $oRenderer =& $this->getRenderer();
+        $oRenderer->assign($var, $value);
     }
 
     /**

@@ -87,8 +87,8 @@ class ComponentAuthModelLogin extends VObject
   public function doLogout()
     {
 
-      $session =& VFactory::getSession();
-      $session->clear('login');
+      $oSession =& VFactory::getSession();
+      $oSession->clear('login');
 
     unset($this->objUser);
     return true;
@@ -126,8 +126,8 @@ class ComponentAuthModelLogin extends VObject
   private function registerLogin()
   {
     $this->tsLogin = time();
-    $session =& VFactory::getSession();
-    $session->set('login', &$this);
+    $oSession =& VFactory::getSession();
+    $oSession->set('login', &$this);
   }
 
   private function forwarding()

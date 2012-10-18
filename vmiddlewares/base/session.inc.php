@@ -20,7 +20,7 @@ class VMiddlewareBaseSession extends VMiddleware
      */
     public function onBeforeRoute()
      {
-        $session =& VFactory::getSession();
+        $oSession =& VFactory::getSession();
     }
 
     /**

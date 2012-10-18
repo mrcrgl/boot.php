@@ -7,10 +7,10 @@ class ComponentViewMediaLib extends VApplicationView
   public function style()
  {
     
-      $document =& VFactory::getDocument();
-      $renderer =& $document->getRenderer();
+      $oDocument =& VFactory::getDocument();
+      $oRenderer =& $oDocument->getRenderer();
       
-      $document->setTemplate('login.htpl');
+      $oDocument->setTemplate('login.htpl');
       
   }
   

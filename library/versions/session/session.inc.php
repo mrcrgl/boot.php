@@ -25,7 +25,7 @@ VLoader::import('versions.session.storage');
  * @subpackage  Session
  * @since       2.0
  */
-class VSession extends VObject 
+class VSession extends VObject
 {
 
     /**
@@ -233,12 +233,12 @@ class VSession extends VObject
             $class = 'VSessionStorage' . ucfirst($name);
 
             //Load the class only if needed
-            if (!class_exists($class)) 
+            if (!class_exists($class))
 {
                 require_once dirname(__FILE__) . '/storage/' . $name . '.inc.php';
             }
 
-            if (call_user_func_array(array(trim($class), 'test'), array())) 
+            if (call_user_func_array(array(trim($class), 'test'), array()))
 {
                 $names[] = $name;
             }
@@ -385,16 +385,16 @@ class VSession extends VObject
      * @since   2.0
      */
     protected function _start()
-     {
+    {
         // Start session if not started
         if ($this->_state == 'restart') {
             session_id($this->_createId());
         } else {
             $session_name = session_name();
-            $input = new VInput();
-            if (!$input->Cookie->get($session_name, false)) {
-                if ($input->Cookie->get($session_name)) {
-                    session_id($input->get($session_name));
+            $oInput = new VInput();
+            if (!$oInput->Cookie->get($session_name, false)) {
+                if ($oInput->Cookie->get($session_name)) {
+                    session_id($oInput->get($session_name));
                     setcookie($session_name, '', time() - 3600);
                 }
             }

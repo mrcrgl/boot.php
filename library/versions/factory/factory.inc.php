@@ -1,6 +1,6 @@
 <?php
 
-abstract class VFactory 
+abstract class VFactory
 {
 
     public static $template = null;
@@ -36,7 +36,7 @@ abstract class VFactory
 
         if (!array_key_exists($instance, self::$template) || !is_object(self::$template[$instance])) {
 
-            if (!class_exists('VTemplate')) 
+            if (!class_exists('VTemplate'))
 {
                 VLoader::import('versions.output.template');
             }
@@ -169,8 +169,8 @@ abstract class VFactory
     {
       if (!self::$user) {
 
-        $session =& self::getSession();
-        $login =& $session->get('login');
+        $oSession =& self::getSession();
+        $login =& $oSession->get('login');
         if ($login && is_object($login) && $login->loggedIn()) {
           self::$user = new User();
           self::$user->load($login->obj->uid);
@@ -229,13 +229,13 @@ abstract class VFactory
         // Config time is in minutes
         $options['expire'] = (VSettings::f('session.lifetime')) ? VSettings::f('session.lifetime') * 60 : 900;
 
-        $session = VSession::getInstance($handler, $options);
+        $oSession = VSession::getInstance($handler, $options);
         #var_dump($session);
-        if ($session->getState() == 'expired') {
-            $session->restart();
+        if ($oSession->getState() == 'expired') {
+            $oSession->restart();
         }
 
-        return $session;
+        return $oSession;
     }
 
 }

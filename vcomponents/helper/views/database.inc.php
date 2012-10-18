@@ -5,16 +5,16 @@ class ComponentHelperViewDatabase extends VApplicationView
     
     public function show()
  {
-        $document =& VFactory::getDocument();
-        $document->setTemplate('database/index.htpl');
-        $document->assign('_current_step_tpl', 'database/step/check.htpl');
+        $oDocument =& VFactory::getDocument();
+        $oDocument->setTemplate('database/index.htpl');
+        $oDocument->assign('_current_step_tpl', 'database/step/check.htpl');
         
         try {
             $dbo =& VFactory::getDatabase();
             $dbo->connect();
             
         } catch (Exception $e) {
-            $document->assign('do_database_setup', true);
+            $oDocument->assign('do_database_setup', true);
         }
         
         
@@ -22,32 +22,32 @@ class ComponentHelperViewDatabase extends VApplicationView
     
     public function configure()
         {
-        $document =& VFactory::getDocument();
+        $oDocument =& VFactory::getDocument();
         $input    =& VFactory::getInput();
         $session  =& VFactory::getSession();
         
-        $document->setTemplate('database/index.htpl');
-        $document->assign('_current_step_tpl', 'database/step/configure.htpl');
+        $oDocument->setTemplate('database/index.htpl');
+        $oDocument->assign('_current_step_tpl', 'database/step/configure.htpl');
         
-        $document->assign('db_host', $session->get('db_host', '', 'formvalue'));
-        $document->assign('db_main_user', $session->get('db_main_user', '', 'formvalue'));
-        $document->assign('db_main_pass', $session->get('db_main_pass', '', 'formvalue'));
+        $oDocument->assign('db_host', $oSession->get('db_host', '', 'formvalue'));
+        $oDocument->assign('db_main_user', $oSession->get('db_main_user', '', 'formvalue'));
+        $oDocument->assign('db_main_pass', $oSession->get('db_main_pass', '', 'formvalue'));
         
-        if (strtolower($input->getMethod()) == 'post') {
+        if (strtolower($oInput->getMethod()) == 'post') {
             
-            $db_host             = $input->get('db_host', '', 'post');
-            #$db_database     = $input->get('db_database', '', 'post');
-            $db_main_user = $input->get('db_main_user', '', 'post');
-            $db_main_pass = $input->get('db_main_pass', '', 'post');
+            $db_host             = $oInput->get('db_host', '', 'post');
+            #$db_database     = $oInput->get('db_database', '', 'post');
+            $db_main_user = $oInput->get('db_main_user', '', 'post');
+            $db_main_pass = $oInput->get('db_main_pass', '', 'post');
             
-            $session->set('db_host', $db_host, 'formvalue');
-            $session->set('db_main_user', $db_main_user, 'formvalue');
-            $session->set('db_main_pass', $db_main_pass, 'formvalue');
+            $oSession->set('db_host', $db_host, 'formvalue');
+            $oSession->set('db_main_user', $db_main_user, 'formvalue');
+            $oSession->set('db_main_pass', $db_main_pass, 'formvalue');
             
-            $document->assign('db_host', $db_host);
-            #$document->assign('db_database', $db_database);
-            $document->assign('db_main_user', $db_main_user);
-            $document->assign('db_main_pass', $db_main_pass);
+            $oDocument->assign('db_host', $db_host);
+            #$oDocument->assign('db_database', $db_database);
+            $oDocument->assign('db_main_user', $db_main_user);
+            $oDocument->assign('db_main_pass', $db_main_pass);
             
             #$dbo =& VDatabase::getInstance('mysql', $db_host, $db_database, $db_main_user, $db_main_pass);
             
@@ -67,7 +67,7 @@ class ComponentHelperViewDatabase extends VApplicationView
             
             VMessages::_("Ok", sprintf("Verbindung konnte erfolgreich hergestellt werden."), 'success');
             
-            header( sprintf("Location: /%sdatabase/create", $document->getUrlPrefix()) );
+            header( sprintf("Location: /%sdatabase/create", $oDocument->getUrlPrefix()) );
             exit;
             
         }
@@ -76,52 +76,52 @@ class ComponentHelperViewDatabase extends VApplicationView
     
     public function create()
             {
-        $document =& VFactory::getDocument();
+        $oDocument =& VFactory::getDocument();
         $input    =& VFactory::getInput();
         $session  =& VFactory::getSession();
         
-        $document->setTemplate('database/index.htpl');
-        $document->assign('_current_step_tpl', 'database/step/create.htpl');
+        $oDocument->setTemplate('database/index.htpl');
+        $oDocument->assign('_current_step_tpl', 'database/step/create.htpl');
         
-        $document->assign('db_host', $session->get('db_host', '', 'formvalue'));
-        $document->assign('db_main_user', $session->get('db_main_user', '', 'formvalue'));
-        $document->assign('db_main_pass', $session->get('db_main_pass', '', 'formvalue'));
+        $oDocument->assign('db_host', $oSession->get('db_host', '', 'formvalue'));
+        $oDocument->assign('db_main_user', $oSession->get('db_main_user', '', 'formvalue'));
+        $oDocument->assign('db_main_pass', $oSession->get('db_main_pass', '', 'formvalue'));
         
-        $document->assign('create_user', $session->get('create_user', '', 'formvalue'));
-        $document->assign('db_database', $session->get('db_database', '', 'formvalue'));
-        $document->assign('db_user', $session->get('db_user', '', 'formvalue'));
-        $document->assign('db_pass', $session->get('db_pass', '', 'formvalue'));
+        $oDocument->assign('create_user', $oSession->get('create_user', '', 'formvalue'));
+        $oDocument->assign('db_database', $oSession->get('db_database', '', 'formvalue'));
+        $oDocument->assign('db_user', $oSession->get('db_user', '', 'formvalue'));
+        $oDocument->assign('db_pass', $oSession->get('db_pass', '', 'formvalue'));
         
         
-        if (strtolower($input->getMethod()) == 'post') {
+        if (strtolower($oInput->getMethod()) == 'post') {
             
-            $db_host             = $input->get('db_host', '', 'post');
-            $db_main_user = $input->get('db_main_user', '', 'post');
-            $db_main_pass = $input->get('db_main_pass', '', 'post');
+            $db_host             = $oInput->get('db_host', '', 'post');
+            $db_main_user = $oInput->get('db_main_user', '', 'post');
+            $db_main_pass = $oInput->get('db_main_pass', '', 'post');
             
-            $create_user         = $input->get('create_user', 0, 'post');
-            $db_database         = $input->get('db_database', null, 'post');
-            $db_user                 = $input->get('db_user', null, 'post');
-            $db_pass                 = $input->get('db_pass', null, 'post');
+            $create_user         = $oInput->get('create_user', 0, 'post');
+            $db_database         = $oInput->get('db_database', null, 'post');
+            $db_user                 = $oInput->get('db_user', null, 'post');
+            $db_pass                 = $oInput->get('db_pass', null, 'post');
             
             
-            $session->set('db_host', $db_host, 'formvalue');
-            $session->set('db_main_user', $db_main_user, 'formvalue');
-            $session->set('db_main_pass', $db_main_pass, 'formvalue');
+            $oSession->set('db_host', $db_host, 'formvalue');
+            $oSession->set('db_main_user', $db_main_user, 'formvalue');
+            $oSession->set('db_main_pass', $db_main_pass, 'formvalue');
             
-            $session->set('create_user', $create_user, 'formvalue');
-            $session->set('db_database', $db_database, 'formvalue');
-            $session->set('db_user', $db_user, 'formvalue');
-            $session->set('db_pass', $db_pass, 'formvalue');
+            $oSession->set('create_user', $create_user, 'formvalue');
+            $oSession->set('db_database', $db_database, 'formvalue');
+            $oSession->set('db_user', $db_user, 'formvalue');
+            $oSession->set('db_pass', $db_pass, 'formvalue');
             
-            $document->assign('db_host', $db_host);
-            $document->assign('db_main_user', $db_main_user);
-            $document->assign('db_main_pass', $db_main_pass);
+            $oDocument->assign('db_host', $db_host);
+            $oDocument->assign('db_main_user', $db_main_user);
+            $oDocument->assign('db_main_pass', $db_main_pass);
             
-            $document->assign('create_user', $create_user);
-            $document->assign('db_database', $db_database);
-            $document->assign('db_user', $db_user);
-            $document->assign('db_pass', $db_pass);
+            $oDocument->assign('create_user', $create_user);
+            $oDocument->assign('db_database', $db_database);
+            $oDocument->assign('db_user', $db_user);
+            $oDocument->assign('db_pass', $db_pass);
             
             $dbo = mysql_connect($db_host, $db_main_user, $db_main_pass, true);
             if (mysql_select_db($db_database, $dbo)) {
@@ -139,8 +139,8 @@ class ComponentHelperViewDatabase extends VApplicationView
                 VLoader::import('versions.utilities.password');
                 $db_pass = VPassword::create(12);
                 VMessages::_("Notice", sprintf("Generiertes Passwort: %s", $db_pass));
-                $session->set('db_pass', $db_pass, 'formvalue');
-                $document->assign('db_pass', $db_pass);
+                $oSession->set('db_pass', $db_pass, 'formvalue');
+                $oDocument->assign('db_pass', $db_pass);
             }
             
             if (mysql_query(sprintf("CREATE DATABASE `%s` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci", $db_database), $dbo)) {
@@ -162,7 +162,7 @@ class ComponentHelperViewDatabase extends VApplicationView
                 if (mysql_query(sprintf("GRANT ALL PRIVILEGES ON `%s`.* TO '%s'@'%%' WITH GRANT OPTION", $db_database, $db_user), $dbo)) {
                     VMessages::_("OK", sprintf("Zugriffsrechte f&uuml;r %s@%% wurde erfolgreich erteilt.", $db_user), 'success');
                 } else {
-                    VMessages::_("Error", sprintf("Zugriffsrechte fŸr %s@%% wurden nicht erteilt: %s", $db_user, mysql_error($dbo)), 'error');
+                    VMessages::_("Error", sprintf("Zugriffsrechte fï¿½r %s@%% wurden nicht erteilt: %s", $db_user, mysql_error($dbo)), 'error');
                     mysql_close($dbo);
                     return false;
                 }
@@ -171,7 +171,7 @@ class ComponentHelperViewDatabase extends VApplicationView
             
             mysql_close($dbo);
             
-            header( sprintf("Location: /%sdatabase/showconfig", $document->getUrlPrefix()) );
+            header( sprintf("Location: /%sdatabase/showconfig", $oDocument->getUrlPrefix()) );
             exit;
             
         }
@@ -179,21 +179,21 @@ class ComponentHelperViewDatabase extends VApplicationView
     
     public function showconfig()
             {
-        $document =& VFactory::getDocument();
+        $oDocument =& VFactory::getDocument();
         $input    =& VFactory::getInput();
         $session  =& VFactory::getSession();
         
-        $document->setTemplate('database/index.htpl');
-        $document->assign('_current_step_tpl', 'database/step/showconfig.htpl');
+        $oDocument->setTemplate('database/index.htpl');
+        $oDocument->assign('_current_step_tpl', 'database/step/showconfig.htpl');
         
-        $document->assign('db_host', $session->get('db_host', '', 'formvalue'));
-        $document->assign('db_main_user', $session->get('db_main_user', '', 'formvalue'));
-        $document->assign('db_main_pass', $session->get('db_main_pass', '', 'formvalue'));
+        $oDocument->assign('db_host', $oSession->get('db_host', '', 'formvalue'));
+        $oDocument->assign('db_main_user', $oSession->get('db_main_user', '', 'formvalue'));
+        $oDocument->assign('db_main_pass', $oSession->get('db_main_pass', '', 'formvalue'));
         
-        $document->assign('create_user', $session->get('create_user', '', 'formvalue'));
-        $document->assign('db_database', $session->get('db_database', '', 'formvalue'));
-        $document->assign('db_user', $session->get('db_user', '', 'formvalue'));
-        $document->assign('db_pass', $session->get('db_pass', '', 'formvalue'));
+        $oDocument->assign('create_user', $oSession->get('create_user', '', 'formvalue'));
+        $oDocument->assign('db_database', $oSession->get('db_database', '', 'formvalue'));
+        $oDocument->assign('db_user', $oSession->get('db_user', '', 'formvalue'));
+        $oDocument->assign('db_pass', $oSession->get('db_pass', '', 'formvalue'));
         
     }
     

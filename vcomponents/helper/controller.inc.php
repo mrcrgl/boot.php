@@ -10,17 +10,17 @@ class ComponentHelperController extends VApplicationControllerWeb
 public function __construct()
     {
       
-        $document =& VFactory::getDocument();
-      $document->setTitle('Versions 2.0 - Helper');
-      $document->setProjectName('Versions 2.0 - Helper');
+        $oDocument =& VFactory::getDocument();
+      $oDocument->setTitle('Versions 2.0 - Helper');
+      $oDocument->setProjectName('Versions 2.0 - Helper');
       
       /*
       $session     =& VFactory::getSession();
       $input         =& VFactory::getInput();
-      $login         =& $session->get('login');
+      $login         =& $oSession->get('login');
       
       if (!is_object($login) || !$login->loggedIn()) {
-          header( sprintf("Location: /%slogin", $document->getUrlPrefix()) );
+          header( sprintf("Location: /%slogin", $oDocument->getUrlPrefix()) );
           exit;
       }*/
       

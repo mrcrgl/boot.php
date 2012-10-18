@@ -12,8 +12,8 @@ class VMessages extends VObject
     static function _($headline, $message=false, $type='info')
      {
 
-      $session =& VFactory::getSession();
-      $messages = $session->get('messages', array());
+      $oSession =& VFactory::getSession();
+      $messages = $oSession->get('messages', array());
 
       $messages[] = array(
           'type' => (string)$type,
@@ -21,18 +21,18 @@ class VMessages extends VObject
           'headline' => (string)$headline
       );
       
-      $session->set('messages', $messages);
+      $oSession->set('messages', $messages);
   }
 
   static function getMessages($leave=false)
   {
     
-      $session =& VFactory::getSession();
+      $oSession =& VFactory::getSession();
       
-      $messages = $session->get('messages', array());
+      $messages = $oSession->get('messages', array());
 
       if (!$leave)
-          $session->set('messages', array());
+          $oSession->set('messages', array());
 
       return $messages;      
   }

@@ -249,22 +249,22 @@ class VResponse
 
     self::setHeader("Status", $code);
 
-    $document =& VFactory::getDocument();
-    $renderer =& $document->getRenderer();
-    #$renderer->init();
+    $oDocument =& VFactory::getDocument();
+    $oRenderer =& $oDocument->getRenderer();
+    #$oRenderer->init();
 
-    #var_dump($document->getRenderer()->getTemplateDir());
+    #var_dump($oDocument->getRenderer()->getTemplateDir());
 
-    $document->assign('message', $message);
+    $oDocument->assign('message', $message);
     if (!is_null($debug) && VSettings::f('default.debug')) {
-      $document->assign('debug', $debug);
+      $oDocument->assign('debug', $debug);
     }
-    $document->setTemplate( sprintf("error/%d.htpl", (int)$code) );
-    $document->render();
+    $oDocument->setTemplate( sprintf("error/%d.htpl", (int)$code) );
+    $oDocument->render();
 
     #var_dump($document);exit;
 
-    self::setBody( $document->getBody() );
+    self::setBody( $oDocument->getBody() );
 
     ob_clean();
     print self::toString(false);

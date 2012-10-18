@@ -249,11 +249,11 @@ abstract class VModelDefault extends VBasic
     if (isset($param)) {
       $bFormOk = true;
       
-      $document =& VFactory::getDocument();
+      $oDocument =& VFactory::getDocument();
       
       foreach ($param as $key => $value) {
         if ($document)
-          $document->assign($key.'_var', $value);
+          $oDocument->assign($key.'_var', $value);
         if (isset($arrRules[$key])) {
           $model[($arrRules[$key]['2'])][$key] = $value;
                     //if (!ereg($arrRules[$key]['1'], $value)) {
@@ -264,7 +264,7 @@ abstract class VModelDefault extends VBasic
                   $bFormOk = false;
                   $this->setErrorMsg($key.'_err');
                   if ($document)
-                    $document->assign($key.'_err', '1');
+                    $oDocument->assign($key.'_err', '1');
                 } // [/if]
                         }
                         
@@ -273,7 +273,7 @@ abstract class VModelDefault extends VBasic
               $bFormOk = false;
               $this->setErrorMsg($key.'_err');
               if ($document)
-                $document->assign($key.'_err', '1');
+                $oDocument->assign($key.'_err', '1');
             } // [/if]
           } // [/if]
         } // [/if]
@@ -282,7 +282,7 @@ abstract class VModelDefault extends VBasic
     
     if ($bFormOk == false) {
       if ($document)
-        $document->assign('error', '1');
+        $oDocument->assign('error', '1');
     }
     return ($bFormOk == false) ? false : $model;
   }

@@ -6,9 +6,9 @@ class ComponentHelperViewModels extends VApplicationView
     public function show()
  {
 
-        $document =& VFactory::getDocument();
-        $document->setTemplate('database/index.htpl');
-        $document->assign('_current_step_tpl', 'models/step/show.htpl');
+        $oDocument =& VFactory::getDocument();
+        $oDocument->setTemplate('database/index.htpl');
+        $oDocument->assign('_current_step_tpl', 'models/step/show.htpl');
 
         VLoader::register('ProjectUrls', PROJECT_CONFIG.DS.'urls.inc.php');
         $project_urls = new ProjectUrls();
@@ -17,8 +17,8 @@ class ComponentHelperViewModels extends VApplicationView
 
 
 
-        #$document->assign('db_designer', &$designer);
-        $document->assign('map', $return);
+        #$oDocument->assign('db_designer', &$designer);
+        $oDocument->assign('map', $return);
 
         $host     = VSettings::get('database.host',         'undef');
         $database = VSettings::get('database.database', 'undef');
@@ -30,11 +30,11 @@ class ComponentHelperViewModels extends VApplicationView
     public function sql_create()
     {
 
-        $document =& VFactory::getDocument();
+        $oDocument =& VFactory::getDocument();
         $input    =& VFactory::getInput();
         $dbo      =& VFactory::getDatabase();
 
-        $classname= $input->get('model', false, 'get');
+        $classname= $oInput->get('model', false, 'get');
         $check    = true;
 
         if (!$classname) 
@@ -62,7 +62,7 @@ class ComponentHelperViewModels extends VApplicationView
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
                       VMessages::_('Databse error', $e->getMessage(), 'error');
-                      header( sprintf("Location: /%sdatabase/models", $document->getUrlPrefix()) );
+                      header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
                 }
@@ -74,7 +74,7 @@ class ComponentHelperViewModels extends VApplicationView
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
                       VMessages::_('Databse error', $e->getMessage(), 'error');
-                      header( sprintf("Location: /%sdatabase/models", $document->getUrlPrefix()) );
+                      header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
                 }
@@ -91,7 +91,7 @@ class ComponentHelperViewModels extends VApplicationView
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
                       VMessages::_('Databse error', $e->getMessage(), 'error');
-                      header( sprintf("Location: /%sdatabase/models", $document->getUrlPrefix()) );
+                      header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
                 }
@@ -103,7 +103,7 @@ class ComponentHelperViewModels extends VApplicationView
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
                       VMessages::_('Databse error', $e->getMessage(), 'error');
-                      header( sprintf("Location: /%sdatabase/models", $document->getUrlPrefix()) );
+                      header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
                 }
@@ -115,7 +115,7 @@ class ComponentHelperViewModels extends VApplicationView
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
                       VMessages::_('Databse error', $e->getMessage(), 'error');
-                      header( sprintf("Location: /%sdatabase/models", $document->getUrlPrefix()) );
+                      header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
                 }
@@ -126,7 +126,7 @@ class ComponentHelperViewModels extends VApplicationView
 
         VMessages::_('Success!', sprintf('Database Layout for Modal \'%s\' installed!', $classname), 'success');
 
-        header( sprintf("Location: /%sdatabase/models", $document->getUrlPrefix()) );
+        header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
         exit;
     }
 

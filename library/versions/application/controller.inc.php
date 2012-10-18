@@ -217,8 +217,8 @@ class VApplicationController extends VObject
     {
         $sViewIdent = $this->getRequestView();
         $oDocument =& VFactory::getDocument();
-        #$renderer =& $oDocument->getRenderer();
-        #$renderer->init();
+        #$oRenderer =& $oDocument->getRenderer();
+        #$oRenderer->init();
 
         $sFilename = $this->sComponentRoot.DS.'views'.DS.$sViewIdent;
 

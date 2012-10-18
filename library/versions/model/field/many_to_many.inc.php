@@ -1,7 +1,7 @@
-<?php 
+<?php
 
 
-class VModelFieldManyToMany extends VModelField 
+class VModelFieldManyToMany extends VModelField
 {
     
     var $type                 = 'none';
@@ -54,22 +54,22 @@ class VModelFieldManyToMany extends VModelField
     }
     
     #public function onCreate($value)
-         {
+    #{
     #    return $this->getUniqueId($value);
     #}
     
     #public function onUpdate($value)
-    {
+    #{
     #    return $this->getUniqueId($value);
     #}
     
     #public function onSet($value)
-    {
+    #{
     #    return $value;
     #}
     
     #public function onGet($value)
-    {
+    #{
     #    return $this->getReferenceObject($value);
     #}
     

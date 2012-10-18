@@ -66,14 +66,14 @@ class VMiddlewareBaseLocalization extends VMiddleware
     public function onBeforePrepareView()
      {
         $localization =& VLocalization::getInstance();
-        $document =& VFactory::getDocument();
+        $oDocument =& VFactory::getDocument();
 
         $sUrlPrefix = sprintf(
             "%s/%s",
             $localization->getLocale(),
-            ($document->getUrlPrefix() == '/') ? '' : $document->getUrlPrefix()
+            ($oDocument->getUrlPrefix() == '/') ? '' : $oDocument->getUrlPrefix()
         );
-        $document->setUrlPrefix($sUrlPrefix);
+        $oDocument->setUrlPrefix($sUrlPrefix);
     }
 
     /**

@@ -7,10 +7,10 @@ class ComponentDefaultViewIndex extends VApplicationView
   public function show()
  {
     
-      $document =& VFactory::getDocument();
-      $renderer =& $document->getRenderer();
+      $oDocument =& VFactory::getDocument();
+      $oRenderer =& $oDocument->getRenderer();
       
-      $document->setTemplate('index.htpl');
+      $oDocument->setTemplate('index.htpl');
       
   }
   

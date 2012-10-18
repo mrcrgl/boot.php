@@ -114,8 +114,8 @@ class VLocalization extends VObject
       $default_lang = VSettings::f('localization.default_locale', 'en');
     }
 
-    $input =& VInput::getInstance('cookie');
-    return $input->get('user_locale', $default_lang, 'cookie');
+    $oInput =& VInput::getInstance('cookie');
+    return $oInput->get('user_locale', $default_lang, 'cookie');
   }
 
   public function record()

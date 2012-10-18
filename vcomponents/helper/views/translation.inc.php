@@ -5,14 +5,14 @@ class ComponentHelperViewTranslation extends VApplicationView
 
     public function show()
  {
-    $document =& VFactory::getDocument();
+    $oDocument =& VFactory::getDocument();
       $input    =& VFactory::getInput();
 
-      $document->setTemplate('translation/index.htpl');
+      $oDocument->setTemplate('translation/index.htpl');
 
       if (VSettings::f('localization.engine', 'none') == 'none') {
         VMessages::_("Localization not enabled!", "ini file jedoens", 'info');
-        $document->assign('is_disabled', true);
+        $oDocument->assign('is_disabled', true);
       }
 
     $localization =& VLocalization::getInstance();
@@ -26,8 +26,8 @@ class ComponentHelperViewTranslation extends VApplicationView
       if ($el != $default_locale) $translate_to[] = $el;
     }
 
-    $from = $input->get('from', null, 'get');
-    $to   = $input->get('to', null, 'get');
+    $from = $oInput->get('from', null, 'get');
+    $to   = $oInput->get('to', null, 'get');
 
     if (is_null($from) || is_null($to)) {
       VResponse::redirect(sprintf('%s?from=%s&to=%s', $_SERVER['REDIRECT_URL'], $default_locale, $translate_to[0]));
@@ -53,22 +53,22 @@ class ComponentHelperViewTranslation extends VApplicationView
       }
     }
 
-    $document->assign('from', $from);
-    $document->assign('to', $to);
-    $document->assign('from_data', $from_data);
-    $document->assign('to_data', $to_data);
+    $oDocument->assign('from', $from);
+    $oDocument->assign('to', $to);
+    $oDocument->assign('from_data', $from_data);
+    $oDocument->assign('to_data', $to_data);
     }
 
     public function save()
     {
-      $document =& VFactory::getDocument();
+      $oDocument =& VFactory::getDocument();
       $input    =& VFactory::getInput();
 
 
       $localization =& VLocalization::getInstance();
       $separator    = $localization->get('key_sep');
 
-      $to   = $input->get('to', null, 'post');
+      $to   = $oInput->get('to', null, 'post');
 
       // the cache
       $c = array();
@@ -77,7 +77,7 @@ class ComponentHelperViewTranslation extends VApplicationView
       if (substr($key, 0, 1) != '_') continue;
       $area = substr($key, 1);
 
-      $area_data = $input->get($key, array(), 'post');
+      $area_data = $oInput->get($key, array(), 'post');
 
       foreach ($area_data as $hash => $ct) {
         if (!isset($ct['t']) || strlen($ct['t']) <= 0) {

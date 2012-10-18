@@ -79,8 +79,8 @@ class VMiddlewareProtectionCsrf extends VMiddleware
             $sCsrfToken
         );
         
-        $document =& VFactory::getDocument();
-        $document->assign('csrf_token', $sHiddenField);
+        $oDocument =& VFactory::getDocument();
+        $oDocument->assign('csrf_token', $sHiddenField);
     }
 
 }

@@ -5,7 +5,7 @@
  * @author marc
  *
  */
-class VDocumentHtml extends VDocument 
+class VDocumentHtml extends VDocument
 {
 
     var $_template = 'index.htpl';
@@ -62,14 +62,14 @@ class VDocumentHtml extends VDocument
      */
     public function assignDocumentVars()
     {
-        $renderer =& $this->getRenderer();
-        $session  =& VFactory::getSession();
+        $oRenderer =& $this->getRenderer();
+        $oSession  =& VFactory::getSession();
 
-        $renderer->assign('_document', &$this);
+        $oRenderer->assign('_document', &$this);
 
-        $login =& $session->get('login');
-      if (is_object($login) && $login->loggedIn()) {
-          $renderer->assign('_user', &$login->obj);
+        $oLogin =& $oSession->get('login');
+      if (is_object($oLogin) && $oLogin->loggedIn()) {
+          $oRenderer->assign('_user', &$oLogin->obj);
       }
     }
 
@@ -88,15 +88,15 @@ class VDocumentHtml extends VDocument
 
         VResponse::setHeader('Content-Type', $this->_mime . ($this->_charset ? '; charset=' . $this->_charset : ''));
 
-        $renderer =& $this->getRenderer();
+        $oRenderer =& $this->getRenderer();
 
-        if (!is_object($renderer)) {
+        if (!is_object($oRenderer)) {
             throw new Exception("No renderer instanciated");
         }
 
         $this->assignDocumentVars();
 
-        $data = $renderer->fetch( $this->getTemplate() );
+        $data = $oRenderer->fetch( $this->getTemplate() );
         $this->setBody($data);
     }
 }

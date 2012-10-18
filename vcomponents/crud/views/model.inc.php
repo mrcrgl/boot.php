@@ -21,20 +21,20 @@ class ComponentCrudViewModel extends VApplicationView
    {
         $this->fetchObject();
 
-        $document =& VFactory::getDocument();
-        $renderer =& $document->getRenderer();
-        $renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
+        $oDocument =& VFactory::getDocument();
+        $oRenderer =& $oDocument->getRenderer();
+        $oRenderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 
-        $document->setTemplate('crud/create.htpl');
+        $oDocument->setTemplate('crud/create.htpl');
 
-        if ($renderer->templateExists($this->getAlternateTemplate('create.htpl'))) {
-            $document->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
+        if ($oRenderer->templateExists($this->getAlternateTemplate('create.htpl'))) {
+            $oDocument->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
         }
 
-      $input =& VFactory::getInput();
-      if (strtolower($input->getMethod()) == 'post') {
+      $oInput =& VFactory::getInput();
+      if (strtolower($oInput->getMethod()) == 'post') {
           $this->updateObject();
-          header( sprintf("Location: /%s%s", $document->getUrlPrefix(), (($this->object->getModelVersion() == 1) ? $this->object->uid : $this->object->get('uid'))) );
+          header( sprintf("Location: /%s%s", $oDocument->getUrlPrefix(), (($this->object->getModelVersion() == 1) ? $this->object->uid : $this->object->get('uid'))) );
           exit;
       }
 
@@ -44,14 +44,14 @@ class ComponentCrudViewModel extends VApplicationView
       {
         $this->fetchObject();
 
-        $document =& VFactory::getDocument();
-        $renderer =& $document->getRenderer();
-        $renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
+        $oDocument =& VFactory::getDocument();
+        $oRenderer =& $oDocument->getRenderer();
+        $oRenderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 
-        $document->setTemplate('crud/read.htpl');
+        $oDocument->setTemplate('crud/read.htpl');
 
-        if ($renderer->templateExists($this->getAlternateTemplate('read.htpl'))) {
-            $document->assign('user_defined_template', $this->getAlternateTemplate('read.htpl'));
+        if ($oRenderer->templateExists($this->getAlternateTemplate('read.htpl'))) {
+            $oDocument->assign('user_defined_template', $this->getAlternateTemplate('read.htpl'));
         }
 
     }
@@ -60,22 +60,22 @@ class ComponentCrudViewModel extends VApplicationView
         {
         $this->fetchObject();
 
-        $document =& VFactory::getDocument();
-      $renderer =& $document->getRenderer();
-        $renderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
+        $oDocument =& VFactory::getDocument();
+      $oRenderer =& $oDocument->getRenderer();
+        $oRenderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 
-        $document->setTemplate('crud/create.htpl');
+        $oDocument->setTemplate('crud/create.htpl');
 
-        if ($renderer->templateExists($this->getAlternateTemplate('create.htpl'))) {
-            $document->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
+        if ($oRenderer->templateExists($this->getAlternateTemplate('create.htpl'))) {
+            $oDocument->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
         }
 
-      $document->assign('delete_url', sprintf("/%s%s/delete", $document->getUrlPrefix(), $this->object->uid));
+      $oDocument->assign('delete_url', sprintf("/%s%s/delete", $oDocument->getUrlPrefix(), $this->object->uid));
 
-        $input =& VFactory::getInput();
-      if (strtolower($input->getMethod()) == 'post') {
+        $oInput =& VFactory::getInput();
+      if (strtolower($oInput->getMethod()) == 'post') {
           if ($this->updateObject()) {
-              header( sprintf("Location: /%s%s", $document->getUrlPrefix(), (($this->object->getModelVersion() == 1) ? $this->object->uid : $this->object->get('uid'))) );
+              header( sprintf("Location: /%s%s", $oDocument->getUrlPrefix(), (($this->object->getModelVersion() == 1) ? $this->object->uid : $this->object->get('uid'))) );
               exit;
           }
       }
@@ -85,25 +85,25 @@ class ComponentCrudViewModel extends VApplicationView
           {
         $this->fetchObject();
 
-        $document =& VFactory::getDocument();
+        $oDocument =& VFactory::getDocument();
 
         $this->object->delete();
 
         VMessages::_('Ok', 'L&ouml;schung erfolgreich!', 'success');
 
-        header( sprintf("Location: /%s", $document->getUrlPrefix()) );
+        header( sprintf("Location: /%s", $oDocument->getUrlPrefix()) );
       exit;
     }
 
     private function fetchObject()
     {
 
-        $input =& VFactory::getInput();
+        $oInput =& VFactory::getInput();
 
-        $parent = $input->get('parent', false, 'get');
+        $parent = $oInput->get('parent', false, 'get');
 
-        $this->object_name = $input->get('object_name', null, 'get');
-        $this->object_uid = $input->get('object_uid', false, 'get');
+        $this->object_name = $oInput->get('object_name', null, 'get');
+        $this->object_uid = $oInput->get('object_uid', false, 'get');
 
 
         if (!$this->object_name) {
@@ -125,16 +125,16 @@ class ComponentCrudViewModel extends VApplicationView
             #print "after init jacket";
         }
 
-        $document =& VFactory::getDocument();
+        $oDocument =& VFactory::getDocument();
 
         if ($parent) {
-            $this->object_manager->filter($parent, $input->get($parent, null, 'get'));
-            $document->assign($parent, $input->get($parent, null, 'get'));
+            $this->object_manager->filter($parent, $oInput->get($parent, null, 'get'));
+            $oDocument->assign($parent, $oInput->get($parent, null, 'get'));
         }
 
 
-        $document->assign('object', &$this->object);
-        $document->assign('manager', &$this->object_manager);
+        $oDocument->assign('object', &$this->object);
+        $oDocument->assign('manager', &$this->object_manager);
 
     }
 
@@ -161,11 +161,11 @@ class ComponentCrudViewModel extends VApplicationView
 
     private function updateObject()
     {
-        $input =& VFactory::getInput();
+        $oInput =& VFactory::getInput();
 
         $params = array();
         foreach ($_POST as $key => $value) {
-            $params[$key] = $input->get($key, null, 'post');
+            $params[$key] = $oInput->get($key, null, 'post');
         }
         #var_dump($params);
         if ($this->object_layout_version == 1) {
