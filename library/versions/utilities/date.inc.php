@@ -8,7 +8,8 @@
  * @subpackage  Utilities
  * @since       2.0
  */
-class VDate extends DateTime {
+class VDate extends DateTime 
+{
   const DAY_ABBR = "\x021\x03";
   const DAY_NAME = "\x022\x03";
   const MONTH_ABBR = "\x023\x03";
@@ -73,7 +74,8 @@ class VDate extends DateTime {
    *
    * @throws  VException
    */
-  public function __construct($date = 'now', $tz = null) {
+  public function __construct($date = 'now', $tz = null)
+   {
     // Create the base GMT and server time zone objects.
     if (empty(self::$gmt) || empty(self::$stz)) {
       self::$gmt = new DateTimeZone('GMT');
@@ -84,12 +86,10 @@ class VDate extends DateTime {
     if (!($tz instanceof DateTimeZone)) {
       if ($tz === null) {
         $tz = self::$gmt;
-      }
-      elseif (is_numeric($tz)) {
+      } elseif (is_numeric($tz)) {
         // Translate from offset.
         $tz = new DateTimeZone(self::$offsets[(string) $tz]);
-      }
-      elseif (is_string($tz)) {
+      } elseif (is_string($tz)) {
         $tz = new DateTimeZone($tz);
       }
     }
@@ -117,7 +117,8 @@ class VDate extends DateTime {
    *
    * @since   2.0
    */
-  public function __get($name) {
+  public function __get($name)
+   {
     $value = null;
 
     switch ($name) {
@@ -188,7 +189,8 @@ class VDate extends DateTime {
    *
    * @since   2.0
    */
-  public function __toString() {
+  public function __toString()
+   {
     return (string) parent::format(self::$format);
   }
 
@@ -203,7 +205,8 @@ class VDate extends DateTime {
    * @since   2.0
    * @throws  VException
    */
-  public static function getInstance($date = 'now', $tz = null) {
+  public static function getInstance($date = 'now', $tz = null)
+   {
     return new VDate($date, $tz);
   }
 
@@ -217,7 +220,8 @@ class VDate extends DateTime {
    *
    * @since   2.0
    */
-  protected function dayToString($day, $abbr = false) {
+  protected function dayToString($day, $abbr = false)
+   {
     switch ($day) {
       case 0:
         return $abbr ? VText::_('SUN') : VText::_('SUNDAY');
@@ -247,7 +251,8 @@ class VDate extends DateTime {
    *
    * @since   2.0
    */
-  public function calendar($format, $local = false, $translate = true) {
+  public function calendar($format, $local = false, $translate = true)
+   {
     return $this->format($format, $local, $translate);
   }
 
@@ -262,7 +267,8 @@ class VDate extends DateTime {
    *
    * @since   2.0
    */
-  public function format($format, $local = false, $translate = true) {
+  public function format($format, $local = false, $translate = true)
+   {
     if ($translate) {
       // Do string replacements for date format options that can be translated.
       $format = preg_replace('/(^|[^\\\])D/', "\\1" . self::DAY_ABBR, $format);
@@ -314,7 +320,8 @@ class VDate extends DateTime {
    *
    * @since   2.0
    */
-  public function getOffsetFromGMT($hours = false) {
+  public function getOffsetFromGMT($hours = false)
+   {
     return (float) $hours ? ($this->_tz->getOffset($this) / 3600) : $this->_tz->getOffset($this);
   }
 
@@ -328,7 +335,8 @@ class VDate extends DateTime {
    *
    * @since   2.0
    */
-  protected function monthToString($month, $abbr = false) {
+  protected function monthToString($month, $abbr = false)
+   {
     switch ($month) {
       case 1:
         return $abbr ? VText::_('VANUARY_SHORT') : VText::_('VANUARY');
@@ -368,7 +376,8 @@ class VDate extends DateTime {
    *
    * @deprecated    12.1  Use setTimezone instead.
    */
-  public function setOffset($offset) {
+  public function setOffset($offset)
+   {
     // Deprecation warning.
     VLog::add('VDate::setOffset() is deprecated.', VLog::WARNING, 'deprecated');
 
@@ -392,7 +401,8 @@ class VDate extends DateTime {
    *
    * @since   2.0
    */
-  public function setTimezone($tz) {
+  public function setTimezone($tz)
+   {
     $this->_tz = $tz;
     return parent::setTimezone($tz);
   }
@@ -412,7 +422,8 @@ class VDate extends DateTime {
    *
    * @deprecated  12.1 Use VDate::format() instead.
    */
-  public function toFormat($format = '%Y-%m-%d %H:%M:%S', $local = false) {
+  public function toFormat($format = '%Y-%m-%d %H:%M:%S', $local = false)
+   {
     // Deprecation warning.
     VLog::add('VDate::toFormat() is deprecated.', VLog::WARNING, 'deprecated');
 
@@ -461,7 +472,8 @@ class VDate extends DateTime {
    * @link    http://www.ietf.org/rfc/rfc3339.txt
    * @since   2.0
    */
-  public function toISO8601($local = false) {
+  public function toISO8601($local = false)
+   {
     return $this->format(DateTime::RFC3339, $local, false);
   }
 
@@ -476,7 +488,8 @@ class VDate extends DateTime {
    * @since   2.0
    * @deprecated 12.1 Use VDate::toSql()
    */
-  public function toMySQL($local = false) {
+  public function toMySQL($local = false)
+   {
     VLog::add('VDate::toMySQL() is deprecated. Use VDate::toSql() instead.', VLog::WARNING, 'deprecated');
     return $this->format('Y-m-d H:i:s', $local, false);
   }
@@ -492,9 +505,10 @@ class VDate extends DateTime {
    * @link http://dev.mysql.com/doc/refman/5.0/en/datetime.html
    * @since   2.0
    */
-  public function toSql($local = false, VDatabase $dbo = null) {
+  public function toSql($local = false, VDatabase $dbo = null)
+   {
     if ($dbo === null) {
-    	// TODO change DAtabase connection
+        // TODO change DAtabase connection
       $dbo = VFactory::getDbo();
     }
     return $this->format($dbo->getDateFormat(), $local, false);
@@ -511,7 +525,8 @@ class VDate extends DateTime {
    * @link    http://www.ietf.org/rfc/rfc2822.txt
    * @since   2.0
    */
-  public function toRFC822($local = false) {
+  public function toRFC822($local = false)
+   {
     return $this->format(DateTime::RFC2822, $local, false);
   }
 
@@ -522,7 +537,8 @@ class VDate extends DateTime {
    *
    * @since   2.0
    */
-  public function toUnix() {
+  public function toUnix()
+   {
     return (int) parent::format('U');
   }
 }

@@ -15,7 +15,8 @@
  * @subpackage  Environment
  * @since       2.0
  */
-class VResponse {
+class VResponse 
+{
   /**
    * @var    array  Body
    * @since  2.0
@@ -61,7 +62,8 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function allowCache($allow = null) {
+  public static function allowCache($allow = null)
+   {
     if (!is_null($allow)) {
       self::$cachable = (bool) $allow;
     }
@@ -82,7 +84,8 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function setHeader($name, $value, $replace = false) {
+  public static function setHeader($name, $value, $replace = false)
+   {
     $name = (string) $name;
     $value = (string) $value;
 
@@ -104,7 +107,8 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function getHeaders() {
+  public static function getHeaders()
+   {
     return self::$headers;
   }
 
@@ -115,7 +119,8 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function clearHeaders() {
+  public static function clearHeaders()
+   {
     self::$headers = array();
   }
 
@@ -126,15 +131,15 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function sendHeaders() {
+  public static function sendHeaders()
+   {
     if (!headers_sent()) {
 
       foreach (self::$headers as $header) {
         if ('status' == strtolower($header['name'])) {
           // 'status' headers indicate an HTTP status, and need to be handled slightly differently
           header(ucfirst(strtolower($header['name'])) . ': ' . $header['value'], null, (int) $header['value']);
-        }
-        else
+        } else
         {
           header($header['name'] . ': ' . $header['value'], false);
         }
@@ -153,7 +158,8 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function setBody($content) {
+  public static function setBody($content)
+   {
     self::$body = array((string) $content);
   }
 
@@ -166,7 +172,8 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function prependBody($content) {
+  public static function prependBody($content)
+   {
     array_unshift(self::$body, (string) $content);
   }
 
@@ -179,7 +186,8 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function appendBody($content) {
+  public static function appendBody($content)
+   {
     array_push(self::$body, (string) $content);
   }
 
@@ -192,7 +200,8 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function getBody($toArray = false) {
+  public static function getBody($toArray = false)
+   {
     if ($toArray) {
       return self::$body;
     }
@@ -214,7 +223,8 @@ class VResponse {
    *
    * @since   2.0
    */
-  public static function toString($compress = false) {
+  public static function toString($compress = false)
+   {
     $data = self::getBody();
 
     // Don't compress something if the server is going to do it anyway. Waste of time.
@@ -233,7 +243,8 @@ class VResponse {
     return $data;
   }
 
-  public static function error($code=404, $message=null, $debug=null) {
+  public static function error($code=404, $message=null, $debug=null)
+  {
     #print $code." thrown.".NL;
 
     self::setHeader("Status", $code);
@@ -260,7 +271,8 @@ class VResponse {
     exit;
   }
 
-  public static function redirect($to, $code=303) {
+  public static function redirect($to, $code=303)
+  {
     if (!isset(self::$http_codes[$code])) return false;
 
     header(sprintf("HTTP/1.1 %d %s", $code, self::$http_codes[$code]));
@@ -281,11 +293,12 @@ class VResponse {
    * @note    Replaces _compress method in 2.0
    * @since   2.0
    */
-  protected static function compress($data) {
+  protected static function compress($data)
+   {
     $encoding = self::clientEncoding();
 
     if (!VSettings::f('default.use_gzip')) {
-    	return $data;
+        return $data;
     }
     
     if (!$encoding) {
@@ -334,7 +347,8 @@ class VResponse {
    * @since   2.0
    * @note    Replaces _clientEncoding method from 2.0
    */
-  protected static function clientEncoding() {
+  protected static function clientEncoding()
+   {
     if (!isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
       return false;
     }

@@ -28,7 +28,8 @@ require_once 'Minify/Controller/Base.php';
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_Controller_Groups extends Minify_Controller_Base {
+class Minify_Controller_Groups extends Minify_Controller_Base 
+{
     
     /**
      * Set up groups of files as sources
@@ -41,7 +42,8 @@ class Minify_Controller_Groups extends Minify_Controller_Base {
      * 'groups': (required) array mapping PATH_INFO strings to arrays
      * of complete file paths. @see Minify_Controller_Groups 
      */
-    public function setupSources($options) {
+    public function setupSources($options)
+ {
         // strip controller options
         $groups = $options['groups'];
         unset($options['groups']);

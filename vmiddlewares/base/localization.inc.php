@@ -22,7 +22,7 @@ class VMiddlewareBaseLocalization extends VMiddleware
      * @return void
      */
     public function onBeforeRoute()
-    {
+     {
         $localization =& VLocalization::getInstance();
         
         if (preg_match(
@@ -64,7 +64,7 @@ class VMiddlewareBaseLocalization extends VMiddleware
      * @return void
      */
     public function onBeforePrepareView()
-    {
+     {
         $localization =& VLocalization::getInstance();
         $document =& VFactory::getDocument();
 
@@ -84,7 +84,7 @@ class VMiddlewareBaseLocalization extends VMiddleware
      * @return void
      */
     public function onBeforeQuit()
-    {
+     {
         if (VSettings::f('localization.record', false)) {
             $localization =& VLocalization::getInstance();
             $localization->record();

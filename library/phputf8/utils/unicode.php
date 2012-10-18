@@ -219,7 +219,7 @@ function utf8_from_unicode($arr) {
             echo chr(0x80 | ($arr[$k] & 0x003f));
 
         # Byte order mark (skip)
-        } else if($arr[$k] == 0xFEFF) {
+        } else if ($arr[$k] == 0xFEFF) {
 
             // nop -- zap the BOM
 

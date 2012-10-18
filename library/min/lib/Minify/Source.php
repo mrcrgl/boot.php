@@ -13,7 +13,8 @@
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_Source {
+class Minify_Source 
+{
 
     /**
      * @var int time of last modification
@@ -54,7 +55,7 @@ class Minify_Source {
      * @param array $spec options
      */
     public function __construct($spec)
-    {
+     {
         if (isset($spec['filepath'])) {
             if (0 === strpos($spec['filepath'], '//')) {
                 $spec['filepath'] = $_SERVER['DOCUMENT_ROOT'] . substr($spec['filepath'], 1);
@@ -103,7 +104,7 @@ class Minify_Source {
      * @return string
      */
     public function getContent()
-    {
+     {
         $content = (null !== $this->filepath)
             ? file_get_contents($this->filepath)
             : ((null !== $this->_content)
@@ -122,7 +123,7 @@ class Minify_Source {
      * @return string
      */
     public function getId()
-    {
+     {
         return $this->_id;
     }
     
@@ -134,7 +135,7 @@ class Minify_Source {
      * @return bool true iff there no sources with specific minifier preferences.
      */
     public static function haveNoMinifyPrefs($sources)
-    {
+     {
         foreach ($sources as $source) {
             if (null !== $source->minifier
                 || null !== $source->minifyOptions) {
@@ -152,7 +153,7 @@ class Minify_Source {
      * @return string
      */
     public static function getDigest($sources)
-    {
+     {
         foreach ($sources as $source) {
             $info[] = array(
                 $source->_id, $source->minifier, $source->minifyOptions
@@ -171,7 +172,7 @@ class Minify_Source {
      * @return string content type. e.g. 'text/css'
      */
     public static function getContentType($sources)
-    {
+     {
         foreach ($sources as $source) {
             if ($source->contentType !== null) {
                 return $source->contentType;

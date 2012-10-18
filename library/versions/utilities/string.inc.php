@@ -12,18 +12,19 @@
 //
 // Check if mbstring extension is loaded and attempt to load it if not present except for windows
 if (extension_loaded('mbstring') || ((!strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' && dl('mbstring.so')))) {
-	// Make sure to suppress the output in case ini_set is disabled
-	@ini_set('mbstring.internal_encoding', 'UTF-8');
-	@ini_set('mbstring.http_input', 'UTF-8');
-	@ini_set('mbstring.http_output', 'UTF-8');
+    // Make sure to suppress the output in case ini_set is disabled
+    @ini_set('mbstring.internal_encoding', 'UTF-8');
+    @ini_set('mbstring.http_input', 'UTF-8');
+    @ini_set('mbstring.http_output', 'UTF-8');
 }
 
 // Same for iconv
-if (function_exists('iconv') || ((!strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' && dl('iconv.so')))) {
-	// These are settings that can be set inside code
-	iconv_set_encoding("internal_encoding", "UTF-8");
-	iconv_set_encoding("input_encoding", "UTF-8");
-	iconv_set_encoding("output_encoding", "UTF-8");
+if (function_exists('iconv') || ((!strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' && dl('iconv.so'))))
+ {
+    // These are settings that can be set inside code
+    iconv_set_encoding("internal_encoding", "UTF-8");
+    iconv_set_encoding("input_encoding", "UTF-8");
+    iconv_set_encoding("output_encoding", "UTF-8");
 }
 
 /**
@@ -41,17 +42,18 @@ VLoader::import('phputf8.strcasecmp');
  * @subpackage  String
  * @since       2.0
  */
-abstract class VString {
+abstract class VString 
+{
 
-	static $sanitize_chars = array();
+    static $sanitize_chars = array();
 
-	/**
-	 * Increment styles.
-	 *
-	 * @var    array
-	 * @since  2.0
-	 */
-	protected static $incrementStyles = array(
+    /**
+     * Increment styles.
+     *
+     * @var    array
+     * @since  2.0
+     */
+    protected static $incrementStyles = array(
     'dash' => array(
       '#-(\d+)$#',
       '-%d'
@@ -79,8 +81,9 @@ abstract class VString {
    *
    * @since   2.0
    */
-  public static function explode_camelcase($string) {
-  	return preg_split('/(?<=[^A-Z_])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][^A-Z_])/x', $string);
+  public static function explode_camelcase($string)
+   {
+      return preg_split('/(?<=[^A-Z_])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][^A-Z_])/x', $string);
   }
 
   /**
@@ -99,35 +102,36 @@ abstract class VString {
    *
    * @since   2.0
    */
-  public static function increment($string, $style = 'default', $n = 0) {
-  	$styleSpec = isset(self::$incrementStyles[$style]) ? self::$incrementStyles[$style] : self::$incrementStyles['default'];
+  public static function increment($string, $style = 'default', $n = 0)
+   {
+      $styleSpec = isset(self::$incrementStyles[$style]) ? self::$incrementStyles[$style] : self::$incrementStyles['default'];
 
-  	// Regular expression search and replace patterns.
-  	if (Validator::is($styleSpec[0], 'array')){
-  		$rxSearch = $styleSpec[0][0];
-  		$rxReplace = $styleSpec[0][1];
-  	}	else {
-  		$rxSearch = $rxReplace = $styleSpec[0];
-  	}
+      // Regular expression search and replace patterns.
+      if (Validator::is($styleSpec[0], 'array')){
+          $rxSearch = $styleSpec[0][0];
+          $rxReplace = $styleSpec[0][1];
+      } else {
+          $rxSearch = $rxReplace = $styleSpec[0];
+      }
 
-  	// New and old (existing) sprintf formats.
-  	if (Validator::is($styleSpec[1], 'array')) {
-  		$newFormat = $styleSpec[1][0];
-  		$oldFormat = $styleSpec[1][1];
-  	}	else {
-  		$newFormat = $oldFormat = $styleSpec[1];
-  	}
+      // New and old (existing) sprintf formats.
+      if (Validator::is($styleSpec[1], 'array')) {
+          $newFormat = $styleSpec[1][0];
+          $oldFormat = $styleSpec[1][1];
+      } else {
+          $newFormat = $oldFormat = $styleSpec[1];
+      }
 
-  	// Check if we are incrementing an existing pattern, or appending a new one.
-  	if (preg_match($rxSearch, $string, $matches)) {
-  		$n = empty($n) ? ($matches[1] + 1) : $n;
-  		$string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
-  	} else {
-  		$n = empty($n) ? 2 : $n;
-  		$string .= sprintf($newFormat, $n);
-  	}
+      // Check if we are incrementing an existing pattern, or appending a new one.
+      if (preg_match($rxSearch, $string, $matches)) {
+          $n = empty($n) ? ($matches[1] + 1) : $n;
+          $string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
+      } else {
+          $n = empty($n) ? 2 : $n;
+          $string .= sprintf($newFormat, $n);
+      }
 
-  	return $string;
+      return $string;
   }
 
   /**
@@ -144,12 +148,13 @@ abstract class VString {
    * @see     http://www.php.net/strpos
    * @since   2.0
    */
-  public static function strpos($str, $search, $offset = false) {
-  	if ($offset === false) {
-  		return utf8_strpos($str, $search);
-  	} else {
-  		return utf8_strpos($str, $search, $offset);
-  	}
+  public static function strpos($str, $search, $offset = false)
+   {
+      if ($offset === false) {
+          return utf8_strpos($str, $search);
+      } else {
+          return utf8_strpos($str, $search, $offset);
+      }
   }
 
   /**
@@ -165,8 +170,9 @@ abstract class VString {
    * @see     http://www.php.net/strrpos
    * @since   2.0
    */
-  public static function strrpos($str, $search, $offset = 0) {
-  	return utf8_strrpos($str, $search, $offset);
+  public static function strrpos($str, $search, $offset = 0)
+   {
+      return utf8_strrpos($str, $search, $offset);
   }
 
   /**
@@ -182,13 +188,14 @@ abstract class VString {
    * @see     http://www.php.net/substr
    * @since   2.0
    */
-  public static function substr($str, $offset, $length = false) {
-  	VLoader::import('phputf8.utf8_substr');
-  	if ($length === false) {
-  		return utf8_substr($str, $offset);
-  	} else {
-  		return utf8_substr($str, $offset, $length);
-  	}
+  public static function substr($str, $offset, $length = false)
+   {
+      VLoader::import('phputf8.utf8_substr');
+      if ($length === false) {
+          return utf8_substr($str, $offset);
+      } else {
+          return utf8_substr($str, $offset, $length);
+      }
   }
 
   /**
@@ -207,8 +214,9 @@ abstract class VString {
    * @see http://www.php.net/strtolower
    * @since   2.0
    */
-  public static function strtolower($str) {
-  	return utf8_strtolower($str);
+  public static function strtolower($str)
+   {
+      return utf8_strtolower($str);
   }
 
   /**
@@ -226,8 +234,9 @@ abstract class VString {
    * @see     http://www.php.net/strtoupper
    * @since   2.0
    */
-  public static function strtoupper($str) {
-  	return utf8_strtoupper($str);
+  public static function strtoupper($str)
+   {
+      return utf8_strtoupper($str);
   }
 
   /**
@@ -242,8 +251,9 @@ abstract class VString {
    * @see http://www.php.net/strlen
    * @since   2.0
    */
-  public static function strlen($str) {
-  	return utf8_strlen($str);
+  public static function strlen($str)
+   {
+      return utf8_strlen($str);
   }
 
   /**
@@ -260,13 +270,14 @@ abstract class VString {
    * @see     http://www.php.net/str_ireplace
    * @since   2.0
    */
-  public static function str_ireplace($search, $replace, $str, $count = null) {
-  	VLoader::file('phputf8.str_ireplace');
-  	if ($count === false) {
-  		return utf8_ireplace($search, $replace, $str);
-  	} else {
-  		return utf8_ireplace($search, $replace, $str, $count);
-  	}
+  public static function str_ireplace($search, $replace, $str, $count = null)
+   {
+      VLoader::file('phputf8.str_ireplace');
+      if ($count === false) {
+          return utf8_ireplace($search, $replace, $str);
+      } else {
+          return utf8_ireplace($search, $replace, $str, $count);
+      }
   }
 
   /**
@@ -281,10 +292,11 @@ abstract class VString {
    * @see     http://www.php.net/str_split
    * @since   2.0
    */
-  public static function str_split($str, $split_len = 1) {
-  	VLoader::file('phputf8.str_split');
+  public static function str_split($str, $split_len = 1)
+   {
+      VLoader::file('phputf8.str_split');
 
-  	return utf8_str_split($str, $split_len);
+      return utf8_str_split($str, $split_len);
   }
 
   /**
@@ -302,36 +314,36 @@ abstract class VString {
    * @see     http://www.php.net/setlocale
    * @since   2.0
    */
-  public static function strcasecmp($str1, $str2, $locale = false) {
-  	if ($locale) {
-  		// Get current locale
-  		$locale0 = setlocale(LC_COLLATE, 0);
-  		if (!$locale = setlocale(LC_COLLATE, $locale)) {
-  			$locale = $locale0;
-  		}
+  public static function strcasecmp($str1, $str2, $locale = false)
+   {
+      if ($locale) {
+          // Get current locale
+          $locale0 = setlocale(LC_COLLATE, 0);
+          if (!$locale = setlocale(LC_COLLATE, $locale)) {
+              $locale = $locale0;
+          }
 
-  		// See if we have successfully set locale to UTF-8
-  		if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m)) {
-  			$encoding = 'CP' . $m[1];
-  		}
-  		elseif (stristr($locale, 'UTF-8')) {
-  			$encoding = 'UTF-8';
-  		}	else {
-  			$encoding = 'nonrecodable';
-  		}
+          // See if we have successfully set locale to UTF-8
+          if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m)) {
+              $encoding = 'CP' . $m[1];
+          } elseif (stristr($locale, 'UTF-8')) {
+              $encoding = 'UTF-8';
+          } else {
+              $encoding = 'nonrecodable';
+          }
 
-  		// if we successfully set encoding it to utf-8 or encoding is sth weird don't recode
-  		if ($encoding == 'UTF-8' || $encoding == 'nonrecodable') {
-  			return strcoll(utf8_strtolower($str1), utf8_strtolower($str2));
-  		} else {
-  			return strcoll(
-	  			self::transcode(utf8_strtolower($str1), 'UTF-8', $encoding),
-	  			self::transcode(utf8_strtolower($str2), 'UTF-8', $encoding)
-  			);
-  		}
-  	}	else {
-  		return utf8_strcasecmp($str1, $str2);
-  	}
+          // if we successfully set encoding it to utf-8 or encoding is sth weird don't recode
+          if ($encoding == 'UTF-8' || $encoding == 'nonrecodable') {
+              return strcoll(utf8_strtolower($str1), utf8_strtolower($str2));
+          } else {
+              return strcoll(
+                  self::transcode(utf8_strtolower($str1), 'UTF-8', $encoding),
+                  self::transcode(utf8_strtolower($str2), 'UTF-8', $encoding)
+              );
+          }
+      } else {
+          return utf8_strcasecmp($str1, $str2);
+      }
   }
 
   /**
@@ -349,33 +361,33 @@ abstract class VString {
    * @see     http://www.php.net/setlocale
    * @since   2.0
    */
-  public static function strcmp($str1, $str2, $locale = false) {
-  	if ($locale) {
-  		// Get current locale
-  		$locale0 = setlocale(LC_COLLATE, 0);
-  		if (!$locale = setlocale(LC_COLLATE, $locale)) {
-  			$locale = $locale0;
-  		}
+  public static function strcmp($str1, $str2, $locale = false)
+   {
+      if ($locale) {
+          // Get current locale
+          $locale0 = setlocale(LC_COLLATE, 0);
+          if (!$locale = setlocale(LC_COLLATE, $locale)) {
+              $locale = $locale0;
+          }
 
-  		// See if we have successfully set locale to UTF-8
-  		if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m)) {
-  			$encoding = 'CP' . $m[1];
-  		}
-  		elseif (stristr($locale, 'UTF-8')) {
-  			$encoding = 'UTF-8';
-  		} else {
-  			$encoding = 'nonrecodable';
-  		}
+          // See if we have successfully set locale to UTF-8
+          if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m)) {
+              $encoding = 'CP' . $m[1];
+          } elseif (stristr($locale, 'UTF-8')) {
+              $encoding = 'UTF-8';
+          } else {
+              $encoding = 'nonrecodable';
+          }
 
-  		// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
-  		if ($encoding == 'UTF-8' || $encoding == 'nonrecodable') {
-  			return strcoll($str1, $str2);
-  		} else {
-  			return strcoll(self::transcode($str1, 'UTF-8', $encoding), self::transcode($str2, 'UTF-8', $encoding));
-  		}
-  	} else {
-  		return strcmp($str1, $str2);
-  	}
+          // If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
+          if ($encoding == 'UTF-8' || $encoding == 'nonrecodable') {
+              return strcoll($str1, $str2);
+          } else {
+              return strcoll(self::transcode($str1, 'UTF-8', $encoding), self::transcode($str2, 'UTF-8', $encoding));
+          }
+      } else {
+          return strcmp($str1, $str2);
+      }
   }
 
   /**
@@ -392,15 +404,16 @@ abstract class VString {
    * @see     http://www.php.net/strcspn
    * @since   2.0
    */
-  public static function strcspn($str, $mask, $start = null, $length = null) {
-  	VLoader::file('phputf8.strcspn');
-  	if ($start === false && $length === false) {
-  		return utf8_strcspn($str, $mask);
-  	} elseif ($length === false) {
-  		return utf8_strcspn($str, $mask, $start);
-  	} else {
-  		return utf8_strcspn($str, $mask, $start, $length);
-  	}
+  public static function strcspn($str, $mask, $start = null, $length = null)
+   {
+      VLoader::file('phputf8.strcspn');
+      if ($start === false && $length === false) {
+          return utf8_strcspn($str, $mask);
+      } elseif ($length === false) {
+          return utf8_strcspn($str, $mask, $start);
+      } else {
+          return utf8_strcspn($str, $mask, $start, $length);
+      }
   }
 
   /**
@@ -417,9 +430,10 @@ abstract class VString {
    * @see     http://www.php.net/stristr
    * @since   2.0
    */
-  public static function stristr($str, $search) {
-  	VLoader::file('phputf8.stristr');
-  	return utf8_stristr($str, $search);
+  public static function stristr($str, $search)
+   {
+      VLoader::file('phputf8.stristr');
+      return utf8_stristr($str, $search);
   }
 
   /**
@@ -433,10 +447,11 @@ abstract class VString {
    * @see     http://www.php.net/strrev
    * @since   2.0
    */
-  public static function strrev($str) {
-  	VLoader::file('phputf8.strrev');
+  public static function strrev($str)
+   {
+      VLoader::file('phputf8.strrev');
 
-  	return utf8_strrev($str);
+      return utf8_strrev($str);
   }
 
   /**
@@ -453,16 +468,16 @@ abstract class VString {
    * @see     http://www.php.net/strspn
    * @since   2.0
    */
-  public static function strspn($str, $mask, $start = null, $length = null) {
-  	VLoader::file('phputf8.strspn');
-  	if ($start === null && $length === null) {
-  		return utf8_strspn($str, $mask);
-  	}
-  	elseif ($length === null) {
-  		return utf8_strspn($str, $mask, $start);
-  	} else {
-  		return utf8_strspn($str, $mask, $start, $length);
-  	}
+  public static function strspn($str, $mask, $start = null, $length = null)
+   {
+      VLoader::file('phputf8.strspn');
+      if ($start === null && $length === null) {
+          return utf8_strspn($str, $mask);
+      } elseif ($length === null) {
+          return utf8_strspn($str, $mask, $start);
+      } else {
+          return utf8_strspn($str, $mask, $start, $length);
+      }
   }
 
   /**
@@ -479,13 +494,14 @@ abstract class VString {
    * @see     http://www.php.net/substr_replace
    * @since   2.0
    */
-  public static function substr_replace($str, $repl, $start, $length = null) {
-  	// loaded by library loader
-  	if ($length === false) {
-  		return utf8_substr_replace($str, $repl, $start);
-  	} else {
-  		return utf8_substr_replace($str, $repl, $start, $length);
-  	}
+  public static function substr_replace($str, $repl, $start, $length = null)
+   {
+      // loaded by library loader
+      if ($length === false) {
+          return utf8_substr_replace($str, $repl, $start);
+      } else {
+          return utf8_substr_replace($str, $repl, $start, $length);
+      }
   }
 
   /**
@@ -504,17 +520,18 @@ abstract class VString {
    * @see     http://www.php.net/ltrim
    * @since   2.0
    */
-  public static function ltrim($str, $charlist = false) {
-  	if (empty($charlist) && $charlist !== false) {
-  		return $str;
-  	}
+  public static function ltrim($str, $charlist = false)
+   {
+      if (empty($charlist) && $charlist !== false) {
+          return $str;
+      }
 
-  	VLoader::file('phputf8.trim');
-  	if ($charlist === false) {
-  		return utf8_ltrim($str);
-  	} else {
-  		return utf8_ltrim($str, $charlist);
-  	}
+      VLoader::file('phputf8.trim');
+      if ($charlist === false) {
+          return utf8_ltrim($str);
+      } else {
+          return utf8_ltrim($str, $charlist);
+      }
   }
 
   /**
@@ -532,17 +549,18 @@ abstract class VString {
    * @see     http://www.php.net/rtrim
    * @since   2.0
    */
-  public static function rtrim($str, $charlist = false) {
-  	if (empty($charlist) && $charlist !== false) {
-  		return $str;
-  	}
+  public static function rtrim($str, $charlist = false)
+   {
+      if (empty($charlist) && $charlist !== false) {
+          return $str;
+      }
 
-  	VLoader::file('phputf8.trim');
-  	if ($charlist === false) {
-  		return utf8_rtrim($str);
-  	} else {
-  		return utf8_rtrim($str, $charlist);
-  	}
+      VLoader::file('phputf8.trim');
+      if ($charlist === false) {
+          return utf8_rtrim($str);
+      } else {
+          return utf8_rtrim($str, $charlist);
+      }
   }
 
   /**
@@ -560,17 +578,18 @@ abstract class VString {
    * @see     http://www.php.net/trim
    * @since   2.0
    */
-  public static function trim($str, $charlist = false) {
-  	if (empty($charlist) && $charlist !== false) {
-  		return $str;
-  	}
+  public static function trim($str, $charlist = false)
+   {
+      if (empty($charlist) && $charlist !== false) {
+          return $str;
+      }
 
-  	VLoader::file('phputf8.trim');
-  	if ($charlist === false) {
-  		return utf8_trim($str);
-  	} else {
-  		return utf8_trim($str, $charlist);
-  	}
+      VLoader::file('phputf8.trim');
+      if ($charlist === false) {
+          return utf8_trim($str);
+      } else {
+          return utf8_trim($str, $charlist);
+      }
   }
 
   /**
@@ -588,16 +607,17 @@ abstract class VString {
    * @see     http://www.php.net/ucfirst
    * @since   2.0
    */
-  public static function ucfirst($str, $delimiter = null, $newDelimiter = null) {
-  	VLoader::file('phputf8.ucfirst');
-  	if ($delimiter === null) {
-  		return utf8_ucfirst($str);
-  	} else {
-  		if ($newDelimiter === null) {
-  			$newDelimiter = $delimiter;
-  		}
-  		return implode($newDelimiter, array_map('utf8_ucfirst', explode($delimiter, $str)));
-  	}
+  public static function ucfirst($str, $delimiter = null, $newDelimiter = null)
+   {
+      VLoader::file('phputf8.ucfirst');
+      if ($delimiter === null) {
+          return utf8_ucfirst($str);
+      } else {
+          if ($newDelimiter === null) {
+              $newDelimiter = $delimiter;
+          }
+          return implode($newDelimiter, array_map('utf8_ucfirst', explode($delimiter, $str)));
+      }
   }
 
   /**
@@ -611,9 +631,10 @@ abstract class VString {
    * @see     http://www.php.net/ucwords
    * @since   2.0
    */
-  public static function ucwords($str) {
-  	VLoader::file('phputf8.ucwords');
-  	return utf8_ucwords($str);
+  public static function ucwords($str)
+   {
+      VLoader::file('phputf8.ucwords');
+      return utf8_ucwords($str);
   }
 
   /**
@@ -627,17 +648,18 @@ abstract class VString {
    *
    * @since   2.0
    */
-  public static function transcode($source, $from_encoding, $to_encoding) {
-  	if (is_string($source)) {
-  		/*
-  		 * "//TRANSLIT" is appended to the $to_encoding to ensure that when iconv comes
-  		 * across a character that cannot be represented in the target charset, it can
-  		 * be approximated through one or several similarly looking characters.
-  		 */
-  		return iconv($from_encoding, $to_encoding . '//TRANSLIT', $source);
-  	}
+  public static function transcode($source, $from_encoding, $to_encoding)
+   {
+      if (is_string($source)) {
+          /*
+           * "//TRANSLIT" is appended to the $to_encoding to ensure that when iconv comes
+           * across a character that cannot be represented in the target charset, it can
+           * be approximated through one or several similarly looking characters.
+           */
+          return iconv($from_encoding, $to_encoding . '//TRANSLIT', $source);
+      }
 
-  	return null;
+      return null;
   }
 
   /**
@@ -654,121 +676,114 @@ abstract class VString {
    * @see     compliant
    * @since   2.0
    */
-  public static function valid($str) {
-  	// Cached expected number of octets after the current octet
-  	// until the beginning of the next UTF8 character sequence
-  	$mState = 0;
+  public static function valid($str)
+   {
+      // Cached expected number of octets after the current octet
+      // until the beginning of the next UTF8 character sequence
+      $mState = 0;
 
-  	// Cached Unicode character
-  	$mUcs4 = 0;
+      // Cached Unicode character
+      $mUcs4 = 0;
 
-  	// Cached expected number of octets in the current sequence
-  	$mBytes = 1;
+      // Cached expected number of octets in the current sequence
+      $mBytes = 1;
 
-  	$len = strlen($str);
+      $len = strlen($str);
 
-  	for ($i = 0; $i < $len; $i++) {
-  		$in = ord($str{$i});
+      for ($i = 0; $i < $len; $i++) {
+          $in = ord($str{$i});
 
-  		if ($mState == 0) {
-  			// When mState is zero we expect either a US-ASCII character or a
-  			// multi-octet sequence.
-  			if (0 == (0x80 & ($in))) {
-  				// US-ASCII, pass straight through.
-  				$mBytes = 1;
-  			}
-  			elseif (0xC0 == (0xE0 & ($in))) {
-  				// First octet of 2 octet sequence
-  				$mUcs4 = ($in);
-  				$mUcs4 = ($mUcs4 & 0x1F) << 6;
-  				$mState = 1;
-  				$mBytes = 2;
-  			}
-  			elseif (0xE0 == (0xF0 & ($in))) {
-  				// First octet of 3 octet sequence
-  				$mUcs4 = ($in);
-  				$mUcs4 = ($mUcs4 & 0x0F) << 12;
-  				$mState = 2;
-  				$mBytes = 3;
-  			}
-  			elseif (0xF0 == (0xF8 & ($in))) {
-  				// First octet of 4 octet sequence
-  				$mUcs4 = ($in);
-  				$mUcs4 = ($mUcs4 & 0x07) << 18;
-  				$mState = 3;
-  				$mBytes = 4;
-  			}
-  			elseif (0xF8 == (0xFC & ($in))) {
-  				/* First octet of 5 octet sequence.
-  				 *
-  				 * This is illegal because the encoded codepoint must be either
-  				 * (a) not the shortest form or
-  				 * (b) outside the Unicode range of 0-0x10FFFF.
-  				 * Rather than trying to resynchronize, we will carry on until the end
-  				 * of the sequence and let the later error handling code catch it.
-  				 */
-  				$mUcs4 = ($in);
-  				$mUcs4 = ($mUcs4 & 0x03) << 24;
-  				$mState = 4;
-  				$mBytes = 5;
-  			}
-  			elseif (0xFC == (0xFE & ($in))) {
-  				// First octet of 6 octet sequence, see comments for 5 octet sequence.
-  				$mUcs4 = ($in);
-  				$mUcs4 = ($mUcs4 & 1) << 30;
-  				$mState = 5;
-  				$mBytes = 6;
+          if ($mState == 0) {
+              // When mState is zero we expect either a US-ASCII character or a
+              // multi-octet sequence.
+              if (0 == (0x80 & ($in))) {
+                  // US-ASCII, pass straight through.
+                  $mBytes = 1;
+              } elseif (0xC0 == (0xE0 & ($in))) {
+                  // First octet of 2 octet sequence
+                  $mUcs4 = ($in);
+                  $mUcs4 = ($mUcs4 & 0x1F) << 6;
+                  $mState = 1;
+                  $mBytes = 2;
+              } elseif (0xE0 == (0xF0 & ($in))) {
+                  // First octet of 3 octet sequence
+                  $mUcs4 = ($in);
+                  $mUcs4 = ($mUcs4 & 0x0F) << 12;
+                  $mState = 2;
+                  $mBytes = 3;
+              } elseif (0xF0 == (0xF8 & ($in))) {
+                  // First octet of 4 octet sequence
+                  $mUcs4 = ($in);
+                  $mUcs4 = ($mUcs4 & 0x07) << 18;
+                  $mState = 3;
+                  $mBytes = 4;
+              } elseif (0xF8 == (0xFC & ($in))) {
+                  /* First octet of 5 octet sequence.
+                   *
+                   * This is illegal because the encoded codepoint must be either
+                   * (a) not the shortest form or
+                   * (b) outside the Unicode range of 0-0x10FFFF.
+                   * Rather than trying to resynchronize, we will carry on until the end
+                   * of the sequence and let the later error handling code catch it.
+                   */
+                  $mUcs4 = ($in);
+                  $mUcs4 = ($mUcs4 & 0x03) << 24;
+                  $mState = 4;
+                  $mBytes = 5;
+              } elseif (0xFC == (0xFE & ($in))) {
+                  // First octet of 6 octet sequence, see comments for 5 octet sequence.
+                  $mUcs4 = ($in);
+                  $mUcs4 = ($mUcs4 & 1) << 30;
+                  $mState = 5;
+                  $mBytes = 6;
 
-  			}
-  			else {
-  				/* Current octet is neither in the US-ASCII range nor a legal first
-  				 * octet of a multi-octet sequence.
-  				 */
-  				return false;
-  			}
-  		}
-  		else {
-  			// When mState is non-zero, we expect a continuation of the multi-octet
-  			// sequence
-  			if (0x80 == (0xC0 & ($in))) {
-  				// Legal continuation.
-  				$shift = ($mState - 1) * 6;
-  				$tmp = $in;
-  				$tmp = ($tmp & 0x0000003F) << $shift;
-  				$mUcs4 |= $tmp;
+              } else {
+                  /* Current octet is neither in the US-ASCII range nor a legal first
+                   * octet of a multi-octet sequence.
+                   */
+                  return false;
+              }
+          } else {
+              // When mState is non-zero, we expect a continuation of the multi-octet
+              // sequence
+              if (0x80 == (0xC0 & ($in))) {
+                  // Legal continuation.
+                  $shift = ($mState - 1) * 6;
+                  $tmp = $in;
+                  $tmp = ($tmp & 0x0000003F) << $shift;
+                  $mUcs4 |= $tmp;
 
-  				/**
-  				 * End of the multi-octet sequence. mUcs4 now contains the final
-  				 * Unicode codepoint to be output
-  				 */
-  				if (0 == --$mState) {
-  					/*
-  					 * Check for illegal sequences and codepoints.
-  					 */
-  					// From Unicode 3.1, non-shortest form is illegal
-  					if (((2 == $mBytes) && ($mUcs4 < 0x0080)) || ((3 == $mBytes) && ($mUcs4 < 0x0800)) || ((4 == $mBytes) && ($mUcs4 < 0x10000))
-  					|| (4 < $mBytes)
-  					|| (($mUcs4 & 0xFFFFF800) == 0xD800) // From Unicode 3.2, surrogate characters are illegal
-  					|| ($mUcs4 > 0x10FFFF)) { // Codepoints outside the Unicode range are illegal
-  						return false;
-  					}
+                  /**
+                   * End of the multi-octet sequence. mUcs4 now contains the final
+                   * Unicode codepoint to be output
+                   */
+                  if (0 == --$mState) {
+                      /*
+                       * Check for illegal sequences and codepoints.
+                       */
+                      // From Unicode 3.1, non-shortest form is illegal
+                      if (((2 == $mBytes) && ($mUcs4 < 0x0080)) || ((3 == $mBytes) && ($mUcs4 < 0x0800)) || ((4 == $mBytes) && ($mUcs4 < 0x10000))
+                      || (4 < $mBytes)
+                      || (($mUcs4 & 0xFFFFF800) == 0xD800) // From Unicode 3.2, surrogate characters are illegal
+                      || ($mUcs4 > 0x10FFFF)) { // Codepoints outside the Unicode range are illegal
+                          return false;
+                      }
 
-  					// Initialize UTF8 cache.
-  					$mState = 0;
-  					$mUcs4 = 0;
-  					$mBytes = 1;
-  				}
-  			}
-  			else {
-  				/**
-  				 *((0xC0 & (*in) != 0x80) && (mState != 0))
-  				 * Incomplete multi-octet sequence.
-  				 */
-  				return false;
-  			}
-  		}
-  	}
-  	return true;
+                      // Initialize UTF8 cache.
+                      $mState = 0;
+                      $mUcs4 = 0;
+                      $mBytes = 1;
+                  }
+              } else {
+                  /**
+                   *((0xC0 & (*in) != 0x80) && (mState != 0))
+                   * Incomplete multi-octet sequence.
+                   */
+                  return false;
+              }
+          }
+      }
+      return true;
   }
 
   /**
@@ -791,16 +806,15 @@ abstract class VString {
    * @since   2.0
    */
   public static function compliant($str)
-  {
-  	if (strlen($str) == 0)
-  	{
-  		return true;
-  	}
-  	// If even just the first character can be matched, when the /u
-  	// modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
-  	// invalid, nothing at all will match, even if the string contains
-  	// some valid sequences
-  	return (preg_match('/^.{1}/us', $str, $ar) == 1);
+   {
+      if (strlen($str) == 0) {
+          return true;
+      }
+      // If even just the first character can be matched, when the /u
+      // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
+      // invalid, nothing at all will match, even if the string contains
+      // some valid sequences
+      return (preg_match('/^.{1}/us', $str, $ar) == 1);
   }
 
   /**
@@ -813,33 +827,35 @@ abstract class VString {
    * @see     http://us3.php.net/manual/en/function.parse-url.php
    * @since   2.0
    */
-  public static function parse_url($url) {
-  	$result = array();
-  	// Build arrays of values we need to decode before parsing
-  	$entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B',
+  public static function parse_url($url)
+   {
+      $result = array();
+      // Build arrays of values we need to decode before parsing
+      $entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B',
             '%5D');
-  	$replacements = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "$", ",", "/", "?", "%", "#", "[", "]");
-  	// Create encoded URL with special URL characters decoded so it can be parsed
-  	// All other characters will be encoded
-  	$encodedURL = str_replace($entities, $replacements, urlencode($url));
-  	// Parse the encoded URL
-  	$encodedParts = parse_url($encodedURL);
-  	// Now, decode each value of the resulting array
-  	foreach ($encodedParts as $key => $value) {
-  		$result[$key] = urldecode($value);
-  	}
-  	return $result;
+      $replacements = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "$", ",", "/", "?", "%", "#", "[", "]");
+      // Create encoded URL with special URL characters decoded so it can be parsed
+      // All other characters will be encoded
+      $encodedURL = str_replace($entities, $replacements, urlencode($url));
+      // Parse the encoded URL
+      $encodedParts = parse_url($encodedURL);
+      // Now, decode each value of the resulting array
+      foreach ($encodedParts as $key => $value) {
+          $result[$key] = urldecode($value);
+      }
+      return $result;
   }
 
   /**
    *
-   * @return string			sanitized String for urls
-   * @param  string 		The String to sanitize
+   * @return string            sanitized String for urls
+   * @param  string         The String to sanitize
    */
-	public static function sanitize($__string) {
-		VString::initChars();
+    public static function sanitize($__string)
+   {
+        VString::initChars();
 
-		$__string = strtr($__string, VString::$sanitize_chars);
+        $__string = strtr($__string, VString::$sanitize_chars);
     $__string = strtolower($__string);
     $__string = preg_replace("#&.+?;#", "", $__string);
     $__string = preg_replace("#[^a-z0-9 _-]#", "", $__string);
@@ -852,210 +868,213 @@ abstract class VString {
     }
 
     return $__string;
-	}
+    }
 
-	static function initChars() {
-		if (count(VString::$sanitize_chars) > 0) {
-			return true;
-		}
+    static function initChars()
+    {
+        if (count(VString::$sanitize_chars) > 0) {
+            return true;
+        }
 
-		VString::$sanitize_chars = array(
-	    chr(195).chr(128) => 'A',
-	    chr(195).chr(160) => 'a',
-	    chr(195).chr(129) => 'A',
-	    chr(195).chr(161) => 'a',
-	    chr(195).chr(130) => 'A',
-	    chr(195).chr(162) => 'a',
-	    chr(195).chr(131) => 'A',
-	    chr(195).chr(163) => 'a',
-	    chr(195).chr(132) => 'Ae',
-	    chr(195).chr(164) => 'ae',
-	    chr(195).chr(133) => 'A',
-	    chr(195).chr(165) => 'a',
-	    chr(196).chr(128) => 'A',
-	    chr(196).chr(129) => 'a',
-	    chr(196).chr(130) => 'A',
-	    chr(196).chr(131) => 'a',
-	    chr(196).chr(132) => 'A',
-	    chr(196).chr(133) => 'a',
-	    chr(195).chr(135) => 'C',
-	    chr(195).chr(167) => 'c',
-	    chr(196).chr(134) => 'C',
-	    chr(196).chr(134) => 'c',
-	    chr(196).chr(136) => 'C',
-	    chr(196).chr(137) => 'c',
-	    chr(196).chr(138) => 'C',
-	    chr(196).chr(139) => 'c',
-	    chr(196).chr(140) => 'C',
-	    chr(196).chr(141) => 'c',
-	    chr(196).chr(142) => 'D',
-	    chr(196).chr(143) => 'd',
-	    chr(196).chr(144) => 'D',
-	    chr(196).chr(145) => 'd',
-	    chr(195).chr(136) => 'E',
-	    chr(195).chr(168) => 'e',
-	    chr(195).chr(137) => 'E',
-	    chr(195).chr(169) => 'e',
-	    chr(195).chr(138) => 'E',
-	    chr(195).chr(170) => 'e',
-	    chr(195).chr(139) => 'E',
-	    chr(195).chr(171) => 'e',
-	    chr(196).chr(146) => 'E',
-	    chr(196).chr(147) => 'e',
-	    chr(196).chr(148) => 'E',
-	    chr(196).chr(149) => 'e',
-	    chr(196).chr(150) => 'E',
-	    chr(196).chr(151) => 'e',
-	    chr(196).chr(152) => 'E',
-	    chr(196).chr(153) => 'e',
-	    chr(196).chr(154) => 'E',
-	    chr(196).chr(155) => 'e',
-	    chr(226).chr(130).chr(172) => 'EUR',
-	    chr(196).chr(156) => 'G',
-	    chr(196).chr(157) => 'g',
-	    chr(196).chr(158) => 'G',
-	    chr(196).chr(159) => 'g',
-	    chr(196).chr(160) => 'G',
-	    chr(196).chr(161) => 'g',
-	    chr(196).chr(162) => 'G',
-	    chr(196).chr(163) => 'g',
-	    chr(196).chr(164) => 'H',
-	    chr(196).chr(165) => 'h',
-	    chr(196).chr(166) => 'H',
-	    chr(196).chr(167) => 'h',
-	    chr(195).chr(140) => 'I',
-	    chr(195).chr(172) => 'i',
-	    chr(195).chr(141) => 'I',
-	    chr(195).chr(173) => 'i',
-	    chr(195).chr(142) => 'I',
-	    chr(195).chr(174) => 'i',
-	    chr(195).chr(143) => 'I',
-	    chr(195).chr(175) => 'i',
-	    chr(196).chr(168) => 'I',
-	    chr(196).chr(169) => 'i',
-	    chr(196).chr(170) => 'I',
-	    chr(196).chr(171) => 'i',
-	    chr(196).chr(172) => 'I',
-	    chr(196).chr(173) => 'i',
-	    chr(196).chr(174) => 'I',
-	    chr(196).chr(175) => 'i',
-	    chr(196).chr(176) => 'I',
-	    chr(196).chr(177) => 'i',
-	    chr(196).chr(178) => 'IJ',
-	    chr(196).chr(179) => 'ij',
-	    chr(196).chr(180) => 'J',
-	    chr(196).chr(181) => 'j',
-	    chr(196).chr(182) => 'K',
-	    chr(196).chr(183) => 'k',
-	    chr(196).chr(184) => 'k',
-	    chr(196).chr(185) => 'L',
-	    chr(196).chr(186) => 'l',
-	    chr(196).chr(187) => 'L',
-	    chr(196).chr(188) => 'l',
-	    chr(196).chr(189) => 'L',
-	    chr(196).chr(190) => 'l',
-	    chr(196).chr(191) => 'L',
-	    chr(197).chr(128) => 'l',
-	    chr(196).chr(129) => 'L',
-	    chr(197).chr(130) => 'l',
-	    chr(195).chr(145) => 'N',
-	    chr(195).chr(177) => 'n',
-	    chr(196).chr(131) => 'N',
-	    chr(197).chr(132) => 'n',
-	    chr(196).chr(133) => 'N',
-	    chr(197).chr(134) => 'n',
-	    chr(196).chr(135) => 'N',
-	    chr(197).chr(136) => 'n',
-	    chr(196).chr(137) => 'N',
-	    chr(197).chr(138) => 'n',
-	    chr(196).chr(139) => 'N',
-	    chr(195).chr(146) => 'O',
-	    chr(195).chr(178) => 'o',
-	    chr(195).chr(147) => 'O',
-	    chr(195).chr(179) => 'o',
-	    chr(195).chr(148) => 'O',
-	    chr(195).chr(180) => 'o',
-	    chr(195).chr(149) => 'O',
-	    chr(195).chr(181) => 'o',
-	    chr(195).chr(150) => 'Oe',
-	    chr(195).chr(182) => 'oe',
-	    chr(197).chr(140) => 'O',
-	    chr(196).chr(141) => 'o',
-	    chr(197).chr(142) => 'O',
-	    chr(196).chr(143) => 'o',
-	    chr(197).chr(144) => 'O',
-	    chr(196).chr(145) => 'o',
-	    chr(197).chr(146) => 'OE',
-	    chr(197).chr(147) => 'oe',
-	    chr(197).chr(148) => 'R',
-	    chr(197).chr(149) => 'r',
-	    chr(197).chr(150) => 'R',
-	    chr(197).chr(151) => 'r',
-	    chr(197).chr(152) => 'R',
-	    chr(197).chr(153) => 'r',
-	    chr(197).chr(154) => 'S',
-	    chr(197).chr(155) => 's',
-	    chr(197).chr(156) => 'S',
-	    chr(197).chr(157) => 's',
-	    chr(197).chr(158) => 'S',
-	    chr(197).chr(159) => 's',
-	    chr(197).chr(160) => 'S',
-	    chr(197).chr(161) => 's',
-	    chr(197).chr(191) => 's',
-	    chr(195).chr(159) => 'ss',
-	    chr(197).chr(162) => 'T',
-	    chr(197).chr(163) => 't',
-	    chr(197).chr(164) => 'T',
-	    chr(197).chr(165) => 't',
-	    chr(197).chr(166) => 'T',
-	    chr(197).chr(167) => 't',
-	    chr(195).chr(153) => 'U',
-	    chr(195).chr(185) => 'u',
-	    chr(195).chr(154) => 'U',
-	    chr(195).chr(186) => 'u',
-	    chr(195).chr(155) => 'U',
-	    chr(195).chr(187) => 'u',
-	    chr(195).chr(156) => 'U',
-	    chr(195).chr(188) => 'ue',
-	    chr(197).chr(168) => 'U',
-	    chr(197).chr(169) => 'u',
-	    chr(197).chr(170) => 'U',
-	    chr(197).chr(171) => 'u',
-	    chr(197).chr(172) => 'U',
-	    chr(197).chr(173) => 'u',
-	    chr(197).chr(174) => 'U',
-	    chr(197).chr(175) => 'u',
-	    chr(197).chr(176) => 'U',
-	    chr(197).chr(177) => 'u',
-	    chr(197).chr(178) => 'U',
-	    chr(197).chr(179) => 'u',
-	    chr(197).chr(180) => 'W',
-	    chr(197).chr(181) => 'w',
-	    chr(195).chr(157) => 'Y',
-	    chr(195).chr(189) => 'y',
-	    chr(195).chr(191) => 'y',
-	    chr(197).chr(182) => 'Y',
-	    chr(197).chr(183) => 'y',
-	    chr(197).chr(184) => 'Y',
-	    chr(197).chr(185) => 'Z',
-	    chr(197).chr(186) => 'z',
-	    chr(197).chr(187) => 'Z',
-	    chr(197).chr(188) => 'z',
-	    chr(197).chr(189) => 'Z',
-	    chr(197).chr(190) => 'z',
+        VString::$sanitize_chars = array(
+        chr(195).chr(128) => 'A',
+        chr(195).chr(160) => 'a',
+        chr(195).chr(129) => 'A',
+        chr(195).chr(161) => 'a',
+        chr(195).chr(130) => 'A',
+        chr(195).chr(162) => 'a',
+        chr(195).chr(131) => 'A',
+        chr(195).chr(163) => 'a',
+        chr(195).chr(132) => 'Ae',
+        chr(195).chr(164) => 'ae',
+        chr(195).chr(133) => 'A',
+        chr(195).chr(165) => 'a',
+        chr(196).chr(128) => 'A',
+        chr(196).chr(129) => 'a',
+        chr(196).chr(130) => 'A',
+        chr(196).chr(131) => 'a',
+        chr(196).chr(132) => 'A',
+        chr(196).chr(133) => 'a',
+        chr(195).chr(135) => 'C',
+        chr(195).chr(167) => 'c',
+        chr(196).chr(134) => 'C',
+        chr(196).chr(134) => 'c',
+        chr(196).chr(136) => 'C',
+        chr(196).chr(137) => 'c',
+        chr(196).chr(138) => 'C',
+        chr(196).chr(139) => 'c',
+        chr(196).chr(140) => 'C',
+        chr(196).chr(141) => 'c',
+        chr(196).chr(142) => 'D',
+        chr(196).chr(143) => 'd',
+        chr(196).chr(144) => 'D',
+        chr(196).chr(145) => 'd',
+        chr(195).chr(136) => 'E',
+        chr(195).chr(168) => 'e',
+        chr(195).chr(137) => 'E',
+        chr(195).chr(169) => 'e',
+        chr(195).chr(138) => 'E',
+        chr(195).chr(170) => 'e',
+        chr(195).chr(139) => 'E',
+        chr(195).chr(171) => 'e',
+        chr(196).chr(146) => 'E',
+        chr(196).chr(147) => 'e',
+        chr(196).chr(148) => 'E',
+        chr(196).chr(149) => 'e',
+        chr(196).chr(150) => 'E',
+        chr(196).chr(151) => 'e',
+        chr(196).chr(152) => 'E',
+        chr(196).chr(153) => 'e',
+        chr(196).chr(154) => 'E',
+        chr(196).chr(155) => 'e',
+        chr(226).chr(130).chr(172) => 'EUR',
+        chr(196).chr(156) => 'G',
+        chr(196).chr(157) => 'g',
+        chr(196).chr(158) => 'G',
+        chr(196).chr(159) => 'g',
+        chr(196).chr(160) => 'G',
+        chr(196).chr(161) => 'g',
+        chr(196).chr(162) => 'G',
+        chr(196).chr(163) => 'g',
+        chr(196).chr(164) => 'H',
+        chr(196).chr(165) => 'h',
+        chr(196).chr(166) => 'H',
+        chr(196).chr(167) => 'h',
+        chr(195).chr(140) => 'I',
+        chr(195).chr(172) => 'i',
+        chr(195).chr(141) => 'I',
+        chr(195).chr(173) => 'i',
+        chr(195).chr(142) => 'I',
+        chr(195).chr(174) => 'i',
+        chr(195).chr(143) => 'I',
+        chr(195).chr(175) => 'i',
+        chr(196).chr(168) => 'I',
+        chr(196).chr(169) => 'i',
+        chr(196).chr(170) => 'I',
+        chr(196).chr(171) => 'i',
+        chr(196).chr(172) => 'I',
+        chr(196).chr(173) => 'i',
+        chr(196).chr(174) => 'I',
+        chr(196).chr(175) => 'i',
+        chr(196).chr(176) => 'I',
+        chr(196).chr(177) => 'i',
+        chr(196).chr(178) => 'IJ',
+        chr(196).chr(179) => 'ij',
+        chr(196).chr(180) => 'J',
+        chr(196).chr(181) => 'j',
+        chr(196).chr(182) => 'K',
+        chr(196).chr(183) => 'k',
+        chr(196).chr(184) => 'k',
+        chr(196).chr(185) => 'L',
+        chr(196).chr(186) => 'l',
+        chr(196).chr(187) => 'L',
+        chr(196).chr(188) => 'l',
+        chr(196).chr(189) => 'L',
+        chr(196).chr(190) => 'l',
+        chr(196).chr(191) => 'L',
+        chr(197).chr(128) => 'l',
+        chr(196).chr(129) => 'L',
+        chr(197).chr(130) => 'l',
+        chr(195).chr(145) => 'N',
+        chr(195).chr(177) => 'n',
+        chr(196).chr(131) => 'N',
+        chr(197).chr(132) => 'n',
+        chr(196).chr(133) => 'N',
+        chr(197).chr(134) => 'n',
+        chr(196).chr(135) => 'N',
+        chr(197).chr(136) => 'n',
+        chr(196).chr(137) => 'N',
+        chr(197).chr(138) => 'n',
+        chr(196).chr(139) => 'N',
+        chr(195).chr(146) => 'O',
+        chr(195).chr(178) => 'o',
+        chr(195).chr(147) => 'O',
+        chr(195).chr(179) => 'o',
+        chr(195).chr(148) => 'O',
+        chr(195).chr(180) => 'o',
+        chr(195).chr(149) => 'O',
+        chr(195).chr(181) => 'o',
+        chr(195).chr(150) => 'Oe',
+        chr(195).chr(182) => 'oe',
+        chr(197).chr(140) => 'O',
+        chr(196).chr(141) => 'o',
+        chr(197).chr(142) => 'O',
+        chr(196).chr(143) => 'o',
+        chr(197).chr(144) => 'O',
+        chr(196).chr(145) => 'o',
+        chr(197).chr(146) => 'OE',
+        chr(197).chr(147) => 'oe',
+        chr(197).chr(148) => 'R',
+        chr(197).chr(149) => 'r',
+        chr(197).chr(150) => 'R',
+        chr(197).chr(151) => 'r',
+        chr(197).chr(152) => 'R',
+        chr(197).chr(153) => 'r',
+        chr(197).chr(154) => 'S',
+        chr(197).chr(155) => 's',
+        chr(197).chr(156) => 'S',
+        chr(197).chr(157) => 's',
+        chr(197).chr(158) => 'S',
+        chr(197).chr(159) => 's',
+        chr(197).chr(160) => 'S',
+        chr(197).chr(161) => 's',
+        chr(197).chr(191) => 's',
+        chr(195).chr(159) => 'ss',
+        chr(197).chr(162) => 'T',
+        chr(197).chr(163) => 't',
+        chr(197).chr(164) => 'T',
+        chr(197).chr(165) => 't',
+        chr(197).chr(166) => 'T',
+        chr(197).chr(167) => 't',
+        chr(195).chr(153) => 'U',
+        chr(195).chr(185) => 'u',
+        chr(195).chr(154) => 'U',
+        chr(195).chr(186) => 'u',
+        chr(195).chr(155) => 'U',
+        chr(195).chr(187) => 'u',
+        chr(195).chr(156) => 'U',
+        chr(195).chr(188) => 'ue',
+        chr(197).chr(168) => 'U',
+        chr(197).chr(169) => 'u',
+        chr(197).chr(170) => 'U',
+        chr(197).chr(171) => 'u',
+        chr(197).chr(172) => 'U',
+        chr(197).chr(173) => 'u',
+        chr(197).chr(174) => 'U',
+        chr(197).chr(175) => 'u',
+        chr(197).chr(176) => 'U',
+        chr(197).chr(177) => 'u',
+        chr(197).chr(178) => 'U',
+        chr(197).chr(179) => 'u',
+        chr(197).chr(180) => 'W',
+        chr(197).chr(181) => 'w',
+        chr(195).chr(157) => 'Y',
+        chr(195).chr(189) => 'y',
+        chr(195).chr(191) => 'y',
+        chr(197).chr(182) => 'Y',
+        chr(197).chr(183) => 'y',
+        chr(197).chr(184) => 'Y',
+        chr(197).chr(185) => 'Z',
+        chr(197).chr(186) => 'z',
+        chr(197).chr(187) => 'Z',
+        chr(197).chr(188) => 'z',
+        chr(197).chr(189) => 'Z',
+        chr(197).chr(190) => 'z',
     );
-	}
+    }
 
-	public static function underscores_to_camelcase($__string) {
-		return implode('', VArray::ucfirst(explode('_', $__string)));
-	}
+    public static function underscores_to_camelcase($__string)
+    {
+        return implode('', VArray::ucfirst(explode('_', $__string)));
+    }
 
-	public static function camelcase_to_underscores($__string) {
+    public static function camelcase_to_underscores($__string)
+    {
 
-	  VLoader::import('versions.utilities.array');
+      VLoader::import('versions.utilities.array');
 
-		$parts = self::explode_camelcase($__string);
-		$parts = VArray::strip_empty_values($parts);
-		return self::strtolower(implode('_', $parts));
-	}
+        $parts = self::explode_camelcase($__string);
+        $parts = VArray::strip_empty_values($parts);
+        return self::strtolower(implode('_', $parts));
+    }
 }

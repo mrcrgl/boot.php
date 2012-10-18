@@ -20,9 +20,9 @@ function utf8_strspn($str, $mask, $start = NULL, $length = NULL) {
 
     $mask = preg_replace('!([\\\\\\-\\]\\[/^])!','\\\${1}',$mask);
 
-	// Fix for $start but no $length argument.
+    // Fix for $start but no $length argument.
     if ($start !== null && $length === null) {
-    	$length = utf8_strlen($str);
+        $length = utf8_strlen($str);
     }
 
     if ( $start !== NULL || $length !== NULL ) {

@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase 
+{
 
     /**
      * Attribute definition: Overwrites base class.
@@ -48,7 +49,7 @@ class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase {
      * @return string compiled code
      */
     public function compile($args, $compiler)
-    {
+     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         // save possible attributes
@@ -57,7 +58,8 @@ class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase {
             $_assign = $_attr['assign'];
         }
         $_name = $_attr['name'];
-        if ($compiler->compiles_template_function) {
+        if ($compiler->compiles_template_function)
+       {
             $compiler->called_functions[] = trim($_name, "'\"");
         }
         unset($_attr['name'], $_attr['assign'], $_attr['nocache']);
@@ -75,8 +77,10 @@ class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase {
                 $_paramsArray[] = "'$_key'=>$_value";
             }
         }
-        if (isset($compiler->template->properties['function'][$_name]['parameter'])) {
-            foreach ($compiler->template->properties['function'][$_name]['parameter'] as $_key => $_value) {
+        if (isset($compiler->template->properties['function'][$_name]['parameter']))
+            {
+            foreach ($compiler->template->properties['function'][$_name]['parameter'] as $_key => $_value)
+           {
                 if (!isset($_attr[$_key])) {
                     if (is_int($_key)) {
                         $_paramsArray[] = "$_key=>$_value";
@@ -85,8 +89,10 @@ class Smarty_Internal_Compile_Call extends Smarty_Internal_CompileBase {
                     }
                 }
             }
-        } elseif (isset($compiler->smarty->template_functions[$_name]['parameter'])) {
-            foreach ($compiler->smarty->template_functions[$_name]['parameter'] as $_key => $_value) {
+        } elseif (isset($compiler->smarty->template_functions[$_name]['parameter']))
+                    {
+            foreach ($compiler->smarty->template_functions[$_name]['parameter'] as $_key => $_value)
+           {
                 if (!isset($_attr[$_key])) {
                     if (is_int($_key)) {
                         $_paramsArray[] = "$_key=>$_value";

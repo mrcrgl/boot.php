@@ -1,22 +1,24 @@
 <?php
 
 
-class VApplicationRouter {
+class VApplicationRouter 
+{
     
-	
-	public function route() {
-		
-		// trigger event onBeforeRoute
-		VMiddleware::trigger('onBeforeRoute');
-		
-		$controller =& VFactory::getController();
+    
+    public function route()
+ {
+        
+        // trigger event onBeforeRoute
+        VMiddleware::trigger('onBeforeRoute');
+        
+        $controller =& VFactory::getController();
 
-		$controller->handleRequest();
-		
-		// trigger event onAfterRoute
-		VMiddleware::trigger('onAfterRoute');
-		
-	}
-	
-	
+        $controller->handleRequest();
+        
+        // trigger event onAfterRoute
+        VMiddleware::trigger('onAfterRoute');
+        
+    }
+    
+    
 }

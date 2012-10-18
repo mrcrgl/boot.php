@@ -18,7 +18,8 @@
  * @author Stephen Clay <steve@mrclay.org>
  * @author http://code.google.com/u/1stvamp/ (Issue 64 patch)
  */
-class Minify_CSS_Compressor {
+class Minify_CSS_Compressor 
+{
 
     /**
      * Minify a CSS string
@@ -30,7 +31,7 @@ class Minify_CSS_Compressor {
      * @return string
      */
     public static function process($css, $options = array())
-    {
+     {
         $obj = new Minify_CSS_Compressor($options);
         return $obj->_process($css);
     }
@@ -55,7 +56,8 @@ class Minify_CSS_Compressor {
      * 
      * @return null
      */
-    private function __construct($options) {
+    private function __construct($options)
+     {
         $this->_options = $options;
     }
     
@@ -67,7 +69,7 @@ class Minify_CSS_Compressor {
      * @return string
      */
     protected function _process($css)
-    {
+     {
         $css = str_replace("\r\n", "\n", $css);
         
         // preserve empty comment after '>'
@@ -162,7 +164,7 @@ class Minify_CSS_Compressor {
      * @return string
      */
     protected function _selectorsCB($m)
-    {
+     {
         // remove ws around the combinators
         return preg_replace('/\\s*([,>+~])\\s*/', '$1', $m[0]);
     }
@@ -175,7 +177,7 @@ class Minify_CSS_Compressor {
      * @return string
      */
     protected function _commentCB($m)
-    {
+     {
         $hasSurroundingWs = (trim($m[0]) !== $m[1]);
         $m = $m[1]; 
         // $m is the comment content w/o the surrounding tokens, 
@@ -235,7 +237,7 @@ class Minify_CSS_Compressor {
      * @return string   
      */
     protected function _fontFamilyCB($m)
-    {
+   {
         $m[1] = preg_replace('/
                 \\s*
                 (

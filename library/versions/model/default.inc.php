@@ -11,7 +11,8 @@
  *
  * --
  */
-abstract class VModelDefault extends VBasic {
+abstract class VModelDefault extends VBasic 
+{
   
   /*
    * @desc unique ID des Objektes,
@@ -33,7 +34,8 @@ abstract class VModelDefault extends VBasic {
    *       Attributen direkt zu �bergeben oder eine UID zu definieren
    * @return bool
    */
-  function __construct($attributes=false) {
+  function __construct($attributes=false)
+   {
     
     if (is_array($attributes)) {
       $this->importAttributes($attributes);
@@ -52,43 +54,46 @@ abstract class VModelDefault extends VBasic {
    *       via $ref->varname
    * @return bool
    */
-  function __get($memberName) {
+  function __get($memberName)
+   {
     
-  	$array = explode('_', $memberName);
-  	if (array_pop($array) != 'uid') {
-	  	$attr = $memberName.'_uid';
-	  	if (Validator::is($this->$attr, 'hexuid')) {
-	  		$parts = explode('_', $memberName);
-	  		foreach ($parts as $k => $v) {
-	  			$parts[$k] = ucfirst($v);
-	  		}
-	  		$classname = implode('', $parts);
-	  		VLoader::autoload($classname);
-		  	if (class_exists($classname, true)) {
-	  			return new $classname($this->$attr);
-	  		} else {
-		  		array_shift($parts);
-	  			foreach ($parts as $k => $v) {
-		  			$parts[$k] = ucfirst($v);
-		  		}
-		  		$classname = implode('', $parts);
-		  		VLoader::autoload($classname);
-		  		if (class_exists($classname, true)) {
-		  			return new $classname($this->$attr);
-		  		}
-	  		}
-	  		
-	  	} 
-  	}
-  	
-  	if (isset($this->status) && $this->status == -9) {
+      $array = explode('_', $memberName);
+      if (array_pop($array) != 'uid') {
+          $attr = $memberName.'_uid';
+          if (Validator::is($this->$attr, 'hexuid')) {
+              $parts = explode('_', $memberName);
+              foreach ($parts as $k => $v) {
+                  $parts[$k] = ucfirst($v);
+              }
+              $classname = implode('', $parts);
+              VLoader::autoload($classname);
+              if (class_exists($classname, true)) 
+{
+                  return new $classname($this->$attr);
+              } else {
+                  array_shift($parts);
+                  foreach ($parts as $k => $v) {
+                      $parts[$k] = ucfirst($v);
+                  }
+                  $classname = implode('', $parts);
+                  VLoader::autoload($classname);
+                  if (class_exists($classname, true)) 
+{
+                      return new $classname($this->$attr);
+                  }
+              }
+              
+          } 
+      }
+      
+      if (isset($this->status) && $this->status == -9) {
       return "<a style=\"color: grey;\">(Daten gel&ouml;scht)</a>";
     }
     
     if ($memberName == 'uid') {
       return $this->uid;
     }
-  	foreach ($this->attributes as $table => $bundle) {
+      foreach ($this->attributes as $table => $bundle) {
       if ($this->getAttribute($memberName, $table) !== false) {
         return $this->getAttribute($memberName, $table);
       }
@@ -96,7 +101,8 @@ abstract class VModelDefault extends VBasic {
     return null;
   }
   
-  public function getType() {
+  public function getType()
+  {
     return get_class($this);
   }
   
@@ -104,7 +110,8 @@ abstract class VModelDefault extends VBasic {
    * @desc gibt die Unique ID
    * @return integer
    */
-  protected function setUID($uid) {
+  protected function setUID($uid)
+   {
     if (!Validator::is($uid, 'uid')) {
       return false;
     }
@@ -119,7 +126,8 @@ abstract class VModelDefault extends VBasic {
    * @desc Setzt die Unique ID und holt die Daten
    * @return bool
    */
-  public function getUID() {
+  public function getUID()
+   {
     return $this->uid;
   }
   
@@ -127,7 +135,8 @@ abstract class VModelDefault extends VBasic {
    * @desc prueft auf validitaet anhand der UID
    * @return bool
    */
-  public function isValid() {
+  public function isValid()
+   {
     if ($this->status == -9) {
       return false;
     }
@@ -138,7 +147,8 @@ abstract class VModelDefault extends VBasic {
    * @desc Importiert eine einzelne Attribute
    * @return bool
    */
-  public function setAttribute($key, $value, $table='default') {
+  public function setAttribute($key, $value, $table='default')
+   {
     if (!Validator::is($key, 'filled')) {
       return false;
     }
@@ -160,7 +170,8 @@ abstract class VModelDefault extends VBasic {
    * @desc gibt eine einzelne Attribute zurueck
    * @return mixed
    */
-  public function getAttribute($key, $table='default') {
+  public function getAttribute($key, $table='default')
+   {
     if (!Validator::is($table, 'filled')) {
       return false;
     }
@@ -176,7 +187,8 @@ abstract class VModelDefault extends VBasic {
     return $this->attributes[$table][$key];
   }
   
-  public function getAllAttributes() {
+  public function getAllAttributes()
+  {
     $array = array();
     foreach ($this->attributes as $type => $tmp_array) {
       foreach ($tmp_array as $key => $value) {
@@ -193,7 +205,8 @@ abstract class VModelDefault extends VBasic {
    *       Extendet: Zweidimensionales Array, erste Stufe sind die Tables
    * @return bool
    */
-  protected function importAttributes($arrAttributes, $table='default') {
+  protected function importAttributes($arrAttributes, $table='default')
+   {
     if (!is_array($arrAttributes)) {
       return false;
     }
@@ -211,11 +224,13 @@ abstract class VModelDefault extends VBasic {
     return true;
   }
   
-  final function exportAttributes($table='default') {
+  final function exportAttributes($table='default')
+  {
     return $this->attributes[$table];
   }
   
-  final function clearAttributes() {
+  final function clearAttributes()
+  {
     unset($this->attributes);
     $this->attributes = array();
     return true;
@@ -226,7 +241,8 @@ abstract class VModelDefault extends VBasic {
    */
   abstract protected function loadAttributesByUID($uid);
   
-  protected function checkForm ($param, $arrRules=false) {
+  protected function checkForm ($param, $arrRules=false)
+  {
     $arrRules = (($arrRules) ? $arrRules : $this->_DataRules);
     $model    = array();
     
@@ -240,19 +256,19 @@ abstract class VModelDefault extends VBasic {
           $document->assign($key.'_var', $value);
         if (isset($arrRules[$key])) {
           $model[($arrRules[$key]['2'])][$key] = $value;
-					//if (!ereg($arrRules[$key]['1'], $value)) {
-					if (substr($arrRules[$key]['1'], 0, 1) == ':') {
-						
-						if (!Validator::is($value, substr($arrRules[$key]['1'], 1))) {
-							if ($arrRules[$key]['0'] == true || ($arrRules[$key]['0'] == false && strlen($value) > 0)) {
-	              $bFormOk = false;
-	              $this->setErrorMsg($key.'_err');
-	              if ($document)
-	                $document->assign($key.'_err', '1');
-	            } // [/if]
-						}
-						
-					} else if (!preg_quote($arrRules[$key]['1'], $value)) {
+                    //if (!ereg($arrRules[$key]['1'], $value)) {
+                    if (substr($arrRules[$key]['1'], 0, 1) == ':') {
+                        
+                        if (!Validator::is($value, substr($arrRules[$key]['1'], 1))) {
+                            if ($arrRules[$key]['0'] == true || ($arrRules[$key]['0'] == false && strlen($value) > 0)) {
+                  $bFormOk = false;
+                  $this->setErrorMsg($key.'_err');
+                  if ($document)
+                    $document->assign($key.'_err', '1');
+                } // [/if]
+                        }
+                        
+                    } else if (!preg_quote($arrRules[$key]['1'], $value)) {
             if ($arrRules[$key]['0'] == true || ($arrRules[$key]['0'] == false && strlen($value) > 0)) {
               $bFormOk = false;
               $this->setErrorMsg($key.'_err');
@@ -271,7 +287,8 @@ abstract class VModelDefault extends VBasic {
     return ($bFormOk == false) ? false : $model;
   }
   
-  public function dump($addPre=false) {
+  public function dump($addPre=false)
+  {
     if ($addPre) {
       print "<pre>";
       var_dump($this);

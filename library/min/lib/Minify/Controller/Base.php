@@ -14,7 +14,8 @@
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-abstract class Minify_Controller_Base {
+abstract class Minify_Controller_Base 
+{
     
     /**
      * Setup controller sources and set an needed options for Minify::source
@@ -38,7 +39,8 @@ abstract class Minify_Controller_Base {
      *
      * @return array options for Minify
      */
-    public function getDefaultMinifyOptions() {
+    public function getDefaultMinifyOptions()
+     {
         return array(
             'isPublic' => true
             ,'encodeOutput' => function_exists('gzdeflate')
@@ -70,7 +72,8 @@ abstract class Minify_Controller_Base {
      *
      * @return array minifier callbacks for common types
      */
-    public function getDefaultMinifers() {
+    public function getDefaultMinifers()
+     {
         $ret[Minify::TYPE_JS] = array('JSMin', 'minify');
         $ret[Minify::TYPE_CSS] = array('Minify_CSS', 'minify');
         $ret[Minify::TYPE_HTML] = array('Minify_HTML', 'minify');
@@ -95,10 +98,11 @@ abstract class Minify_Controller_Base {
      * @return null
      */
     public function loadMinifier($minifierCallback)
-    {
+     {
         if (is_array($minifierCallback)
             && is_string($minifierCallback[0])
-            && !class_exists($minifierCallback[0], false)) {
+            && !class_exists($minifierCallback[0], false)) 
+{
             
             require str_replace('_', '/', $minifierCallback[0]) . '.php';
         }
@@ -119,7 +123,7 @@ abstract class Minify_Controller_Base {
      * @return bool file is safe
      */
     public static function _fileIsSafe($file, $safeDirs)
-    {
+     {
         $pathOk = false;
         foreach ((array)$safeDirs as $safeDir) {
             if (strpos($file, $safeDir) === 0) {
@@ -151,7 +155,7 @@ abstract class Minify_Controller_Base {
      * @return array mixed options
      */
     public final function mixInDefaultOptions($options)
-    {
+     {
         $ret = array_merge(
             $this->getDefaultMinifyOptions(), $options
         );
@@ -172,8 +176,8 @@ abstract class Minify_Controller_Base {
      * 
      * @return array options for Minify
      */
-    public final function analyzeSources($options = array()) 
-    {
+    public final function analyzeSources($options = array())
+     {
         if ($this->sources) {
             if (! isset($options['contentType'])) {
                 $options['contentType'] = Minify_Source::getContentType($this->sources);
@@ -195,7 +199,8 @@ abstract class Minify_Controller_Base {
      * @param string $msg
      * @return null
      */
-    protected function log($msg) {
+    protected function log($msg)
+     {
         require_once 'Minify/Logger.php';
         Minify_Logger::log($msg);
     }

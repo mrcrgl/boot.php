@@ -4,10 +4,11 @@
  * @package Minify
  */
 
-class Minify_Cache_File {
+class Minify_Cache_File 
+{
     
     public function __construct($path = '', $fileLocking = false)
-    {
+ {
         if (! $path) {
             require_once 'Solar/Dir.php';
             $path = rtrim(Solar_Dir::tmp(), DIRECTORY_SEPARATOR);
@@ -26,7 +27,7 @@ class Minify_Cache_File {
      * @return bool success
      */
     public function store($id, $data)
-    {
+     {
         $flag = $this->_locking
             ? LOCK_EX
             : null;
@@ -52,7 +53,7 @@ class Minify_Cache_File {
      * @return int size in bytes
      */
     public function getSize($id)
-    {
+     {
         return filesize($this->_path . '/' . $id);
     }
     
@@ -66,7 +67,7 @@ class Minify_Cache_File {
      * @return bool exists
      */
     public function isValid($id, $srcMtime)
-    {
+     {
         $file = $this->_path . '/' . $id;
         return (is_file($file) && (filemtime($file) >= $srcMtime));
     }
@@ -77,7 +78,7 @@ class Minify_Cache_File {
      * @param string $id cache id (e.g. a filename)
      */
     public function display($id)
-    {
+     {
         if ($this->_locking) {
             $fp = fopen($this->_path . '/' . $id, 'rb');
             flock($fp, LOCK_SH);
@@ -89,7 +90,7 @@ class Minify_Cache_File {
         }
     }
     
-	/**
+    /**
      * Fetch the cached content
      *
      * @param string $id cache id (e.g. a filename)
@@ -97,7 +98,7 @@ class Minify_Cache_File {
      * @return string
      */
     public function fetch($id)
-    {
+     {
         if ($this->_locking) {
             $fp = fopen($this->_path . '/' . $id, 'rb');
             flock($fp, LOCK_SH);
@@ -116,7 +117,7 @@ class Minify_Cache_File {
      * @return string
      */
     public function getPath()
-    {
+     {
         return $this->_path;
     }
     

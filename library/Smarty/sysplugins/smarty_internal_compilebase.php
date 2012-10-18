@@ -13,7 +13,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-abstract class Smarty_Internal_CompileBase {
+abstract class Smarty_Internal_CompileBase 
+{
 
     /**
      * Array of names of required attribute required by tag
@@ -54,7 +55,7 @@ abstract class Smarty_Internal_CompileBase {
      * @return array of mapped attributes for further processing
      */
     public function getAttributes($compiler, $attributes)
-    {
+     {
         $_indexed_attr = array();
         // loop over attributes
         foreach ($attributes as $key => $mixed) {
@@ -134,7 +135,7 @@ abstract class Smarty_Internal_CompileBase {
      * @param mixed     $data       optional data saved
      */
     public function openTag($compiler, $openTag, $data = null)
-    {
+     {
         array_push($compiler->_tag_stack, array($openTag, $data));
     }
 
@@ -148,7 +149,7 @@ abstract class Smarty_Internal_CompileBase {
      * @return mixed any type the opening tag's name or saved data
      */
     public function closeTag($compiler, $expectedTag)
-    {
+     {
         if (count($compiler->_tag_stack) > 0) {
             // get stacked info
             list($_openTag, $_data) = array_pop($compiler->_tag_stack);

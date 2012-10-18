@@ -2,8 +2,9 @@
 
 
 
-class ComponentAuthController extends VApplicationControllerWeb {
-	
-	var $default_view = 'login';
-	
+class ComponentAuthController extends VApplicationControllerWeb 
+{
+    
+    var $default_view = 'login';
+    
 }

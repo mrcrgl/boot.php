@@ -12,7 +12,8 @@
  * 
  */
 
-class UserLog extends VModelConnector {
+class UserLog extends VModelConnector 
+{
   
   var $_DataMap = array(
     '_head'       => 'user_log',
@@ -50,11 +51,13 @@ class UserLog extends VModelConnector {
   
   var $refUser;
   
-  public function __construct($attributes=false) {
+  public function __construct($attributes=false)
+  {
     parent::__construct($attributes);
   }
   
-  public function __get($__memberName) {
+  public function __get($__memberName)
+  {
     if ($__memberName == 'user') {
       if (!$this->refUser) {
         $this->refUser = new User($this->user_uid);

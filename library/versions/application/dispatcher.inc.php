@@ -47,7 +47,7 @@ class VDispatcher
      * @return void
      */
     public function __construct()
-    {
+     {
         if (is_null($this->oDispatcher)) {
             $this->oDispatcher = $this->_getInstance(
                 VSettings::f('application.dispatcher', 'default')
@@ -63,11 +63,12 @@ class VDispatcher
      * @throws Exception
      */
     private function _getInstance($sType='default')
-    {
+     {
 
         $sClassname = 'VDispatcher'.ucfirst($sType);
 
-        if (!class_exists($sClassname)) {
+        if (!class_exists($sClassname)) 
+{
             $sMessage = sprintf(
                 'Dispatcher %s not found. Exiting...',
                 $sClassname
@@ -86,7 +87,7 @@ class VDispatcher
      * @param array     $aArgs
      */
     public function __call($sMethod, $aArgs)
-    {
+     {
         return call_user_func_array(
             array($this->oDispatcher, $sMethod),
             $aArgs
@@ -101,7 +102,7 @@ class VDispatcher
      * @throws Exception
      */
     static public function __callStatic($method, $args)
-    {
+     {
         throw new Exception('Dispatcher: __callStatic not implemented yet.');
     }
 }

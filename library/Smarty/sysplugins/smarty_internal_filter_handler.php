@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage PluginsInternal
  */
-class Smarty_Internal_Filter_Handler {
+class Smarty_Internal_Filter_Handler 
+{
 
     /**
      * Run filters over content
@@ -31,17 +32,19 @@ class Smarty_Internal_Filter_Handler {
      * @return string the filtered content
      */
     public static function runFilter($type, $content, Smarty_Internal_Template $template)
-    {
+     {
         $output = $content;
         // loop over autoload filters of specified type
         if (!empty($template->smarty->autoload_filters[$type])) {
             foreach ((array)$template->smarty->autoload_filters[$type] as $name) {
                 $plugin_name = "Smarty_{$type}filter_{$name}";
                 if ($template->smarty->loadPlugin($plugin_name)) {
-                    if (function_exists($plugin_name)) {
+                    if (function_exists($plugin_name))
+ {
                         // use loaded Smarty2 style plugin
                         $output = $plugin_name($output, $template);
-                    } elseif (class_exists($plugin_name, false)) {
+                    } elseif (class_exists($plugin_name, false)) 
+{
                         // loaded class of filter plugin
                         $output = call_user_func(array($plugin_name, 'execute'), $output, $template);
                     }

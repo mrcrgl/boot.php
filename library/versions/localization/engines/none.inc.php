@@ -4,6 +4,7 @@
  * @author marc
  *
  */
-class VLocalizationNone extends VLocalization {
+class VLocalizationNone extends VLocalization 
+{
 
 }

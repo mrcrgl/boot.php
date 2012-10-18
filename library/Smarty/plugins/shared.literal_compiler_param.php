@@ -17,7 +17,7 @@
  * @author Rodney Rehm
  */
 function smarty_literal_compiler_param($params, $index, $default=null)
-{
+ {
     // not set, go default
     if (!isset($params[$index])) {
         return $default;

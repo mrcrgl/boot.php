@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Private_Block_Plugin extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Private_Block_Plugin extends Smarty_Internal_CompileBase 
+{
 
     /**
      * Attribute definition: Overwrites base class.
@@ -36,7 +37,7 @@ class Smarty_Internal_Compile_Private_Block_Plugin extends Smarty_Internal_Compi
      * @return string compiled code
      */
     public function compile($args, $compiler, $parameter, $tag, $function)
-    {
+     {
         if (!isset($tag[5]) || substr($tag, -5) != 'close') {
             // opening tag of block plugin
             // check and get attributes
@@ -60,7 +61,8 @@ class Smarty_Internal_Compile_Private_Block_Plugin extends Smarty_Internal_Compi
             // maybe nocache because of nocache variables or nocache plugin
             $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
             // compile code
-            $output = "<?php \$_smarty_tpl->smarty->_tag_stack[] = array('{$tag}', {$_params}); \$_block_repeat=true; echo {$function}({$_params}, null, \$_smarty_tpl, \$_block_repeat);while (\$_block_repeat) { ob_start();?>";
+            $output = "<?php \$_smarty_tpl->smarty->_tag_stack[] = array('{$tag}', {$_params}); \$_block_repeat=true; echo {$function}({$_params}, null, \$_smarty_tpl, \$_block_repeat);while (\$_block_repeat)
+            { ob_start();?>";
         } else {
             // must endblock be nocache?
             if ($compiler->nocache) {

@@ -50,7 +50,8 @@
  * @link http://code.google.com/p/jsmin-php/
  */
 
-class JSMin {
+class JSMin 
+{
     const ORD_LF            = 10;
     const ORD_SPACE         = 32;
     const ACTION_KEEP_A     = 1;
@@ -72,7 +73,7 @@ class JSMin {
      * @return string
      */
     public static function minify($js)
-    {
+     {
         $jsmin = new JSMin($js);
         return $jsmin->min();
     }
@@ -81,7 +82,7 @@ class JSMin {
      * Setup process
      */
     public function __construct($input)
-    {
+     {
         $this->input       = str_replace("\r\n", "\n", $input);
         $this->inputLength = strlen($this->input);
     }
@@ -90,7 +91,7 @@ class JSMin {
      * Perform minification, return result
      */
     public function min()
-    {
+     {
         if ($this->output !== '') { // min already run
             return $this->output;
         }
@@ -129,7 +130,7 @@ class JSMin {
      * ACTION_DELETE_A_B = Get the next B.
      */
     protected function action($command)
-    {
+     {
         switch ($command) {
             case self::ACTION_KEEP_A:
                 $this->output .= $this->a;
@@ -184,7 +185,7 @@ class JSMin {
     }
     
     protected function isRegexpLiteral()
-    {
+        {
         if (false !== strpos("\n{;(,=:[!&|?", $this->a)) { // we aren't dividing
             return true;
         }
@@ -212,7 +213,7 @@ class JSMin {
      * Get next char. Convert ctrl char to space.
      */
     protected function get()
-    {
+     {
         $c = $this->lookAhead;
         $this->lookAhead = null;
         if ($c === null) {
@@ -236,7 +237,7 @@ class JSMin {
      * Get next char. If is ctrl character, translate to a space or newline.
      */
     protected function peek()
-    {
+     {
         $this->lookAhead = $this->get();
         return $this->lookAhead;
     }
@@ -245,7 +246,7 @@ class JSMin {
      * Is $c a letter, digit, underscore, dollar sign, escape, or non-ASCII?
      */
     protected function isAlphaNum($c)
-    {
+     {
         return (preg_match('/^[0-9a-zA-Z_\\$\\\\]$/', $c) || ord($c) > 126);
     }
     
@@ -266,7 +267,7 @@ class JSMin {
     }
     
     protected function multipleLineComment()
-    {
+            {
         $this->get();
         $comment = '';
         while (true) {
@@ -296,7 +297,7 @@ class JSMin {
      * Some comments may be preserved.
      */
     protected function next()
-    {
+     {
         $get = $this->get();
         if ($get !== '/') {
             return $get;
@@ -309,6 +310,9 @@ class JSMin {
     }
 }
 
-class JSMin_UnterminatedStringException extends Exception {}
-class JSMin_UnterminatedCommentException extends Exception {}
-class JSMin_UnterminatedRegExpException extends Exception {}
+class JSMin_UnterminatedStringException extends Exception 
+{}
+class JSMin_UnterminatedCommentException extends Exception 
+{}
+class JSMin_UnterminatedRegExpException extends Exception 
+{}

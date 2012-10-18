@@ -1,6 +1,7 @@
 <?php
 
 
-class VInputCli extends VInput {
-	
+class VInputCli extends VInput 
+{
+    
 }

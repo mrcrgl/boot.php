@@ -124,8 +124,10 @@ $(function () {
     // detection of double output encoding
     var msg = '<\p class=topWarning><\strong>Warning:<\/strong> ';
     var url = 'ocCheck.php?' + (new Date()).getTime();
-    $.get(url, function (ocStatus) {
-        $.get(url + '&hello=1', function (ocHello) {
+    $.get(url, function (ocStatus)
+    {
+        $.get(url + '&hello=1', function (ocHello)
+        {
             if (ocHello != 'World!') {
                 msg += 'It appears output is being automatically compressed, interfering ' 
                      + ' with Minify\'s own compression. ';

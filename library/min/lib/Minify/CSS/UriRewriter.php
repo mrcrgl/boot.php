@@ -10,7 +10,8 @@
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_CSS_UriRewriter {
+class Minify_CSS_UriRewriter 
+{
     
     /**
      * Defines which class to call as part of callbacks, change this
@@ -47,8 +48,8 @@ class Minify_CSS_UriRewriter {
      * 
      * @return string
      */
-    public static function rewrite($css, $currentDir, $docRoot = null, $symlinks = array()) 
-    {
+    public static function rewrite($css, $currentDir, $docRoot = null, $symlinks = array())
+     {
         self::$_docRoot = self::_realpath(
             $docRoot ? $docRoot : $_SERVER['DOCUMENT_ROOT']
         );
@@ -92,7 +93,7 @@ class Minify_CSS_UriRewriter {
      * @return string
      */
     public static function prepend($css, $path)
-    {
+     {
         self::$_prependPath = $path;
         
         $css = self::_trimUrls($css);
@@ -211,7 +212,7 @@ class Minify_CSS_UriRewriter {
      * @return string
      */
     public static function rewriteRelative($uri, $realCurrentDir, $realDocRoot, $symlinks = array())
-    {
+     {
         // prepend path with current dir separator (OS-independent)
         $path = strtr($realCurrentDir, '/', DIRECTORY_SEPARATOR)  
             . DIRECTORY_SEPARATOR . strtr($uri, '/', DIRECTORY_SEPARATOR);
@@ -260,7 +261,7 @@ class Minify_CSS_UriRewriter {
      * @return mixed path with no trailing slash
      */
     protected static function _realpath($path)
-    {
+     {
         $realPath = realpath($path);
         if ($realPath !== false) {
             $path = $realPath;

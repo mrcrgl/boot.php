@@ -10,7 +10,8 @@ VLoader::import('versions.base.object');
  * @subpackage    Debug
  * @since         2.0
  */
-class VProfiler extends VObject {
+class VProfiler extends VObject 
+{
     /**
      *
      * @var int
@@ -35,7 +36,8 @@ class VProfiler extends VObject {
      * @access protected
      * @param string Prefix for mark messages
      */
-    function __construct( $prefix = '' ) {
+    function __construct( $prefix = '' )
+     {
         $this->_start = $this->getmicrotime();
         $this->_prefix = $prefix;
         $this->_buffer = array();
@@ -52,7 +54,8 @@ class VProfiler extends VObject {
      * @param string Prefix used to distinguish profiler objects.
      * @return VProfiler  The Profiler object.
      */
-    public static function &getInstance($prefix = '') {
+    public static function &getInstance($prefix = '')
+     {
         static $instances;
 
         if (!isset($instances)) {
@@ -76,10 +79,12 @@ class VProfiler extends VObject {
      * @param string A label for the time mark
      * @return string Mark enclosed in <div> tags
      */
-    function mark( $label ) {
+    function mark( $label )
+     {
         $mark    = $this->_prefix." $label: ";
         $mark    .= sprintf('%.3f', $this->getmicrotime() - $this->_start) . ' seconds';
-        if ( function_exists('memory_get_usage') ) {
+        if ( function_exists('memory_get_usage') )
+       {
             $mark    .= ', '.sprintf('%0.2f', memory_get_usage() / 1048576 ).' MB';
         }
 
@@ -93,7 +98,8 @@ class VProfiler extends VObject {
      * @access public
      * @return float The current time
      */
-    function getmicrotime() {
+    function getmicrotime()
+     {
         list( $usec, $sec ) = explode( ' ', microtime() );
         return ((float)$usec + (float)$sec);
     }
@@ -105,10 +111,12 @@ class VProfiler extends VObject {
      * @return int The memory usage
      * @link PHP_MANUAL#memory_get_usage
      */
-    function getMemory() {
+    function getMemory()
+     {
         static $isWin;
 
-        if (function_exists( 'memory_get_usage' )) {
+        if (function_exists( 'memory_get_usage' ))
+       {
             return memory_get_usage();
         } else {
             // Determine if a windows server
@@ -143,7 +151,8 @@ class VProfiler extends VObject {
      * @access public
      * @return array Array of profiler marks
      */
-    function getBuffer() {
+    function getBuffer()
+     {
         return $this->_buffer;
     }
 }

@@ -56,7 +56,8 @@ unset($UTF8_ar);
 * and utf8_substr
 */
 if ( !defined('UTF8_CORE') ) {
-    if ( function_exists('mb_substr') ) {
+    if ( function_exists('mb_substr') )
+ {
         require_once UTF8 . '/mbstring/core.php';
     } else {
         require_once UTF8 . '/utils/unicode.php';

@@ -16,7 +16,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Debug extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Debug extends Smarty_Internal_CompileBase 
+{
 
     /**
      * Compiles code for the {debug} tag
@@ -26,7 +27,7 @@ class Smarty_Internal_Compile_Debug extends Smarty_Internal_CompileBase {
      * @return string compiled code
      */
     public function compile($args, $compiler)
-    {
+     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 

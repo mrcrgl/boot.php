@@ -1,6 +1,7 @@
 <?php 
 
-function smarty_function_newobject($params, &$smarty) {
+function smarty_function_newobject($params, &$smarty)
+ {
   if (empty($params['var'])) {
     return "Missing Parameter: 'var'!";
   }

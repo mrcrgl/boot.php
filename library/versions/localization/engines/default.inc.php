@@ -14,7 +14,8 @@
  * @author marc
  *
  */
-class VLocalizationDefault extends VLocalization {
+class VLocalizationDefault extends VLocalization 
+{
 
   /**
    * The users locale
@@ -72,11 +73,13 @@ class VLocalizationDefault extends VLocalization {
    */
   var $file_ext = '.i18n.json';
 
-  /*public function _($text) {
+  /*public function _($text)
+  {
    return $this->translate($text);
   }*/
 
-  public function __construct() {
+  public function __construct()
+  {
 
     $this->set('file_path', PROJECT_CONFIG.DS.'translations');
     $this->set('fallback_locale', VSettings::f('localization.default_locale', 'en'));
@@ -89,7 +92,8 @@ class VLocalizationDefault extends VLocalization {
     parent::__construct();
   }
 
-  public function _($text, $options=array()) {
+  public function _($text, $options=array())
+  {
 
     $plural = null;
     $none = null;
@@ -115,16 +119,15 @@ class VLocalizationDefault extends VLocalization {
 
     if (!is_null($ct['n']) && $count == 0) {
       return $this->parse($ct['n'], $options);
-    }
-    elseif (!is_null($ct['p']) && $count != 1) { // TODO: for "none" translation
+    } elseif (!is_null($ct['p']) && $count != 1) { // TODO: for "none" translation
       return $this->parse($ct['p'], $options);
-    }
-    else {
+    } else {
       return $this->parse($ct['t'], $options);
     }
   }
 
-  private function parse($text, $options) {
+  private function parse($text, $options)
+    {
     if (count($options)) {
       foreach ($options as $key => $value) {
         #print $key;
@@ -134,7 +137,8 @@ class VLocalizationDefault extends VLocalization {
     return $text;
   }
 
-  public function translate($ct) {
+  public function translate($ct)
+  {
     $h = $this->getHash($ct);
     $k = $this->getKey($this->get('user_locale', $this->get('fallback_locale')));
 
@@ -154,11 +158,13 @@ class VLocalizationDefault extends VLocalization {
     return $this->storeCache(&$ct, $h, $k);
   }
 
-  public function record() {
+  public function record()
+  {
     $this->saveFiles();
   }
 
-  private function getText(&$ct, $h=null, $k=null) {
+  private function getText(&$ct, $h=null, $k=null)
+  {
     if (is_null($h)) {
       $h = $this->getHash($ct);
     }
@@ -173,7 +179,8 @@ class VLocalizationDefault extends VLocalization {
     return $this->storeCache(&$ct, $h, $k);
   }
 
-  public function storeCache(&$ct, $h=null, $k=null) {
+  public function storeCache(&$ct, $h=null, $k=null)
+  {
     #print "[stored]";
 
     if (is_null($h)) {
@@ -197,32 +204,38 @@ class VLocalizationDefault extends VLocalization {
     return $text;
   }
 
-  public function getCache() {
+  public function getCache()
+  {
     if (!apc_exists($this->get('ns')))
       apc_store($this->get('ns'), array());
 
     return apc_fetch($this->get('ns'));
   }
 
-  public function hasCache() {
+  public function hasCache()
+  {
     return apc_exists($this->get('ns'));
   }
 
-  public function setCache($c) {
+  public function setCache($c)
+  {
     apc_store($this->get('ns'), $c);
   }
 
-  public function clearCache() {
+  public function clearCache()
+  {
     apc_delete($this->get('ns'));
   }
 
-  public function inCache($h, $k) {
+  public function inCache($h, $k)
+  {
     $c = $this->getCache();
     #var_dump($c);
     return (bool)isset($c[$k][$h]);
   }
 
-  public function saveFiles($c=null) {
+  public function saveFiles($c=null)
+  {
     if (null === $c) {
       $c = $this->getCache();
     }
@@ -244,7 +257,8 @@ class VLocalizationDefault extends VLocalization {
     }
   }
 
-  public function loadFiles($return=false) {
+  public function loadFiles($return=false)
+    {
 
     if (!$return)
       $this->clearCache();
@@ -295,28 +309,32 @@ class VLocalizationDefault extends VLocalization {
 
   }
 
-  public function encode($data) {
+  public function encode($data)
+  {
     switch($this->get('file_type')) {
       case "json":
         return json_encode($data);
     }
   }
 
-  public function decode($data) {
+  public function decode($data)
+    {
     switch($this->get('file_type')) {
       case "json":
         return json_decode($data, true);
     }
   }
 
-  public function getKey($locale=null, $component=null) {
+  public function getKey($locale=null, $component=null)
+    {
     if (is_null($locale))
       $locale =& $this->get('fallback_locale');
 
     return $locale.$this->get('key_sep').((is_null($component)) ? $this->get('component') : $component);
   }
 
-  public function getHash(&$ct) {
+  public function getHash(&$ct)
+  {
     return md5($ct['t']);
   }
 }

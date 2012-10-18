@@ -60,7 +60,8 @@
  * @subpackage HTTP
  * @author Stephen Clay <steve@mrclay.org>
  */
-class HTTP_ConditionalGet {
+class HTTP_ConditionalGet 
+{
 
     /**
      * Does the client have a valid copy of the requested resource?
@@ -110,7 +111,7 @@ class HTTP_ConditionalGet {
      * @return null
      */
     public function __construct($spec)
-    {
+     {
         $scope = (isset($spec['isPublic']) && $spec['isPublic'])
             ? 'public'
             : 'private';
@@ -174,7 +175,7 @@ class HTTP_ConditionalGet {
      * @return array 
      */
     public function getHeaders()
-    {
+ {
         return $this->_headers;
     }
 
@@ -190,7 +191,7 @@ class HTTP_ConditionalGet {
      * @return int copy of input $bytes
      */
     public function setContentLength($bytes)
-    {
+     {
         return $this->_headers['Content-Length'] = $bytes;
     }
 
@@ -206,7 +207,7 @@ class HTTP_ConditionalGet {
      * @return null
      */
     public function sendHeaders()
-    {
+     {
         $headers = $this->_headers;
         if (array_key_exists('_responseCode', $headers)) {
             header($headers['_responseCode']);
@@ -234,7 +235,7 @@ class HTTP_ConditionalGet {
      * @return null     
      */
     public static function check($lastModifiedTime = null, $isPublic = false, $options = array())
-    {
+     {
         if (null !== $lastModifiedTime) {
             $options['lastModifiedTime'] = (int)$lastModifiedTime;
         }
@@ -259,7 +260,7 @@ class HTTP_ConditionalGet {
      * @return string
      */
     public static function gmtDate($time)
-    {
+     {
         return gmdate('D, d M Y H:i:s \G\M\T', $time);
     }
     
@@ -284,7 +285,7 @@ class HTTP_ConditionalGet {
      * Determine validity of client cache and queue 304 header if valid
      */
     protected function _isCacheValid()
-    {
+     {
         if (null === $this->_etag) {
             // lmTime is copied to ETag, so this condition implies that the
             // server sent neither ETag nor Last-Modified, so the client can't 
@@ -320,7 +321,8 @@ class HTTP_ConditionalGet {
         return false;
     }
     
-    protected function normalizeEtag($etag) {
+    protected function normalizeEtag($etag)
+    {
         $etag = trim($etag);
         return $this->_stripEtag
             ? preg_replace('/;\\w\\w"$/', '"', $etag)

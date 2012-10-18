@@ -12,7 +12,8 @@
  *
  */
 
-class User extends UserAbstraction {
+class User extends UserAbstraction 
+{
   
   var $_DataMap = array(
     '_head'       => 'user',
@@ -27,10 +28,10 @@ class User extends UserAbstraction {
         'uid'          => 'uid',
         'puid'         => 'puid',
         'duid'         => 'duid',
-  			'group_uid'		 => 'group_uid',
-  			'language_uid' => 'language_uid',
-  			'customer_uid' => 'customer_uid',
-  			'salutation'   => 'salutation',
+              'group_uid'         => 'group_uid',
+              'language_uid' => 'language_uid',
+              'customer_uid' => 'customer_uid',
+              'salutation'   => 'salutation',
         'firstname'    => 'firstname',
         'lastname'     => 'lastname',
         'username'     => 'username',
@@ -51,7 +52,7 @@ class User extends UserAbstraction {
   var $_DataRules = array(
     'language_uid'      => array(false, '^[0-9a-f]{13}$',          'default'),
     'customer_uid'      => array(true,  '^[0-9a-f]{13}$',          'default'),
-    'group_uid'					=> array(true,  '^[0-9a-f]{13}$',          'default'),
+    'group_uid'                    => array(true,  '^[0-9a-f]{13}$',          'default'),
     'salutation'        => array(false, '^(mister|misses)$',       'default'),
     'firstname'         => array(false, '^[a-zA-Z]{1,32}$',        'default'),
     'lastname'          => array(false, '^[a-zA-Z]{1,32}$',        'default'),
@@ -67,14 +68,16 @@ class User extends UserAbstraction {
   private $refCustomer;
   
   
-  public function __construct($attributes=false) {
+  public function __construct($attributes=false)
+  {
     parent::__construct($attributes);
   }
   
-  public function __get($__memberName) {
+  public function __get($__memberName)
+  {
     if ($__memberName == 'duid') {
       if (strlen(parent::__get($__memberName)) < 1) {
-      	return $this->uid;
+          return $this->uid;
       }
     }
     if ($__memberName == 'is_copy') {
@@ -90,7 +93,7 @@ class User extends UserAbstraction {
       return $this->email;
     }
     if ($__memberName == 'fullname_with_salutation') {
-    	return (($this->salutation) ? Text::_($this->salutation).' '.$this->fullname : $this->fullname);
+        return (($this->salutation) ? Text::_($this->salutation).' '.$this->fullname : $this->fullname);
     }
     if ($__memberName == 'status_string') {
       if ($this->status == 1) {
@@ -142,12 +145,13 @@ class User extends UserAbstraction {
     return parent::__get($__memberName);
   }
   
-  public function update($param, $dontCheckNeedles=false) {
+  public function update($param, $dontCheckNeedles=false)
+  {
     
     if ($param['duid'] == "is_parent") {
-    	$param['duid'] = $param['puid'];
+        $param['duid'] = $param['puid'];
     } else {
-    	$param['duid'] = "";
+        $param['duid'] = "";
     }
         
     /*
@@ -179,7 +183,8 @@ class User extends UserAbstraction {
     return parent::update($param, $dontCheckNeedles);
   }
   
-  public function delete() {
+  public function delete()
+  {
     
     $bOk = $this->update(array('status' => -9), true);
     
@@ -191,12 +196,13 @@ class User extends UserAbstraction {
     return true;
   }
   
-  public function hasPermission($permission_ident, $explicit=false) {
+  public function hasPermission($permission_ident, $explicit=false)
+  {
     if ($this->group && $this->group->isValid()) {
-    	return $this->group->hasPermission($permission_ident, $explicit);
+        return $this->group->hasPermission($permission_ident, $explicit);
     }
-  	return false;
-  	
+      return false;
+      
 
     // obsolete..
     $perm_list = ($explicit == false) ? "'$permission_ident', 'ui.super'" : "'$permission_ident'";
@@ -209,13 +215,15 @@ class User extends UserAbstraction {
     return true;
   }
   
-  public function log($object, $message) {
+  public function log($object, $message)
+  {
     $remote_addr = $_SERVER['REMOTE_ADDR'];
     $object_uid  = '';
     if (is_object($object)) {
       $object_type = get_class($object);
     }
-    if (is_object($object) && in_array('isValid', get_class_methods($object)) && $object->isValid()) {
+    if (is_object($object) && in_array('isValid', get_class_methods($object)) && $object->isValid()) 
+{
       $object_uid = $object->uid;
     }
     if (!isset($object_type) && strlen($object) > 0) {

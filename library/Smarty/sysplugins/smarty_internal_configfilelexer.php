@@ -20,12 +20,12 @@ class Smarty_Internal_Configfilelexer
     public $node;
     public $line;
     private $state = 1;
-    public $smarty_token_names = array (		// Text for parser error messages
-   				);
+    public $smarty_token_names = array (        // Text for parser error messages
+                   );
 
 
     function __construct($data, $smarty)
-    {
+                   {
         // set instance object
         self::instance($this);
         $this->data = $data . "\n"; //now all lines are \n-terminated
@@ -48,7 +48,7 @@ class Smarty_Internal_Configfilelexer
     private $_yy_stack = array();
 
     function yylex()
-    {
+   {
         return $this->{'yylex' . $this->_yy_state}();
     }
 
@@ -137,7 +137,7 @@ class Smarty_Internal_Configfilelexer
 
     const START = 1;
     function yy_r1_1($yy_subpatterns)
-    {
+   {
 
     $this->token = Smarty_Internal_Configfileparser::TPC_COMMENTSTART;
     $this->yypushstate(self::COMMENT);
@@ -249,7 +249,7 @@ class Smarty_Internal_Configfilelexer
 
     const VALUE = 2;
     function yy_r2_1($yy_subpatterns)
-    {
+   {
 
     return false;
     }
@@ -370,7 +370,7 @@ class Smarty_Internal_Configfilelexer
 
     const NAKED_STRING_VALUE = 3;
     function yy_r3_1($yy_subpatterns)
-    {
+   {
 
     $this->token = Smarty_Internal_Configfileparser::TPC_NAKED_STRING;
     $this->yypopstate();
@@ -439,7 +439,7 @@ class Smarty_Internal_Configfilelexer
 
     const COMMENT = 4;
     function yy_r4_1($yy_subpatterns)
-    {
+   {
 
     return false;
     }
@@ -517,7 +517,7 @@ class Smarty_Internal_Configfilelexer
 
     const SECTION = 5;
     function yy_r5_1($yy_subpatterns)
-    {
+   {
 
     $this->token = Smarty_Internal_Configfileparser::TPC_DOT;
     }
@@ -589,7 +589,7 @@ class Smarty_Internal_Configfilelexer
 
     const TRIPPLE = 6;
     function yy_r6_1($yy_subpatterns)
-    {
+   {
 
     $this->token = Smarty_Internal_Configfileparser::TPC_TRIPPLE_QUOTES_END;
     $this->yypopstate();

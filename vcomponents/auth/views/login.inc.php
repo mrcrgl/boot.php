@@ -1,41 +1,44 @@
 <?php
 
-class ComponentAuthViewLogin extends VApplicationView {
+class ComponentAuthViewLogin extends VApplicationView 
+{
   
   
-  public function show() {
+  public function show()
+ {
     
-  	$document =& VFactory::getDocument();
-  	$renderer =& $document->getRenderer();
-  	$session =& VFactory::getSession();
-  	$input =& VFactory::getInput();
-  	
-  	$login =& $session->get('login');
-  	if (is_object($login) && $login->loggedIn()) {
-  		header( sprintf("Location: %s", $input->get('referer', '/', 'get')) );
-  		exit;
-  	}
-  	
-  	$document->setTemplate('login.htpl');
-  	
-  	
-  	#print $input->get('name', 'nix da', 'get');
-  	
-  	print $input->get('referer');
-  	
-  	if (strtolower($input->getMethod()) == 'post') {
-  		$this->verify();
-  	}
-  	
+      $document =& VFactory::getDocument();
+      $renderer =& $document->getRenderer();
+      $session =& VFactory::getSession();
+      $input =& VFactory::getInput();
+      
+      $login =& $session->get('login');
+      if (is_object($login) && $login->loggedIn()) {
+          header( sprintf("Location: %s", $input->get('referer', '/', 'get')) );
+          exit;
+      }
+      
+      $document->setTemplate('login.htpl');
+      
+      
+      #print $input->get('name', 'nix da', 'get');
+      
+      print $input->get('referer');
+      
+      if (strtolower($input->getMethod()) == 'post') {
+          $this->verify();
+      }
+      
   }
   
-  public function verify() {
-  	
-  	$document =& VFactory::getDocument();
-  	$input 		=& VFactory::getInput();
-  	$session 	=& VFactory::getSession();
-  	
-  	if ($input->get('do_login', false, 'post')) {
+  public function verify()
+      {
+      
+      $document =& VFactory::getDocument();
+      $input         =& VFactory::getInput();
+      $session     =& VFactory::getSession();
+      
+      if ($input->get('do_login', false, 'post')) {
       $refLogin = new ComponentAuthModelLogin("User");
       $requested_view = $input->get('requested_view', false, 'post');
       if ( $requested_view ) {
@@ -61,38 +64,40 @@ class ComponentAuthViewLogin extends VApplicationView {
     exit;
   }
   
-  public function logout() {
-  	$document =& VFactory::getDocument();
-  	$input 		=& VFactory::getInput();
-  	$session 	=& VFactory::getSession();
-  	
-  	#$document->setTemplate('login.htpl');
-  	
-  	$login =& $session->get('login');
-  	if (is_object($login)) {
-  		$login->doLogout();
-  	}
-  	
-  	
-  	VMessages::_('Ok', 'Logout erfolgreich!', 'success');
-  	
-  	header( sprintf('Location: /%s', $document->getUrlPrefix()) );
-  	exit;
+  public function logout()
+  {
+      $document =& VFactory::getDocument();
+      $input         =& VFactory::getInput();
+      $session     =& VFactory::getSession();
+      
+      #$document->setTemplate('login.htpl');
+      
+      $login =& $session->get('login');
+      if (is_object($login)) {
+          $login->doLogout();
+      }
+      
+      
+      VMessages::_('Ok', 'Logout erfolgreich!', 'success');
+      
+      header( sprintf('Location: /%s', $document->getUrlPrefix()) );
+      exit;
   }
   /*
-  public function show() {
-  	
-  	
-  	
-  	$this->registerStyleSheet('jquery.dataTable');
-  	
-  	
-  	$this->registerJavaScript('jquery.dataTables');
-  	$this->registerJavaScript('bootstrap.datatables');
-  	$this->registerJavaScript('bootstrap.datatables.paging');
-  	$this->registerJavaScript('jquery.validate');
-  	$this->registerJavaScript('do.validate');
-  	
+  public function show()
+  {
+      
+      
+      
+      $this->registerStyleSheet('jquery.dataTable');
+      
+      
+      $this->registerJavaScript('jquery.dataTables');
+      $this->registerJavaScript('bootstrap.datatables');
+      $this->registerJavaScript('bootstrap.datatables.paging');
+      $this->registerJavaScript('jquery.validate');
+      $this->registerJavaScript('do.validate');
+      
     
     $this->setTemplate('Login/login');
     

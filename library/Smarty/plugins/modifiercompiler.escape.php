@@ -24,7 +24,7 @@ require_once( SMARTY_PLUGINS_DIR .'shared.literal_compiler_param.php' );
  * @return string with compiled code
  */
 function smarty_modifiercompiler_escape($params, $compiler)
-{
+ {
     try {
         $esc_type = smarty_literal_compiler_param($params, 1, 'html');
         $char_set = smarty_literal_compiler_param($params, 2, Smarty::$_CHARSET);
@@ -72,7 +72,7 @@ function smarty_modifiercompiler_escape($params, $compiler)
                 return 'strtr(' . $params[0] . ', array("\\\\" => "\\\\\\\\", "\'" => "\\\\\'", "\"" => "\\\\\"", "\\r" => "\\\\r", "\\n" => "\\\n", "</" => "<\/" ))';
 
         }
-    } catch(SmartyException $e) {
+    } catch (SmartyException $e) {
         // pass through to regular plugin fallback
     }
 

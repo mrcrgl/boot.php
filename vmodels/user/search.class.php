@@ -12,7 +12,8 @@
  * 
  */
 
-class UserSearch extends UserManager {
+class UserSearch extends UserManager 
+{
   
   private $relevanzBonusByMatch = 5;
   
@@ -28,25 +29,28 @@ class UserSearch extends UserManager {
   
   private $boolSearchRequestDone = false;
   
-  public function setKeyword($keyword) {
+  public function setKeyword($keyword)
+  {
     if (!in_array($keyword, $this->arrKeywords) && strlen($keyword) > 1) {
       $this->arrKeywords[] = $keyword;
     }
   }
   
-  public function clearKeywords() {
+  public function clearKeywords()
+    {
     $this->arrKeywords = array();
     
     if ($this->boolSearchRequestDone == true) {
       $query = "DROP TEMPORARY TABLE `search_request`";
       $dbo =& VFactory::getDatabase();
-    	$dbo->userQuery($query);
+        $dbo->userQuery($query);
     }
     
     $this->boolSearchRequestDone = false;
   }
   
-  private function createTempTable() {
+  private function createTempTable()
+  {
     $query = "CREATE TEMPORARY TABLE `search_request` (
                 `uid` VARCHAR( 13 ) NOT NULL ,
                 `ts_update` INT NULL ,
@@ -56,21 +60,24 @@ class UserSearch extends UserManager {
     $dbo->userQuery($query);
   }
   
-  public function getAll() {
+  public function getAll()
+  {
     if (count($this->arrKeywords)) {
       return $this->startRequest();
     }
     return parent::getAll();
   }
   
-  public function getNumRows() {
+  public function getNumRows()
+  {
     if (count($this->arrKeywords)) {
       return $this->requestNumRows();
     }
     return parent::getNumRows();
   }
   
-  public function searchRequest() {
+  public function searchRequest()
+  {
     if ($this->boolSearchRequestDone == true) {
       return true;
     }
@@ -98,7 +105,8 @@ class UserSearch extends UserManager {
   }
   
   
-  public function startRequest() {
+  public function startRequest()
+  {
     $this->searchRequest();
     
     $dbo =& VFactory::getDatabase();
@@ -112,7 +120,8 @@ class UserSearch extends UserManager {
     return $this->getObjects($record, 'User');
   }
   
-  private function requestNumRows() {
+  private function requestNumRows()
+  {
     $this->searchRequest();
     $dbo =& VFactory::getDatabase();
     $dbo->userQuery("SELECT COUNT(*) AS `count` FROM `search_request` WHERE `relevance` IS NOT NULL");
@@ -120,7 +129,8 @@ class UserSearch extends UserManager {
     return $dbo->f("count");
   }
   
-  private function getBonusBySearchMatch() {
+  private function getBonusBySearchMatch()
+  {
     $bmList = "";
     foreach ($this->arrKeywords as $keyword) {
       $bmList .= " + IF(STRCMP(ma.value,'$keyword'),'0','".$this->relevanzBonusByMatch."')";
@@ -128,7 +138,8 @@ class UserSearch extends UserManager {
     return $bmList;
   }
   
-  private function getWellformedAttributeList() {
+  private function getWellformedAttributeList()
+  {
     $wfList = "";
     foreach ($this->searchAttributeList as $attribute) {
       $wfList .= (($wfList == "") ? "" : ", " )."'$attribute'";
@@ -136,7 +147,8 @@ class UserSearch extends UserManager {
     return $wfList;
   }
   
-  private function getKeywordQuerySnippet($field) {
+  private function getKeywordQuerySnippet($field)
+  {
     $kqSnippet = "";
     foreach ($this->arrKeywords as $keyword) {
       $kqSnippet .= (($kqSnippet == "") ? "" : " OR " )."$field LIKE '%$keyword%' ";

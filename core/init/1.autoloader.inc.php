@@ -12,8 +12,9 @@ VLoader::register('VProfiler', VLIB.DS.'versions'.DS.'debug'.DS.'profiler.inc.ph
  * @param string $__classname
  * @return mixed path if class found, false if not
  */
-function __autoload($__classname) {
-	return VLoader::autoload($__classname);
+function __autoload($__classname)
+ {
+    return VLoader::autoload($__classname);
 }
 
 spl_autoload_register();

@@ -159,7 +159,7 @@ function utf8_accents_to_ascii( $str, $case=0 ){
     static $UTF8_LOWER_ACCENTS = NULL;
     static $UTF8_UPPER_ACCENTS = NULL;
 
-    if($case <= 0){
+    if ($case <= 0){
 
         if ( is_null($UTF8_LOWER_ACCENTS) ) {
             $UTF8_LOWER_ACCENTS = array(
@@ -188,7 +188,7 @@ function utf8_accents_to_ascii( $str, $case=0 ){
             );
     }
 
-    if($case >= 0){
+    if ($case >= 0){
         if ( is_null($UTF8_UPPER_ACCENTS) ) {
             $UTF8_UPPER_ACCENTS = array(
   'À' => 'A', 'Ô' => 'O', 'Ď' => 'D', 'Ḟ' => 'F', 'Ë' => 'E', 'Š' => 'S', 'Ơ' => 'O',

@@ -28,7 +28,7 @@ require_once 'Minify/Build.php';
  * @return string
  */ 
 function Minify_groupUri($group, $forceAmpersand = false)
-{
+ {
     $path = $forceAmpersand
         ? "/g={$group}"
         : "/?g={$group}";
@@ -63,7 +63,7 @@ function Minify_groupUri($group, $forceAmpersand = false)
  * @return int Unix timestamp of the latest modification
  */ 
 function Minify_groupsMtime($groups)
-{
+ {
     $max = 0;
     foreach ((array)$groups as $group) {
         $max = max($max, _Minify_getBuild($group)->lastModified);
@@ -77,7 +77,7 @@ function Minify_groupsMtime($groups)
  * @private
  */
 function _Minify_getBuild($group)
-{
+ {
     static $builds = array();
     static $gc = false;
     if (false === $gc) {

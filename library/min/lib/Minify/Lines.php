@@ -11,7 +11,8 @@
  * @author Stephen Clay <steve@mrclay.org>
  * @author Adam Pedersen (Issue 55 fix)
  */
-class Minify_Lines {
+class Minify_Lines 
+{
 
     /**
      * Add line numbers in C-style comments
@@ -34,8 +35,8 @@ class Minify_Lines {
      * 
      * @return string 
      */
-    public static function minify($content, $options = array()) 
-    {
+    public static function minify($content, $options = array())
+ {
         $id = (isset($options['id']) && $options['id'])
             ? $options['id']
             : '';
@@ -86,7 +87,7 @@ class Minify_Lines {
      * @return bool
      */
     private static function _eolInComment($line, $inComment)
-    {
+     {
         while (strlen($line)) {
             $search = $inComment
                 ? '*/'
@@ -98,8 +99,7 @@ class Minify_Lines {
                 if ($pos == 0
                     || ($inComment
                         ? substr($line, $pos, 3)
-                        : substr($line, $pos-1, 3)) != '*/*')
-                {
+                        : substr($line, $pos-1, 3)) != '*/*') {
                         $inComment = ! $inComment;
                 }
                 $line = substr($line, $pos + 2);
@@ -123,7 +123,7 @@ class Minify_Lines {
      * @return string
      */
     private static function _addNote($line, $note, $inComment, $padTo)
-    {
+     {
         return $inComment
             ? '/* ' . str_pad($note, $padTo, ' ', STR_PAD_RIGHT) . ' *| ' . $line
             : '/* ' . str_pad($note, $padTo, ' ', STR_PAD_RIGHT) . ' */ ' . $line;

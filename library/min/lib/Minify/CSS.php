@@ -14,7 +14,8 @@
  * @author Stephen Clay <steve@mrclay.org>
  * @author http://code.google.com/u/1stvamp/ (Issue 64 patch)
  */
-class Minify_CSS {
+class Minify_CSS 
+{
     
     /**
      * Minify a CSS string
@@ -48,8 +49,8 @@ class Minify_CSS {
      * 
      * @return string
      */
-    public static function minify($css, $options = array()) 
-    {
+    public static function minify($css, $options = array())
+     {
         require_once 'Minify/CSS/Compressor.php';
         if (isset($options['preserveComments']) 
             && !$options['preserveComments']) {

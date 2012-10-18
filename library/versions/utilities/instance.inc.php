@@ -11,14 +11,18 @@
  *
  * --
  */
-class VInstance {
+class VInstance 
+{
   static $arrInstances = array();
 
-  public final function __construct() { }
+  public final function __construct()
+ { }
 
-  public final function __clone() { }
+  public final function __clone()
+ { }
 
-  static final function loadPersistent() {
+  static final function loadPersistent()
+ {
     if (isset($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance']) && Validator::is($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'], 'array')) {
       foreach ($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'] as $ident => $reference) {
         self::_new($reference, $ident);
@@ -28,14 +32,16 @@ class VInstance {
     }
   }
 
-  static final function f($__memberName) {
+  static final function f($__memberName)
+      {
     if (isset(self::$arrInstances[$__memberName])) {
       return self::$arrInstances[$__memberName];
     }
     return false;
   }
 
-  static final function _new($reference, $ident=false, $persistent=false) {
+  static final function _new($reference, $ident=false, $persistent=false)
+  {
     if (!$ident) {
       $ident = get_class($reference);
     }
@@ -48,14 +54,16 @@ class VInstance {
     }
   }
 
-  static final function _unset($ident) {
+  static final function _unset($ident)
+    {
     if (isset($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'][$ident])) {
       unset($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'][$ident]);
     }
     unset (self::$arrInstances[$ident]);
   }
 
-  static final function _unsetNonPersistent() {
+  static final function _unsetNonPersistent()
+  {
     foreach (self::$arrInstances as $ident => $reference) {
       if (!isset($_SESSION[(VSettings::f('default.secret', uniqid()))]['Instance'][$ident])) {
         unset (self::$arrInstances[$ident]);

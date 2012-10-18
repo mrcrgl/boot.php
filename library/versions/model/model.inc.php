@@ -1,9 +1,11 @@
 <?php 
 
-class VModel {
-	
-	public static function unique() {
-		
-	} 
-	
+class VModel 
+{
+    
+    public static function unique()
+ {
+        
+    } 
+    
 }

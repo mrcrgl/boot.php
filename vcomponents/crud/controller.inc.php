@@ -2,10 +2,11 @@
 
 
 
-class ComponentCrudController extends VApplicationControllerWeb {
-	
-	var $default_view = 'index';
-	
-	
-	
+class ComponentCrudController extends VApplicationControllerWeb 
+{
+    
+    var $default_view = 'index';
+    
+    
+    
 }

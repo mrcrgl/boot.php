@@ -11,22 +11,26 @@
  * Validates a different Type of Values
  * --
  */
-class Validator {
+class Validator 
+{
 
   public static $error;
   public static $errors;
 
-  public static function setError($error) {
+  public static function setError($error)
+ {
     Validator::$error    = $error;
     Validator::$errors[] = $error;
   }
 
-  public static function resetErrors() {
+  public static function resetErrors()
+  {
     Validator::$error    = '';
     Validator::$errors[] = array();
   }
 
-  public static function is($value, $processor, $minlen=false, $maxlen=false) {
+  public static function is($value, $processor, $minlen=false, $maxlen=false)
+  {
     if ($minlen !== false && strlen($value) < $minlen) {
       Validator::setError("MinLengthExceeded");
       return false;
@@ -45,31 +49,33 @@ class Validator {
     return true;
   }
 
-  public static function checkField($field_declaration, $value) {
-  	if ($field_declaration->get('null') === true && Validator::is($value, 'null')) {
-  		return true;
-  	}
-  	if ($field_declaration->get('blank') === true && Validator::is($value, 'blank')) {
-  		return true;
-  	}
-  	if (in_array($field_declaration->get('type'), array('integer', 'string', 'float', 'decimal'))) {
-	  	if (!Validator::is($value, $field_declaration->get('type'), $field_declaration->get('min_length'), $field_declaration->get('max_length'))) {
-	  		#printf("%s with length %d is not accepted; minlength %d and maxlength %d expected".NL, $field_declaration->get('type'), strlen($value), $field_declaration->get('min_length'), $field_declaration->get('max_length'));
-  			return false;
-	  	}
-  	}
+  public static function checkField($field_declaration, $value)
+  {
+      if ($field_declaration->get('null') === true && Validator::is($value, 'null')) {
+          return true;
+      }
+      if ($field_declaration->get('blank') === true && Validator::is($value, 'blank')) {
+          return true;
+      }
+      if (in_array($field_declaration->get('type'), array('integer', 'string', 'float', 'decimal'))) {
+          if (!Validator::is($value, $field_declaration->get('type'), $field_declaration->get('min_length'), $field_declaration->get('max_length'))) {
+              #printf("%s with length %d is not accepted; minlength %d and maxlength %d expected".NL, $field_declaration->get('type'), strlen($value), $field_declaration->get('min_length'), $field_declaration->get('max_length'));
+              return false;
+          }
+      }
 
-  	foreach ($field_declaration->get('validators') as $validator) {
-  		if (!Validator::is($value, $validator)) {
-  			#printf("$validator is required".NL);
-  			return false;
-  		}
-  	}
+      foreach ($field_declaration->get('validators') as $validator) {
+          if (!Validator::is($value, $validator)) {
+              #printf("$validator is required".NL);
+              return false;
+          }
+      }
 
-  	return true;
+      return true;
   }
 
-  public static function regexp($value, $regexp, $isTrueIfEmpty=false, $isCaseSensitive=false) {
+  public static function regexp($value, $regexp, $isTrueIfEmpty=false, $isCaseSensitive=false)
+  {
     if (!Validator::is($value, 'filled') && $isTrueIfEmpty) {
       true;
     }
@@ -96,7 +102,8 @@ class Validator {
    *
    ***************************************************/
 
-  public static function is_integer($value) {
+  public static function is_integer($value)
+   {
     if (is_numeric($value)) {
       return true;
     }
@@ -105,7 +112,8 @@ class Validator {
     return false;
   }
 
-  public static function is_float($value) {
+  public static function is_float($value)
+  {
     if (is_numeric($value)) {
       return true;
     }
@@ -114,7 +122,8 @@ class Validator {
     return false;
   }
 
-	public static function is_string($value) {
+    public static function is_string($value)
+  {
     if (is_string($value)) {
       return true;
     }
@@ -123,7 +132,8 @@ class Validator {
     return false;
   }
 
-  public static function is_filled($value) {
+  public static function is_filled($value)
+  {
     if (strlen($value) > 0) {
       return true;
     }
@@ -132,7 +142,8 @@ class Validator {
     return false;
   }
 
-	public static function is_blank($value) {
+    public static function is_blank($value)
+  {
     if (strlen($value) == 0) {
       return true;
     }
@@ -141,7 +152,8 @@ class Validator {
     return false;
   }
 
-	public static function is_array($value) {
+    public static function is_array($value)
+  {
     if ((array)$value === $value) {
       return true;
     }
@@ -150,7 +162,8 @@ class Validator {
     return false;
   }
 
-	public static function is_null($value) {
+    public static function is_null($value)
+  {
     if (is_null($value)) {
       return true;
     }
@@ -159,7 +172,8 @@ class Validator {
     return false;
   }
 
-  public static function is_uid($value) {
+  public static function is_uid($value)
+  {
     if (self::is_intuid($value)) {
       return true;
     }
@@ -171,7 +185,8 @@ class Validator {
     return false;
   }
 
-  public static function is_intuid($value) {
+  public static function is_intuid($value)
+  {
     if (is_numeric($value)) {
       return true;
     }
@@ -180,7 +195,8 @@ class Validator {
     return false;
   }
 
-  public static function is_hexuid($value) {
+  public static function is_hexuid($value)
+  {
     if (preg_match('/^([0-9a-z]{13})$/', $value)) {
       return true;
     }
@@ -189,7 +205,8 @@ class Validator {
     return false;
   }
 
-  public static function is_email($value) {
+  public static function is_email($value)
+  {
     if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
       return true;
     }
@@ -198,7 +215,8 @@ class Validator {
     return false;
   }
 
-  public static function is_username($value) {
+  public static function is_username($value)
+  {
 
     if (preg_match('/^[0-9a-zA-Z\._-]{5,50}$/', $value)) {
       return true;
@@ -208,7 +226,8 @@ class Validator {
     return false;
   }
 
-  public static function is_ip($value) {
+  public static function is_ip($value)
+  {
     if (filter_var($value, FILTER_VALIDATE_IP)) {
       return true;
     }
@@ -217,7 +236,8 @@ class Validator {
     return false;
   }
 
-  public static function is_timestamp($value) {
+  public static function is_timestamp($value)
+  {
     if (preg_match("/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/", $value, $matches)) {
       if (checkdate($matches[2], $matches[3], $matches[1])) {
         return true;

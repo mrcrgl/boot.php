@@ -16,7 +16,8 @@ require_once 'Minify/Controller/Base.php';
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_Controller_Version1 extends Minify_Controller_Base {
+class Minify_Controller_Version1 extends Minify_Controller_Base 
+{
     
     /**
      * Set up groups of files as sources
@@ -25,7 +26,8 @@ class Minify_Controller_Version1 extends Minify_Controller_Base {
      * @return array Minify options
      * 
      */
-    public function setupSources($options) {
+    public function setupSources($options)
+     {
         self::_setupDefines();
         if (MINIFY_USE_CACHE) {
             $cacheDir = defined('MINIFY_CACHE_DIR')
@@ -78,8 +80,7 @@ class Minify_Controller_Version1 extends Minify_Controller_Base {
             $file = realpath($file);
             // don't allow unsafe or duplicate files
             if (parent::_fileIsSafe($file, $allowDirs) 
-                && !in_array($file, $goodFiles)) 
-            {
+                && !in_array($file, $goodFiles)) {
                 $goodFiles[] = $file;
                 $srcOptions = array(
                     'filepath' => $file

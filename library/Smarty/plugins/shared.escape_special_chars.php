@@ -19,7 +19,7 @@ if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
      * @return string
      */
     function smarty_function_escape_special_chars($string)
-    {
+     {
         if (!is_array($string)) {
             $string = htmlspecialchars($string, ENT_COMPAT, Smarty::$_CHARSET, false);
         }
@@ -38,7 +38,7 @@ if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
      * @return string
      */
     function smarty_function_escape_special_chars($string)
-    {
+     {
         if (!is_array($string)) {
             $string = preg_replace('!&(#?\w+);!', '%%%SMARTY_START%%%\\1%%%SMARTY_END%%%', $string);
             $string = htmlspecialchars($string);

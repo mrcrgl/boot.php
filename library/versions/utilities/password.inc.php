@@ -39,7 +39,8 @@ $_VPassword_NumberOfPossibleCharacters = 0;
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/VPassword
  */
-class VPassword {
+class VPassword 
+{
 
     /**
      * Create a single password.
@@ -53,7 +54,7 @@ class VPassword {
      * @return string  Returns the generated password.
      */
     function create($length = 10, $type = 'pronounceable', $chars = '')
-    {
+     {
         switch ($type) {
         case 'unpronounceable' :
             return VPassword::_createUnpronounceable($length, $chars);
@@ -80,7 +81,7 @@ class VPassword {
      * @return array   Array containing the passwords
      */
     function createMultiple($number, $length = 10, $type = 'pronounceable', $chars = '')
-    {
+     {
         $passwords = array();
 
         while ($number > 0) {
@@ -108,7 +109,7 @@ class VPassword {
      * @return string
      */
     function createFromLogin($login, $type, $key = 0)
-    {
+     {
         switch ($type) {
         case 'reverse':
             return strrev($login);
@@ -154,7 +155,7 @@ class VPassword {
      * @return array   Array containing the passwords
      */
     function createMultipleFromLogin($login, $type, $key = 0)
-    {
+     {
         $passwords = array();
         $number    = count($login);
         $save      = $number;
@@ -183,7 +184,7 @@ class VPassword {
      * @return string
      */
     function _xor($login, $key)
-    {
+     {
         $tmp = '';
 
         for ($i = 0; $i < strlen($login); $i++) {
@@ -211,7 +212,7 @@ class VPassword {
      * @return string
      */
     function _rotx($login, $key)
-    {
+     {
         $tmp = '';
         $login = strtolower($login);
 
@@ -244,7 +245,7 @@ class VPassword {
      * @return string
      */
     function _rotxpp($login, $key)
-    {
+     {
         $tmp = '';
         $login = strtolower($login);
 
@@ -277,7 +278,7 @@ class VPassword {
      * @return string
      */
     function _rotxmm($login, $key)
-    {
+     {
         $tmp = '';
         $login = strtolower($login);
 
@@ -309,7 +310,7 @@ class VPassword {
      * @return string
      */
     function _asciiRotx($login, $key)
-    {
+     {
         $tmp = '';
 
         for ($i = 0; $i < strlen($login); $i++) {
@@ -343,7 +344,7 @@ class VPassword {
      * @return string
      */
     function _asciiRotxpp($login, $key)
-    {
+     {
         $tmp = '';
 
         for ($i = 0; $i < strlen($login); $i++, $key++) {
@@ -377,7 +378,7 @@ class VPassword {
      * @return string
      */
     function _asciiRotxmm($login, $key)
-    {
+     {
         $tmp = '';
 
         for ($i = 0; $i < strlen($login); $i++, $key--) {
@@ -410,7 +411,7 @@ class VPassword {
      * @return string
      */
     function _shuffle($login)
-    {
+     {
         $tmp = array();
 
         for ($i = 0; $i < strlen($login); $i++) {
@@ -433,7 +434,7 @@ class VPassword {
      * @return string  Returns the password
      */
     function _createPronounceable($length)
-    {
+     {
 
         global $_VPassword_NumberOfPossibleCharacters;
         $retVal = '';
@@ -480,7 +481,7 @@ class VPassword {
      * @return string  Returns the password
      */
     function _createUnpronounceable($length, $chars)
-    {
+     {
         global $_VPassword_NumberOfPossibleCharacters;
 
         $password = '';

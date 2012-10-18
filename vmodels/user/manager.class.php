@@ -12,12 +12,14 @@
  *
  */
 
-class UserManager extends VModelManagerSearch {
+class UserManager extends VModelManagerSearch 
+{
   
   var $pagination;
   var $display_subuser;
   
-  public function _getAll() {
+  public function _getAll()
+  {
     $user_list = $this->getUserListString();
     if (!$user_list) {
       return array();
@@ -38,7 +40,8 @@ class UserManager extends VModelManagerSearch {
     return $this->getObjects($record, 'User');
   }
   
-	public function getUserByMail($username, $email) {
+    public function getUserByMail($username, $email)
+  {
     $dbo =& VFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", $this->getWhereCondition("((`email` = '$email') AND (`username` = '$username'))"));
@@ -53,7 +56,8 @@ class UserManager extends VModelManagerSearch {
     return false;
   }
   
-  public function getAllByCustomer(Customer $Customer) {
+  public function getAllByCustomer(Customer $Customer)
+  {
     $dbo =& VFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", "`customer_uid` = '".$Customer->uid."'", "none", (isset($this->pagination)) ? $this->pagination->getLimitStatement() : "none");
@@ -70,7 +74,8 @@ class UserManager extends VModelManagerSearch {
   }
   
   
-  public function getNumRows() {
+  public function getNumRows()
+  {
     $user_list = $this->getUserListString();
     if (!$user_list) {
       return 0;
@@ -84,7 +89,8 @@ class UserManager extends VModelManagerSearch {
   }
   
   
-  public function doLogin($username, $password) {
+  public function doLogin($username, $password)
+  {
     $dbo =& VFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", $this->getWhereCondition("((`email` = '$username') OR (`username` = '$username')) AND `password` = MD5('$password')"));
@@ -100,7 +106,8 @@ class UserManager extends VModelManagerSearch {
     return false;
   }
   
-  public function getCompleteSubUserList($user_uid=false, $user_list=false) {
+  public function getCompleteSubUserList($user_uid=false, $user_list=false)
+  {
     if ($user_uid === false) {
       $user_uid = Instance::f('Login')->obj->duid;
     }
@@ -112,7 +119,7 @@ class UserManager extends VModelManagerSearch {
     $dbo->selectRows("uid", $this->getWhereCondition("`puid` = '$user_uid'"));
     if ($dbo->getNumRows()) {
       $record = array();
-      while($dbo->nextRecord()) {
+      while ($dbo->nextRecord()) {
         $record[] = $dbo->f("uid");
       }
       
@@ -124,7 +131,8 @@ class UserManager extends VModelManagerSearch {
     return $user_list;
   }
   
-  public function getCompleteSubUserListString() {
+  public function getCompleteSubUserListString()
+  {
     $user_list = $this->getCompleteSubUserList();
     $user_list_string = "";
     foreach ($user_list as $uid) {
@@ -133,7 +141,8 @@ class UserManager extends VModelManagerSearch {
     return $user_list_string;
   }
   
-  public function getCompleteSubUserListObjects() {
+  public function getCompleteSubUserListObjects()
+  {
     $record = array();
     foreach ($this->getCompleteSubUserList() as $uid) {
       $record[] = array('uid' => $uid);
@@ -141,7 +150,8 @@ class UserManager extends VModelManagerSearch {
     return $this->getObjects($record, 'User');
   }
   
-  public function getSubUserList() {
+  public function getSubUserList()
+  {
     $dbo =& VFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", $this->getWhereCondition("`puid` = '$user_uid'"));
@@ -154,7 +164,8 @@ class UserManager extends VModelManagerSearch {
     return $user_list;
   }
   
-  public function getSubUserListString() {
+  public function getSubUserListString()
+  {
     $user_list = $this->getSubUserList();
     $user_list_string = "";
     foreach ($user_list as $uid) {
@@ -163,7 +174,8 @@ class UserManager extends VModelManagerSearch {
     return $user_list_string;
   }
   
-  public function getSubUserListObjects() {
+  public function getSubUserListObjects()
+  {
     $record = array();
     foreach ($this->getSubUserList() as $uid) {
       $record[] = array('uid' => $uid);
@@ -171,7 +183,8 @@ class UserManager extends VModelManagerSearch {
     return $this->getObjects($record, 'User');
   }
   
-  public function safeMode($owner_uid, $user_uid=false, $user_list=false) {
+  public function safeMode($owner_uid, $user_uid=false, $user_list=false)
+  {
     if ($user_uid === false) {
       $user_uid = Instance::f('Login')->obj->duid;
     }
@@ -183,7 +196,7 @@ class UserManager extends VModelManagerSearch {
     $dbo->selectRows("uid", $this->getWhereCondition("`puid` = '$user_uid'"));
     if ($dbo->getNumRows()) {
       $record = array();
-      while($dbo->nextRecord()) {
+      while ($dbo->nextRecord()) {
         $record[] = $dbo->f("uid");
       }
       

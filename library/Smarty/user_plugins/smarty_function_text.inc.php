@@ -1,6 +1,7 @@
 <?php 
 
-function smarty_function_text($params, &$smarty) {
+function smarty_function_text($params, &$smarty)
+ {
   $ident = $params['ident'];
   unset($params['ident']);
   return $ident;

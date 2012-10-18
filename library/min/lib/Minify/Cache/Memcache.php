@@ -17,7 +17,8 @@
  * }
  * </code>
  **/
-class Minify_Cache_Memcache {
+class Minify_Cache_Memcache 
+{
     
     /**
      * Create a Minify_Cache_Memcache object, to be passed to 
@@ -31,7 +32,7 @@ class Minify_Cache_Memcache {
      * @return null
      */
     public function __construct($memcache, $expire = 0)
-    {
+     {
         $this->_mc = $memcache;
         $this->_exp = $expire;
     }
@@ -46,7 +47,7 @@ class Minify_Cache_Memcache {
      * @return bool success
      */
     public function store($id, $data)
-    {
+     {
         return $this->_mc->set($id, "{$_SERVER['REQUEST_TIME']}|{$data}", 0, $this->_exp);
     }
     
@@ -59,7 +60,7 @@ class Minify_Cache_Memcache {
      * @return int size in bytes
      */
     public function getSize($id)
-    {
+     {
         return $this->_fetch($id)
             ? strlen($this->_data)
             : false;
@@ -75,7 +76,7 @@ class Minify_Cache_Memcache {
      * @return bool exists
      */
     public function isValid($id, $srcMtime)
-    {
+     {
         return ($this->_fetch($id) && ($this->_lm >= $srcMtime));
     }
     
@@ -85,13 +86,13 @@ class Minify_Cache_Memcache {
      * @param string $id cache id
      */
     public function display($id)
-    {
+     {
         echo $this->_fetch($id)
             ? $this->_data
             : '';
     }
     
-	/**
+    /**
      * Fetch the cached content
      *
      * @param string $id cache id
@@ -99,7 +100,7 @@ class Minify_Cache_Memcache {
      * @return string
      */
     public function fetch($id)
-    {
+     {
         return $this->_fetch($id)
             ? $this->_data
             : '';
@@ -113,7 +114,7 @@ class Minify_Cache_Memcache {
     private $_data = null;
     private $_id = null;
     
-	/**
+    /**
      * Fetch data and timestamp from memcache, store in instance
      * 
      * @param string $id
@@ -121,7 +122,7 @@ class Minify_Cache_Memcache {
      * @return bool success
      */
     private function _fetch($id)
-    {
+     {
         if ($this->_id === $id) {
             return true;
         }

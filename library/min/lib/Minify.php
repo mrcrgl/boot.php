@@ -27,7 +27,8 @@ require_once 'Minify/Source.php';
  * @license http://opensource.org/licenses/bsd-license.php  New BSD License
  * @link http://code.google.com/p/minify/
  */
-class Minify {
+class Minify 
+{
     
     const VERSION = '2.1.3';
     const TYPE_CSS = 'text/css';
@@ -75,7 +76,7 @@ class Minify {
      * @return null
      */
     public static function setCache($cache = '', $fileLocking = true)
-    {
+     {
         if (is_string($cache)) {
             require_once 'Minify/Cache/File.php';
             self::$_cache = new Minify_Cache_File($cache, $fileLocking);
@@ -158,11 +159,12 @@ class Minify {
      * "headers" (array).
      */
     public static function serve($controller, $options = array())
-    {
+     {
         if (is_string($controller)) {
             // make $controller into object
             $class = 'Minify_Controller_' . $controller;
-            if (! class_exists($class, false)) {
+            if (! class_exists($class, false)) 
+{
                 require_once "Minify/Controller/" 
                     . str_replace('_', '/', $controller) . ".php";    
             }
@@ -278,7 +280,8 @@ class Minify {
                 // generate & cache content
                 $content = self::_combineMinify();
                 self::$_cache->store($cacheId, $content);
-                if (function_exists('gzencode')) {
+                if (function_exists('gzencode'))
+               {
                     self::$_cache->store($cacheId . '.gz', gzencode($content, self::$_options['encodeLevel']));
                 }
             }
@@ -341,7 +344,7 @@ class Minify {
      * @return string
      */
     public static function combine($sources, $options = array())
-    {
+     {
         $cache = self::$_cache;
         self::$_cache = null;
         $options = array_merge(array(
@@ -364,7 +367,7 @@ class Minify {
      * @return null
      */
     public static function setDocRoot($unsetPathInfo = false)
-    {
+     {
         if (isset($_SERVER['SERVER_SOFTWARE'])
             && 0 === strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/')
         ) {
@@ -404,7 +407,7 @@ class Minify {
      * @return null
      */
     protected static function _setupDebug($sources)
-    {
+     {
         foreach ($sources as $source) {
             $source->minifier = array('Minify_Lines', 'minify');
             $id = $source->getId();
@@ -420,7 +423,7 @@ class Minify {
      * @return string
      */
     protected static function _combineMinify()
-    {
+     {
         $type = self::$_options['contentType']; // ease readability
         
         // when combining scripts, make sure all statements separated and
@@ -494,7 +497,7 @@ class Minify {
      * @return string
      */
     protected static function _getCacheId()
-    {
+     {
         return md5(serialize(array(
             Minify_Source::getDigest(self::$_controller->sources)
             ,self::$_options['minifiers'] 
@@ -509,7 +512,7 @@ class Minify {
      * @import is detected not at the top.
      */
     protected static function _handleCssImports($css)
-    {
+     {
         if (self::$_options['bubbleCssImports']) {
             // bubble CSS imports
             preg_match_all('/@import.*?;/', $css, $imports);

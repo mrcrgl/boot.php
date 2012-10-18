@@ -1,8 +1,10 @@
 <?php
 
-class VLocalizationGettext extends VLocalization {
+class VLocalizationGettext extends VLocalization 
+{
 
-  public function __construct() {
+  public function __construct()
+ {
     parent::__construct();
 
     putenv(sprintf('LC_ALL=%s', $this->getLocale(true)));
@@ -16,7 +18,8 @@ class VLocalizationGettext extends VLocalization {
     textdomain("lang");
   }
 
-  public function translate() {
+  public function translate()
+  {
     $args = func_get_args();
 
     if (!isset($args[0]) || !$args[0]) return false;

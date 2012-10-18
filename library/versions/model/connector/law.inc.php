@@ -11,13 +11,15 @@
  * 
  * --
  */
-abstract class VModelConnectorLaw extends VModelConnector {
+abstract class VModelConnectorLaw extends VModelConnector 
+{
   
   private $arrUsers = array();
   
   private $boolPermit = false;
   
-  public function __construct($attributes=false) {
+  public function __construct($attributes=false)
+  {
     
     $this->arrUsers = array();
     $this->arrUsers[] = Instance::f('Login')->obj->duid;
@@ -31,7 +33,8 @@ abstract class VModelConnectorLaw extends VModelConnector {
     parent::__construct($attributes);
   }
   
-  public function __get($__memberName) {
+  public function __get($__memberName)
+  {
     if ($this->boolPermit == false && $this->isValid() && Validator::is(parent::__get('customer_uid'), 'uid')) {
       if (!in_array(parent::__get('user_uid'), $this->arrUsers)) {
         Instance::f('smarty')->assign('error_object_permission-denied', true);
@@ -47,7 +50,8 @@ abstract class VModelConnectorLaw extends VModelConnector {
   /**
    * Destroys a Object.
    */
-  private function destroy() {
+  private function destroy()
+   {
     $classname = get_class($this);
     
     throw new Exception("permission_denied_by_object: $classname");

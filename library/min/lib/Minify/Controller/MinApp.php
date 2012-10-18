@@ -12,7 +12,8 @@ require_once 'Minify/Controller/Base.php';
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_Controller_MinApp extends Minify_Controller_Base {
+class Minify_Controller_MinApp extends Minify_Controller_Base 
+{
     
     /**
      * Set up groups of files as sources
@@ -21,7 +22,8 @@ class Minify_Controller_MinApp extends Minify_Controller_Base {
      * @return array Minify options
      * 
      */
-    public function setupSources($options) {
+    public function setupSources($options)
+     {
         // filter controller options
         $cOptions = array_merge(
             array(

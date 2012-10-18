@@ -22,7 +22,7 @@
  * @return string|null
  */
 function smarty_function_math($params, $template)
-{
+ {
     static $_allowed_funcs = array(
         'int' => true, 'abs' => true, 'ceil' => true, 'cos' => true, 'exp' => true, 'floor' => true,
         'log' => true, 'log10' => true, 'max' => true, 'min' => true, 'pi' => true, 'pow' => true,
@@ -45,14 +45,14 @@ function smarty_function_math($params, $template)
     // match all vars in equation, make sure all are passed
     preg_match_all("!(?:0x[a-fA-F0-9]+)|([a-zA-Z][a-zA-Z0-9_]*)!",$equation, $match);
 
-    foreach($match[1] as $curr_var) {
+    foreach ($match[1] as $curr_var) {
         if ($curr_var && !isset($params[$curr_var]) && !isset($_allowed_funcs[$curr_var])) {
             trigger_error("math: function call $curr_var not allowed",E_USER_WARNING);
             return;
         }
     }
 
-    foreach($params as $key => $val) {
+    foreach ($params as $key => $val) {
         if ($key != "equation" && $key != "format" && $key != "assign") {
             // make sure value is not empty
             if (strlen($val)==0) {

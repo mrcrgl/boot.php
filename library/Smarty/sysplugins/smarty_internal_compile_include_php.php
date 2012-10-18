@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Include_Php extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Include_Php extends Smarty_Internal_CompileBase 
+{
 
     /**
      * Attribute definition: Overwrites base class.
@@ -47,7 +48,7 @@ class Smarty_Internal_Compile_Include_Php extends Smarty_Internal_CompileBase {
      * @return string compiled code
      */
     public function compile($args, $compiler)
-    {
+     {
         if (!($compiler->smarty instanceof SmartyBC)) {
             throw new SmartyException("{include_php} is deprecated, use SmartyBC class to enable");
         }
@@ -68,7 +69,7 @@ class Smarty_Internal_Compile_Include_Php extends Smarty_Internal_CompileBase {
                 $_dir = $compiler->smarty->trusted_dir;
             }
             if (!empty($_dir)) {
-                foreach((array)$_dir as $_script_dir) {
+                foreach ((array)$_dir as $_script_dir) {
                     $_script_dir = rtrim($_script_dir, '/\\') . DS;
                     if (file_exists($_script_dir . $_file)) {
                         $_filepath = $_script_dir .  $_file;

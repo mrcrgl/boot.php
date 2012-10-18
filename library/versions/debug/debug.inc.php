@@ -8,78 +8,88 @@
  * @subpackage  Base
  * @since       2.0
  */
-class VDebug implements VDebugInterface {
+class VDebug implements VDebugInterface 
+{
 
-	static $handler;
+    static $handler;
 
-	static function init() {
-		$handler = VSettings::f('debug.handler', 'none');
-		self::$handler = __CLASS__.ucfirst($handler);
+    static function init()
+   {
+        $handler = VSettings::f('debug.handler', 'none');
+        self::$handler = __CLASS__.ucfirst($handler);
 
-		if (!class_exists(self::$handler)) {
-			throw new Exception("VDebug Handler ".$handler." not found!");
-		}
+        if (!class_exists(self::$handler)) 
+{
+            throw new Exception("VDebug Handler ".$handler." not found!");
+        }
 
-		// TODO: Perfomante lšsung finden
-		#set_error_handler('VDebug::php_error_handler');
-		#set_exception_handler('VDebug::php_exception_handler');
+        // TODO: Perfomante lšsung finden
+        #set_error_handler('VDebug::php_error_handler');
+        #set_exception_handler('VDebug::php_exception_handler');
 
-		return call_user_func(self::$handler.'::init');
-	}
+        return call_user_func(self::$handler.'::init');
+    }
 
-	static function _(VDebugMessage $message) {
-		return self::report($message);
-	}
+    static function _(VDebugMessage $message)
+    {
+        return self::report($message);
+    }
 
-	static function report(VDebugMessage $message) {
+    static function report(VDebugMessage $message)
+    {
 
-	  if (!$message->valid) return false;
+      if (!$message->valid) return false;
 
-	  /*if (VSettings::f('default.debug')) {
-	    if (!class_exists('VProfiler')) {
-	      VLoader::import('versions.debug.profiler');
-	    }
-	    $profiler = VProfiler::getInstance('debug');
-	    $profiler->mark($message);
-	  }*/
+      /*if (VSettings::f('default.debug')) {
+        if (!class_exists('VProfiler')) 
+{
+          VLoader::import('versions.debug.profiler');
+        }
+        $profiler = VProfiler::getInstance('debug');
+        $profiler->mark($message);
+      }*/
 
-	  if (VSettings::f('default.debug', false) != 1) {
-	    return false;
-	  }
+      if (VSettings::f('default.debug', false) != 1) {
+        return false;
+      }
 
-		if (self::$handler)
-			return call_user_func(self::$handler.'::report', $message);
-	}
+        if (self::$handler)
+            return call_user_func(self::$handler.'::report', $message);
+    }
 
-	static function get() {
-		if (self::$handler)
-			return call_user_func(self::$handler.'::get');
-	}
+    static function get()
+    {
+        if (self::$handler)
+            return call_user_func(self::$handler.'::get');
+    }
 
-	static function get_last() {
-		if (self::$handler)
-			return call_user_func(self::$handler.'::get_last');
-	}
+    static function get_last()
+    {
+        if (self::$handler)
+            return call_user_func(self::$handler.'::get_last');
+    }
 
-	/**
-	 *
-	 * PHP correspondenting error handler
-	 * @param integer $errno
-	 * @param string  $errstr
-	 * @param string  $errfile
-	 * @param integer $errline
-	 * @param array   $errcontext
-	 */
-	static function php_error_handler($errno, $errstr, $errfile=null, $errline=null, $errcontext=null) {
-		self::report(new VDebugMessage($errstr, null, $errno, $errfile, $errline));
-	}
+    /**
+     *
+     * PHP correspondenting error handler
+     * @param integer $errno
+     * @param string  $errstr
+     * @param string  $errfile
+     * @param integer $errline
+     * @param array   $errcontext
+     */
+    static function php_error_handler($errno, $errstr, $errfile=null, $errline=null, $errcontext=null)
+     {
+        self::report(new VDebugMessage($errstr, null, $errno, $errfile, $errline));
+    }
 
-	/**
-	 *
-	 * Enter description here ...
-	 * @param unknown_type $exception
-	 */
-	static function php_exception_handler($exception) {
-		self::report(new VDebugMessage($exception->getMessage(), DEBUG_EXCEPTION, null, $exception->getFile(), $exception->getLine()));
-	}
+    /**
+     *
+     * Enter description here ...
+     * @param unknown_type $exception
+     */
+    static function php_exception_handler($exception)
+     {
+        self::report(new VDebugMessage($exception->getMessage(), DEBUG_EXCEPTION, null, $exception->getFile(), $exception->getLine()));
+    }
 }

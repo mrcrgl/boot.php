@@ -429,7 +429,7 @@ function utf8_strtoupper($string){
 
     $cnt = count($uni);
     for ($i=0; $i < $cnt; $i++){
-        if( isset($UTF8_LOWER_TO_UPPER[$uni[$i]]) ) {
+        if ( isset($UTF8_LOWER_TO_UPPER[$uni[$i]]) ) {
             $uni[$i] = $UTF8_LOWER_TO_UPPER[$uni[$i]];
         }
     }

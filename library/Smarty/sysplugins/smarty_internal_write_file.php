@@ -13,7 +13,8 @@
  * @package Smarty
  * @subpackage PluginsInternal
  */
-class Smarty_Internal_Write_File {
+class Smarty_Internal_Write_File 
+{
 
     /**
      * Writes file in a safe way to disk
@@ -24,7 +25,7 @@ class Smarty_Internal_Write_File {
      * @return boolean true
      */
     public static function writeFile($_filepath, $_contents, Smarty $smarty)
-    {
+     {
         $_error_reporting = error_reporting();
         error_reporting($_error_reporting & ~E_NOTICE & ~E_WARNING);
         if ($smarty->_file_perms !== null) {

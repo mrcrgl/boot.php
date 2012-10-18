@@ -2,11 +2,13 @@
 
 VLoader::register('PHPMailer', VLIB.DS.'PHPMailer'.DS.'class.phpmailer.php');
 
-class VMailer extends PHPMailer {
+class VMailer extends PHPMailer 
+{
 
   static $_instance = null;
 
-  static function &getInstance() {
+  static function &getInstance()
+ {
 
     if (!self::$_instance) {
       self::$_instance = new VMailer();
@@ -15,7 +17,8 @@ class VMailer extends PHPMailer {
     return self::$_instance;
   }
 
-  public function __construct() {
+  public function __construct()
+  {
 
 
     $smtpauth = VSettings::f('mailer.smtphost', 0);
@@ -75,7 +78,8 @@ class VMailer extends PHPMailer {
     parent::__construct();
   }
 
-  public function setDebug($num=1) {
+  public function setDebug($num=1)
+  {
     $this->SMTPDebug  = $num;
   }
 }

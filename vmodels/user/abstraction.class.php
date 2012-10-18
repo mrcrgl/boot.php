@@ -12,9 +12,11 @@
  * 
  */
 
-abstract class UserAbstraction extends VModelConnector {
+abstract class UserAbstraction extends VModelConnector 
+{
   
-  public function changePassword($param=false, $sendMail=false) {
+  public function changePassword($param=false, $sendMail=false)
+ {
     if ($param === false) {
       $strNewPass = VPassword::create(8);
       Instance::f('smarty')->assign('created_password', $strNewPass);
@@ -49,7 +51,8 @@ abstract class UserAbstraction extends VModelConnector {
     return true;
   }
   
-  private function sendNewPasswordByMail() {
+  private function sendNewPasswordByMail()
+  {
     $refMailer = new PHPMailer();
     $refMailer->AddAddress($this->email, $this->fullname);
     $refMailer->Subject = "[clickhotel.tv] Ihr neues Passwort";

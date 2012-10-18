@@ -12,7 +12,8 @@
  *
  */
 
-class ComponentAuthModelLogin extends VObject {
+class ComponentAuthModelLogin extends VObject 
+{
 
   private $tsLogin    = false;
 
@@ -26,11 +27,13 @@ class ComponentAuthModelLogin extends VObject {
 
   private $strPermission = false;
 
-  public function __construct($__loginType="User") {
+  public function __construct($__loginType="User")
+ {
     $this->loginType = $__loginType;
   }
 
-  public function __get($__memberName) {
+  public function __get($__memberName)
+  {
     if ($__memberName == 'obj') {
       if (!is_object($this->objUser)) {
         return new User();
@@ -39,7 +42,8 @@ class ComponentAuthModelLogin extends VObject {
     }
   }
 
-  public function doLogin($username, $password) {
+  public function doLogin($username, $password)
+    {
     if (!Validator::is($username, 'filled')) {
       #$this->setErrorMsg("loginUserRequired");
       VMessages::_('Error', 'loginUserRequired', 'error');
@@ -53,12 +57,12 @@ class ComponentAuthModelLogin extends VObject {
 
     $user = new $this->loginType();
     if ($user->getModelVersion() == 1) {
-    	$managerClass  = $this->loginType."Manager";
-    	$objManager    = new $managerClass();
-    	$this->objUser = $objManager->doLogin($username, $password);
+        $managerClass  = $this->loginType."Manager";
+        $objManager    = new $managerClass();
+        $this->objUser = $objManager->doLogin($username, $password);
     } elseif ($user->getModelVersion() == 2) {
-    	$user->objects->filter(sprintf('[username:%s,password:%s]', $username, md5($password)))->get();
-    	$this->objUser = $user;
+        $user->objects->filter(sprintf('[username:%s,password:%s]', $username, md5($password)))->get();
+        $this->objUser = $user;
     }
 
 
@@ -80,16 +84,18 @@ class ComponentAuthModelLogin extends VObject {
     }
   }
 
-  public function doLogout() {
+  public function doLogout()
+    {
 
-  	$session =& VFactory::getSession();
-  	$session->clear('login');
+      $session =& VFactory::getSession();
+      $session->clear('login');
 
     unset($this->objUser);
     return true;
   }
 
-  public function loggedIn() {
+  public function loggedIn()
+  {
     if (!isset($this->objUser)) {
       return false;
     }
@@ -106,22 +112,26 @@ class ComponentAuthModelLogin extends VObject {
     return true;
   }
 
-  public function setUser($user) {
+  public function setUser($user)
+  {
     $this->objUser = $user;
   }
 
-  private function loginSuccessful() {
+  private function loginSuccessful()
+  {
     $this->registerLogin();
     $this->forwarding();
   }
 
-  private function registerLogin() {
+  private function registerLogin()
+  {
     $this->tsLogin = time();
     $session =& VFactory::getSession();
     $session->set('login', &$this);
   }
 
-  private function forwarding() {
+  private function forwarding()
+  {
     $headerLocation = false;
     if ($this->useReferer == true && Validator::is($_SERVER['HTTP_REFERER'], 'filled')) {
       $headerLocation = $_SERVER['HTTP_REFERER'];
@@ -135,15 +145,18 @@ class ComponentAuthModelLogin extends VObject {
     }
   }
 
-  public function useReferer($bool=true) {
+  public function useReferer($bool=true)
+    {
     $this->useReferer = $bool;
   }
 
-  public function followUrl($url=false) {
+  public function followUrl($url=false)
+  {
     $this->followUrl = $url;
   }
 
-  public function needPermission($permission=false) {
+  public function needPermission($permission=false)
+  {
     $this->strPermission = $permission;
   }
 

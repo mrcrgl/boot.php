@@ -12,11 +12,12 @@
  * 
  */
 
-class FilePicture extends VModelFile {
+class FilePicture extends VModelFile 
+{
   /*
    * 'Picture', Bilder
    */
-	var $_DataMap = array(
+    var $_DataMap = array(
     '_head'       => 'file_picture',
     '_uid'        => 'uid',
     '_usehexuid'  => true,
@@ -26,13 +27,13 @@ class FilePicture extends VModelFile {
       '_unique'   => 'uid',
       '_mapping'  => array(
         'uid'             => 'uid',
-				'path'						=> 'path',
-				'filename'				=> 'filename',
-				'size'						=> 'size',
-				'filetype'				=> 'filetype',
-				'ts_create'     	=> 'ts_create',
-        'ts_update'		  	=> 'ts_update',
-				'status'					=> 'status'
+                'path'                        => 'path',
+                'filename'                => 'filename',
+                'size'                        => 'size',
+                'filetype'                => 'filetype',
+                'ts_create'         => 'ts_create',
+        'ts_update'              => 'ts_update',
+                'status'                    => 'status'
       ),
       '_specials' => array(
         'ts_create'   => 'oncreate:mysqltimestamp',
@@ -44,16 +45,17 @@ class FilePicture extends VModelFile {
   );
 
   var $_DataRules = array(
-  	'path'  						=> array(true,   '^.{1,128}$', 	'default'),
-  	'filename'  				=> array(true,   '^.{1,128}$', 	'default'),
-  	'size'  						=> array(true,   '^.{1,128}$', 	'default'),
-  	'filetype'  				=> array(true,   '^.{1,128}$', 	'default'),
-		'status' 						=> array(true,   '^(1|0)$', 				'default')
+      'path'                          => array(true,   '^.{1,128}$',     'default'),
+      'filename'                  => array(true,   '^.{1,128}$',     'default'),
+      'size'                          => array(true,   '^.{1,128}$',     'default'),
+      'filetype'                  => array(true,   '^.{1,128}$',     'default'),
+        'status'                         => array(true,   '^(1|0)$',                 'default')
   );
-	
+    
   var $_AllowedMime = array('image/jpeg', 'image/png', 'image/gif');
   
-	public function __get($__memberName) {
+    public function __get($__memberName)
+  {
     if ($__memberName == 'status_string') {
       if ($this->status == 1) {
         return VText::_('state_active');
@@ -66,9 +68,10 @@ class FilePicture extends VModelFile {
     return parent::__get($__memberName);
   }
   
-  public function update($param, $dontCheckNeedles=false) {
-      	
-  	return parent::update($param, $dontCheckNeedles);
+  public function update($param, $dontCheckNeedles=false)
+  {
+          
+      return parent::update($param, $dontCheckNeedles);
   }
   
 }

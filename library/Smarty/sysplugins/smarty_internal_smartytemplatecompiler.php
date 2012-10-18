@@ -20,7 +20,8 @@ include ("smarty_internal_parsetree.php");
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCompilerBase {
+class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCompilerBase 
+{
 
     /**
      * Lexer class name
@@ -72,7 +73,7 @@ class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCom
      * @param Smarty $smarty       global instance
      */
     public function __construct($lexer_class, $parser_class, $smarty)
-    {
+     {
         $this->smarty = $smarty;
         parent::__construct();
         // get required plugins
@@ -87,7 +88,7 @@ class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCom
      * @return bool true if compiling succeeded, false if it failed
      */
     protected function doCompile($_content)
-    {
+     {
         /* here is where the compiling takes place. Smarty
           tags in the templates are replaces with PHP code,
           then written to compiled files. */

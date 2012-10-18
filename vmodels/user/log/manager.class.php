@@ -12,12 +12,14 @@
  * 
  */
 
-class UserLogManager extends VModelManagerDefault {
+class UserLogManager extends VModelManagerDefault 
+{
   
   var $pagination;
   var $display_subuser = false;
   
-  public function getAll($object, $limit=false) {
+  public function getAll($object, $limit=false)
+  {
     $user_list = $this->getUserListString();
     if (!$user_list) {
       return array();
@@ -46,7 +48,8 @@ class UserLogManager extends VModelManagerDefault {
     return $this->getObjects($record, 'UserLog');
   }
   
-  public function getNumRows() {
+  public function getNumRows()
+  {
     $user_list = $this->getUserListString();
     if (!$user_list) {
       return array();
@@ -58,7 +61,8 @@ class UserLogManager extends VModelManagerDefault {
     return Instance::f('db_default')->f("count");
   }
   
-  public function getUserListString() {
+  public function getUserListString()
+  {
     if ($this->display_subuser) {
       return Instance::f("Login")->obj->all_sub_user_string;
     } else {

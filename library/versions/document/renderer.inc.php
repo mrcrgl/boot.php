@@ -1,5 +1,6 @@
 <?php
 
-class VDocumentRenderer extends VObject {
-	
+class VDocumentRenderer extends VObject 
+{
+    
 }

@@ -1,5 +1,6 @@
 <?php
 
-class VModelManagerBasic extends VModelManager {
-	
+class VModelManagerBasic extends VModelManager 
+{
+    
 }

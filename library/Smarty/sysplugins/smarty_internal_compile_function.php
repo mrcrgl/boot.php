@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase 
+{
 
     /**
      * Attribute definition: Overwrites base class.
@@ -48,7 +49,7 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase {
      * @return boolean true
      */
     public function compile($args, $compiler, $parameter)
-    {
+     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
@@ -73,10 +74,13 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase {
         if ($compiler->template->caching) {
             $output = '';
         } else {
-            $output = "<?php if (!function_exists('smarty_template_function_{$_name}')) {
-    function smarty_template_function_{$_name}(\$_smarty_tpl,\$params) {
+            $output = "<?php if (!function_exists('smarty_template_function_{$_name}'))
+ {
+    function smarty_template_function_{$_name}(\$_smarty_tpl,\$params)
+   {
     \$saved_tpl_vars = \$_smarty_tpl->tpl_vars;
-    foreach (\$_smarty_tpl->smarty->template_functions['{$_name}']['parameter'] as \$key => \$value) {\$_smarty_tpl->tpl_vars[\$key] = new Smarty_variable(\$value);};
+    foreach (\$_smarty_tpl->smarty->template_functions['{$_name}']['parameter'] as \$key => \$value)
+   {\$_smarty_tpl->tpl_vars[\$key] = new Smarty_variable(\$value);};
     foreach (\$params as \$key => \$value) {\$_smarty_tpl->tpl_vars[\$key] = new Smarty_variable(\$value);}?>";
         }
         // Init temporay context
@@ -97,7 +101,8 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase {
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase 
+{
 
     /**
      * Compiles code for the {/function} tag
@@ -108,7 +113,7 @@ class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase 
      * @return boolean true
      */
     public function compile($args, $compiler, $parameter)
-    {
+     {
         $_attr = $this->getAttributes($compiler, $args);
         $saved_data = $this->closeTag($compiler, array('function'));
         $_name = trim($saved_data[0]['name'], "'\"");
@@ -116,8 +121,8 @@ class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase 
         $plugins_string = '';
         if (!empty($compiler->template->required_plugins['compiled'])) {
             $plugins_string = '<?php ';
-            foreach($compiler->template->required_plugins['compiled'] as $tmp) {
-                foreach($tmp as $data) {
+            foreach ($compiler->template->required_plugins['compiled'] as $tmp) {
+                foreach ($tmp as $data) {
                     $plugins_string .= "if (!is_callable('{$data['function']}')) include '{$data['file']}';\n";
                 }
             }
@@ -125,8 +130,8 @@ class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase 
         }
         if (!empty($compiler->template->required_plugins['nocache'])) {
             $plugins_string .= "<?php echo '/*%%SmartyNocache:{$compiler->template->properties['nocache_hash']}%%*/<?php ";
-            foreach($compiler->template->required_plugins['nocache'] as $tmp) {
-                foreach($tmp as $data) {
+            foreach ($compiler->template->required_plugins['nocache'] as $tmp) {
+                foreach ($tmp as $data) {
                     $plugins_string .= "if (!is_callable(\'{$data['function']}\')) include \'{$data['file']}\';\n";
                 }
             }

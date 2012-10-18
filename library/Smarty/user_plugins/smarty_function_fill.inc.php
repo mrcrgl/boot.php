@@ -1,6 +1,7 @@
 <?php 
 
-function smarty_function_fill($params, &$smarty) {
+function smarty_function_fill($params, &$smarty)
+ {
   if (empty($params['char'])) {
     $params['char'] = "-";
   }

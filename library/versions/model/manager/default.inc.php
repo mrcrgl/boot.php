@@ -12,7 +12,8 @@
  *
  * --
  */
-abstract class VModelManagerDefault extends VObject {
+abstract class VModelManagerDefault extends VObject 
+{
 
   var $limit = "none";
 
@@ -38,15 +39,16 @@ abstract class VModelManagerDefault extends VObject {
 
   var $_order = array();
 
-	/**
+    /**
    *
    * Default constructor
    */
-  function __construct() {
+  function __construct()
+   {
 
-  	$object = str_replace("Manager", "", get_class($this));
-  	$this->object_name = $object;
-  	$this->object = new $object();
+      $object = str_replace("Manager", "", get_class($this));
+      $this->object_name = $object;
+      $this->object = new $object();
 
   }
 
@@ -57,59 +59,61 @@ abstract class VModelManagerDefault extends VObject {
    * @param string $value
    * @param string $condition
    */
-  public function filter($column, $value=null, $condition='eq') {
-  	if (!$this->object->hasField($column)) {
-  		return false;
-  	}
+  public function filter($column, $value=null, $condition='eq')
+   {
+      if (!$this->object->hasField($column)) {
+          return false;
+      }
 
-  	switch ($condition) {
-  		case "eq":
-  			$cond = '=';
-  			$value = "'".$value."'";
-  			break;
-  		case "neq":
-  			$cond = '!=';
-  			$value = "'".$value."'";
-  			break;
-  		case "lt":
-  			$cond = '>';
-  			$value = "'".$value."'";
-  			break;
-  		case "gt":
-  			$cond = '<';
-  			$value = "'".$value."'";
-  			break;
-  		case "like":
-  			$cond = '<';
-  			$value = "'".$value."'";
-  			break;
-  		case "in":
-  			$cond = 'IN';
-  			if (!Validator::is($value, 'array')) return false;
-  			$value = "('".implode("', '", $value)."')";
-  			break;
-  		case "not-in":
-  			$cond = 'IN';
-  			if (!Validator::is($value, 'array')) return false;
-  			$value = "('".implode("', '", $value)."')";
-  			break;
-  		case "null":
-  			$cond = 'IS NULL';
-  			$value = '';
-  			break;
-  		case "not-null":
-  			$cond = 'IS NOT NULL';
-  			$value = '';
-  			break;
-  	}
+      switch ($condition) {
+          case "eq":
+              $cond = '=';
+              $value = "'".$value."'";
+              break;
+          case "neq":
+              $cond = '!=';
+              $value = "'".$value."'";
+              break;
+          case "lt":
+              $cond = '>';
+              $value = "'".$value."'";
+              break;
+          case "gt":
+              $cond = '<';
+              $value = "'".$value."'";
+              break;
+          case "like":
+              $cond = '<';
+              $value = "'".$value."'";
+              break;
+          case "in":
+              $cond = 'IN';
+              if (!Validator::is($value, 'array')) return false;
+              $value = "('".implode("', '", $value)."')";
+              break;
+          case "not-in":
+              $cond = 'IN';
+              if (!Validator::is($value, 'array')) return false;
+              $value = "('".implode("', '", $value)."')";
+              break;
+          case "null":
+              $cond = 'IS NULL';
+              $value = '';
+              break;
+          case "not-null":
+              $cond = 'IS NOT NULL';
+              $value = '';
+              break;
+      }
 
-  	$clause = sprintf(" (`%s` %s %s) ", $column, $cond, $value);
-  	$this->_filter[] = $clause;
+      $clause = sprintf(" (`%s` %s %s) ", $column, $cond, $value);
+      $this->_filter[] = $clause;
 
-  	return true;
+      return true;
   }
 
-  public function order_by($field, $dir='ASC') {
+  public function order_by($field, $dir='ASC')
+  {
     if (!in_array(strtoupper($dir), array('ASC', 'DESC'))) die("Argument 2 'dir' must be ASC or DESC");
 
     if (!$this->object->hasField($field)) {
@@ -119,8 +123,9 @@ abstract class VModelManagerDefault extends VObject {
     $this->_order[] = sprintf("`%s` %s", $field, $dir);
   }
 
-	public function clearFilter() {
-  	$this->$_filter = array();
+    public function clearFilter()
+  {
+      $this->$_filter = array();
   }
 
   /**
@@ -129,8 +134,9 @@ abstract class VModelManagerDefault extends VObject {
    * @param int $count
    * @param int $offset
    */
-  public function limit($count, $offset=0) {
-  	$this->limit = sprintf("%d, %d", $offset, $count);
+  public function limit($count, $offset=0)
+   {
+      $this->limit = sprintf("%d, %d", $offset, $count);
   }
 
   /*
@@ -142,7 +148,8 @@ abstract class VModelManagerDefault extends VObject {
    *
    * @return array of objects
    */
-  protected function getObjects($arrResult, $strObject, $unique='uid') {
+  protected function getObjects($arrResult, $strObject, $unique='uid')
+   {
     $arrObjects = array();
 
     foreach ($arrResult as $key => $row) {
@@ -154,7 +161,8 @@ abstract class VModelManagerDefault extends VObject {
     return $arrObjects;
   }
 
-  function getUserListString() {
+  function getUserListString()
+  {
     /*if ($this->display_subuser) {
       return Instance::f("Login")->obj->customer->all_sub_customer_string;
     } else {
@@ -162,9 +170,10 @@ abstract class VModelManagerDefault extends VObject {
     }*/
   }
 
-  function getOrdering() {
+  function getOrdering()
+    {
 
-  	$order = array();
+      $order = array();
     if (count($this->_order) <= 0 && $this->object->hasField('priority')) {
       $order[] = sprintf(" `priority` ASC");
     }
@@ -177,14 +186,16 @@ abstract class VModelManagerDefault extends VObject {
       return implode(', ', $order);
     }
 
-  	return "none";
+      return "none";
   }
 
-  function getLimitCondition() {
-  	return (isset($this->pagination)) ? $this->pagination->getLimitStatement() : $this->limit;
+  function getLimitCondition()
+  {
+      return (isset($this->pagination)) ? $this->pagination->getLimitStatement() : $this->limit;
   }
 
-  function getWhereCondition($where='') {
+  function getWhereCondition($where='')
+  {
     if (!empty($where)) {
       $where = "($where)";
     } else {
@@ -203,12 +214,12 @@ abstract class VModelManagerDefault extends VObject {
       $where .= " AND `customer_uid` = '".$this->customer_filter."' ";
     }
 
-  	if ($this->hotel_filter && $this->object->hasField('hotel_uid')) {
+      if ($this->hotel_filter && $this->object->hasField('hotel_uid')) {
       $where .= " AND `hotel_uid` = '".$this->hotel_filter."' ";
     }
 
     if (count($this->_filter)) {
-    	$where .= " AND ".implode(" AND ", $this->_filter);
+        $where .= " AND ".implode(" AND ", $this->_filter);
     }
 
     return $where;

@@ -28,7 +28,7 @@ class VMiddlewareProtectionCsrf extends VMiddleware
      * @return void
      */
     function onBeforeRoute()
-    {
+     {
         $oInput =& VFactory::getInput();
         $oSession =& VFactory::getSession();
 
@@ -62,7 +62,7 @@ class VMiddlewareProtectionCsrf extends VMiddleware
      * @return void
      */
     function onBeforePrepareResponse()
-    {
+     {
         VLoader::import('versions.utilities.password');
 
         $sCsrfToken = VPassword::create(rand(32, 64));

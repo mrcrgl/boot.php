@@ -18,7 +18,7 @@
  * @return string with compiled code
  */
 function smarty_modifiercompiler_noprint($params, $compiler)
-{
+ {
     return "''";
 }
 

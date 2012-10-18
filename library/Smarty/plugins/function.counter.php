@@ -20,7 +20,7 @@
  * @return string|null
  */
 function smarty_function_counter($params, $template)
-{
+ {
     static $counters = array();
 
     $name = (isset($params['name'])) ? $params['name'] : 'default';

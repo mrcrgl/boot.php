@@ -43,7 +43,8 @@
  * @subpackage HTTP
  * @author Stephen Clay <steve@mrclay.org>
  */
-class HTTP_Encoder {
+class HTTP_Encoder 
+{
 
     /**
      * Should the encoder allow HTTP encoding to IE6? 
@@ -88,16 +89,15 @@ class HTTP_Encoder {
      * 
      * @return null
      */
-    public function __construct($spec) 
-    {
+    public function __construct($spec)
+     {
         $this->_content = $spec['content'];
         $this->_headers['Content-Length'] = (string)strlen($this->_content);
         if (isset($spec['type'])) {
             $this->_headers['Content-Type'] = $spec['type'];
         }
         if (isset($spec['method'])
-            && in_array($spec['method'], array('gzip', 'deflate', 'compress', '')))
-        {
+            && in_array($spec['method'], array('gzip', 'deflate', 'compress', ''))) {
             $this->_encodeMethod = array($spec['method'], $spec['method']);
         } else {
             $this->_encodeMethod = self::getAcceptedEncoding();
@@ -111,8 +111,8 @@ class HTTP_Encoder {
      * 
      * return string
      */
-    public function getContent() 
-    {
+    public function getContent()
+     {
         return $this->_content;
     }
     
@@ -131,7 +131,7 @@ class HTTP_Encoder {
      * @return array 
      */
     public function getHeaders()
-    {
+ {
         return $this->_headers;
     }
 
@@ -147,7 +147,7 @@ class HTTP_Encoder {
      * @return null
      */
     public function sendHeaders()
-    {
+     {
         foreach ($this->_headers as $name => $val) {
             header($name . ': ' . $val);
         }
@@ -165,7 +165,7 @@ class HTTP_Encoder {
      * @return null
      */
     public function sendAll()
-    {
+     {
         $this->sendHeaders();
         echo $this->_content;
     }
@@ -191,12 +191,11 @@ class HTTP_Encoder {
      * call gzip "x-gzip" etc.)
      */
     public static function getAcceptedEncoding($allowCompress = true, $allowDeflate = true)
-    {
+     {
         // @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
         
         if (! isset($_SERVER['HTTP_ACCEPT_ENCODING'])
-            || self::_isBuggyIe())
-        {
+            || self::_isBuggyIe()) {
             return array('', '');
         }
         $ae = $_SERVER['HTTP_ACCEPT_ENCODING'];
@@ -252,15 +251,14 @@ class HTTP_Encoder {
      * @return bool success true if the content was actually compressed
      */
     public function encode($compressionLevel = null)
-    {
+     {
         $this->_headers['Vary'] = 'Accept-Encoding';
         if (null === $compressionLevel) {
             $compressionLevel = self::$compressionLevel;
         }
         if ('' === $this->_encodeMethod[0]
             || ($compressionLevel == 0)
-            || !extension_loaded('zlib'))
-        {
+            || !extension_loaded('zlib')) {
             return false;
         }
         if ($this->_encodeMethod[0] === 'deflate') {
@@ -292,7 +290,7 @@ class HTTP_Encoder {
      * @return bool success true if the content was actually compressed
      */
     public static function output($content, $compressionLevel = null)
-    {
+     {
         if (null === $compressionLevel) {
             $compressionLevel = self::$compressionLevel;
         }
@@ -310,7 +308,7 @@ class HTTP_Encoder {
      * Is the browser an IE version earlier than 6 SP2?  
      */
     protected static function _isBuggyIe()
-    {
+  {
         $ua = $_SERVER['HTTP_USER_AGENT'];
         // quick escape for non-IEs
         if (0 !== strpos($ua, 'Mozilla/4.0 (compatible; MSIE ')

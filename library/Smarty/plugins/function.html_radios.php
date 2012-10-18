@@ -43,7 +43,7 @@
  * @uses smarty_function_escape_special_chars()
  */
 function smarty_function_html_radios($params, $template)
-{
+ {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
     $name = 'radio';
@@ -57,7 +57,7 @@ function smarty_function_html_radios($params, $template)
     $output = null;
     $extra = '';
 
-    foreach($params as $_key => $_val) {
+    foreach ($params as $_key => $_val) {
         switch ($_key) {
             case 'name':
             case 'separator':
@@ -138,7 +138,7 @@ function smarty_function_html_radios($params, $template)
 } 
 
 function smarty_function_html_radios_output($name, $value, $output, $selected, $extra, $separator, $labels, $label_ids, $escape)
-{
+    {
     $_output = '';
     
     if (is_object($value)) {

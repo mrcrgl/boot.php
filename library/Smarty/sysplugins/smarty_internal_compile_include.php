@@ -15,7 +15,8 @@
 * @package Smarty
 * @subpackage Compiler
 */
-class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase 
+{
 
     /**
     * caching mode to create nocache code but no cache file
@@ -59,7 +60,7 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
      * @return string compiled code
      */
     public function compile($args, $compiler, $parameter)
-    {
+     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         // save posible attributes

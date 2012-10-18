@@ -11,7 +11,8 @@
  *
  * --
  */
-abstract class VModelConnector extends VModelDefault {
+abstract class VModelConnector extends VModelDefault 
+{
 
   /*
    * The Database (DBTransaction) Object
@@ -22,59 +23,60 @@ abstract class VModelConnector extends VModelDefault {
   var $default_datatype = "varchar(255) NOT NULL";
 
   var $predefined_fields = array(
-  	'uid' 				=> "varchar(13) NOT NULL",
-  	'puid' 				=> "varchar(13) NOT NULL",
-  	'duid' 				=> "varchar(13) NOT NULL",
-  	'ts_create' 	=> "TIMESTAMP DEFAULT 0",
-  	'ts_update' 	=> "TIMESTAMP DEFAULT 0",
-  	'status' 			=> "tinyint(1) NOT NULL DEFAULT '1'",
-  	'title' 			=> "varchar(128) NOT NULL",
-  	'description' => "text NOT NULL",
-  	'key' 				=> "varchar(128) NOT NULL",
-  	'value' 			=> "varchar(255) NOT NULL"
+      'uid'                 => "varchar(13) NOT NULL",
+      'puid'                 => "varchar(13) NOT NULL",
+      'duid'                 => "varchar(13) NOT NULL",
+      'ts_create'     => "TIMESTAMP DEFAULT 0",
+      'ts_update'     => "TIMESTAMP DEFAULT 0",
+      'status'             => "tinyint(1) NOT NULL DEFAULT '1'",
+      'title'             => "varchar(128) NOT NULL",
+      'description' => "text NOT NULL",
+      'key'                 => "varchar(128) NOT NULL",
+      'value'             => "varchar(255) NOT NULL"
 
   );
 
   var $predefined_datatypes = array(
-  	'timestamp'		=> 'TIMESTAMP %s DEFAULT %s'
+      'timestamp'        => 'TIMESTAMP %s DEFAULT %s'
   );
 
   var $predefined_indexes = array(
-  	'uid' => array(
-  		'_type' => 'UNIQUE KEY',
-  		'_fields' => array('uid')
-  	),
-  	'puid' => array(
-  		'_type' => 'KEY',
-  		'_fields' => array('puid')
-  	),
-  	'duid' => array(
-  		'_type' => 'KEY',
-  		'_fields' => array('duid')
-  	),
-  	'status' => array(
-  		'_type' => 'KEY',
-  		'_fields' => array('status')
-  	),
-  	'key' => array(
-  		'_type' => 'KEY',
-  		'_fields' => array('key')
-  	),
-  	'value' => array(
-  		'_type' => 'KEY',
-  		'_fields' => array('value')
-  	),
-  	'title' => array(
-  		'_type' => 'KEY',
-  		'_fields' => array('title')
-  	),
-  	'locale_uid' => array(
-  		'_type' => 'KEY',
-  		'_fields' => array('locale_uid')
-  	)
+      'uid' => array(
+          '_type' => 'UNIQUE KEY',
+          '_fields' => array('uid')
+      ),
+      'puid' => array(
+          '_type' => 'KEY',
+          '_fields' => array('puid')
+      ),
+      'duid' => array(
+          '_type' => 'KEY',
+          '_fields' => array('duid')
+      ),
+      'status' => array(
+          '_type' => 'KEY',
+          '_fields' => array('status')
+      ),
+      'key' => array(
+          '_type' => 'KEY',
+          '_fields' => array('key')
+      ),
+      'value' => array(
+          '_type' => 'KEY',
+          '_fields' => array('value')
+      ),
+      'title' => array(
+          '_type' => 'KEY',
+          '_fields' => array('title')
+      ),
+      'locale_uid' => array(
+          '_type' => 'KEY',
+          '_fields' => array('locale_uid')
+      )
   );
 
-  public function __construct($attributes=false) {
+  public function __construct($attributes=false)
+      {
     // make ur checks
     if (!isset($this->_DataMap) || !Validator::is($this->_DataMap, 'array')) {
       throw new Exception("Var DataMap is Missing in Object '".get_class($this)."'.\n");
@@ -89,15 +91,18 @@ abstract class VModelConnector extends VModelDefault {
     parent::__construct($attributes);
   }
 
-	public function getModelVersion() {
-		return 1;
-	}
+    public function getModelVersion()
+  {
+        return 1;
+    }
 
-  public function insert($param, $what='default') {
+  public function insert($param, $what='default')
+    {
     $this->update($param, $what);
   }
 
-  public function update($param, $dontCheckNeedles=false) {
+  public function update($param, $dontCheckNeedles=false)
+  {
     if ($dontCheckNeedles === true) {
       foreach ($this->_DataRules as $field => $rules) {
         if ($rules[0] === true && !isset($param[$field])) {
@@ -110,38 +115,40 @@ abstract class VModelConnector extends VModelDefault {
      *
      */
     foreach ($param as $key => $value) {
-    	if (Validator::is($value, 'array') && isset($this->_DataRules[($key.'_uid')])) {
-    		$attribute = $key.'_uid';
-    		$parts = explode('_', $key);
-    		$classname = "";
-    		foreach ($parts as $pkey => $pval) {
-    			$classname .= ucfirst($pval);
-    		}
-    		VLoader::autoload($classname);
-    		if (!class_exists($classname)) {
-    			array_shift($parts);
-	    		$classname = "";
-	    		foreach ($parts as $pkey => $pval) {
-	    			$classname .= ucfirst($pval);
-	    		}
+        if (Validator::is($value, 'array') && isset($this->_DataRules[($key.'_uid')])) {
+            $attribute = $key.'_uid';
+            $parts = explode('_', $key);
+            $classname = "";
+            foreach ($parts as $pkey => $pval) {
+                $classname .= ucfirst($pval);
+            }
+            VLoader::autoload($classname);
+            if (!class_exists($classname)) 
+{
+                array_shift($parts);
+                $classname = "";
+                foreach ($parts as $pkey => $pval) {
+                    $classname .= ucfirst($pval);
+                }
 
-	    		VLoader::autoload($classname);
-	    		if (!class_exists($classname)) {
-	    			continue;
-	    		}
-    		}
+                VLoader::autoload($classname);
+                if (!class_exists($classname)) 
+{
+                    continue;
+                }
+            }
 
 
-    		try {
-    			$obj = new $classname( (($this->isValid()) ? $this->$attribute : false) );
-    		} catch (Exception $e) {
-    			$obj = null;
-    			continue;
-    		}
+            try {
+                $obj = new $classname( (($this->isValid()) ? $this->$attribute : false) );
+            } catch (Exception $e) {
+                $obj = null;
+                continue;
+            }
 
-    		$obj->update($value);
-    		$param[$attribute] = $obj->uid;
-    	}
+            $obj->update($value);
+            $param[$attribute] = $obj->uid;
+        }
     }
 
 
@@ -191,189 +198,195 @@ abstract class VModelConnector extends VModelDefault {
     /**
      * User Log
      */
-    if (get_class($this) != 'UserLog' && is_object(VInstance::f('Login')) && is_object(Instance::f('Login')->obj)) {
+    if (get_class($this) != 'UserLog' && is_object(VInstance::f('Login')) && is_object(Instance::f('Login')->obj)) 
+{
       VInstance::f('Login')->obj->log($this, (($bOnCreate === true) ? "Object created." : "Object updated."));
     }
 
     return true;
   }
 
-  public function isSqlInstalled() {
-  	$datamap = $this->_DataMap;
-  	$is_installed = true;
+  public function isSqlInstalled()
+  {
+      $datamap = $this->_DataMap;
+      $is_installed = true;
 
-  	$this->objDB =& VFactory::getDatabase();
-  	$tables_installed = $this->objDB->getListOfTables();
+      $this->objDB =& VFactory::getDatabase();
+      $tables_installed = $this->objDB->getListOfTables();
 
-  	foreach ($datamap as $key => $attributes) {
-  		if (!Validator::is($attributes, 'array') || preg_match('/^_/', $key)) continue;
+      foreach ($datamap as $key => $attributes) {
+          if (!Validator::is($attributes, 'array') || preg_match('/^_/', $key)) continue;
 
-  		#printf("Required: %s".NL, $attributes['_table']);
-  		if (!in_array($attributes['_table'], $tables_installed)) {
-  			$is_installed = false;
-  		}
-  	}
+          #printf("Required: %s".NL, $attributes['_table']);
+          if (!in_array($attributes['_table'], $tables_installed)) {
+              $is_installed = false;
+          }
+      }
 
 
-  	return $is_installed;
+      return $is_installed;
   }
 
-	public function isSqlUpToDate() {
-  	$tablecolumns = $this->getTableColumns();
-  	$is_uptodate = true;
+    public function isSqlUpToDate()
+  {
+      $tablecolumns = $this->getTableColumns();
+      $is_uptodate = true;
 
-  	$this->objDB =& VFactory::getDatabase();
-  	#$tables_installed = $this->objDB->getListOfTables();
+      $this->objDB =& VFactory::getDatabase();
+      #$tables_installed = $this->objDB->getListOfTables();
 
-  	foreach ($tablecolumns as $table => $array_columns) {
+      foreach ($tablecolumns as $table => $array_columns) {
 
-  		$columns = $this->objDB->getListOfColumns($table);
+          $columns = $this->objDB->getListOfColumns($table);
 
-  		if (count($columns) != count($array_columns)) {
-  			$is_uptodate = false;
-  		} else {
-	  		foreach ($array_columns as $ident => $column) {
-		  		#printf("Required column: %s.%s".NL, $table, $column);
-		  		if (!in_array($column, $columns)) {
-		  			$is_uptodate = false;
-		  		}
-	  		}
-  		}
+          if (count($columns) != count($array_columns)) {
+              $is_uptodate = false;
+          } else {
+              foreach ($array_columns as $ident => $column) {
+                  #printf("Required column: %s.%s".NL, $table, $column);
+                  if (!in_array($column, $columns)) {
+                      $is_uptodate = false;
+                  }
+              }
+          }
 
-  	}
+      }
 
 
-  	return $is_uptodate;
+      return $is_uptodate;
   }
 
-  public function getTableColumns() {
-  	$datamap = $this->_DataMap;
-  	$tables = array();
+  public function getTableColumns()
+  {
+      $datamap = $this->_DataMap;
+      $tables = array();
 
-  	foreach ($datamap as $key => $attributes) {
-  		if (Validator::is($attributes, 'array') && !preg_match('/^_/', $key)) {
+      foreach ($datamap as $key => $attributes) {
+          if (Validator::is($attributes, 'array') && !preg_match('/^_/', $key)) {
 
-  			$table = $attributes['_table'];
-				$tables[$table] = array();
-  			foreach (array('_unique', '_locale', '_key', '_value') as $special_field) {
-  				if (isset($attributes[$special_field]) && strlen($attributes[$special_field]) > 0) {
-  					$tables[$table][($attributes[$special_field])] = $attributes[$special_field];
-  				}
-  			}
+              $table = $attributes['_table'];
+                $tables[$table] = array();
+              foreach (array('_unique', '_locale', '_key', '_value') as $special_field) {
+                  if (isset($attributes[$special_field]) && strlen($attributes[$special_field]) > 0) {
+                      $tables[$table][($attributes[$special_field])] = $attributes[$special_field];
+                  }
+              }
 
-  			if ($attributes['_type'] == 'all-in-a-row') {
+              if ($attributes['_type'] == 'all-in-a-row') {
 
-  				foreach ($attributes['_mapping'] as $map => $field) {
-  					$tables[$table][($field)] = $field;
-  				}
+                  foreach ($attributes['_mapping'] as $map => $field) {
+                      $tables[$table][($field)] = $field;
+                  }
 
-  			}
+              }
 
-  			if ($attributes['_type'] == 'key-value') {
+              if ($attributes['_type'] == 'key-value') {
 
-  			}
+              }
 
-  		}
-  	}
+          }
+      }
 
-  	return $tables;
+      return $tables;
   }
 
-  public function getSQL($override=false) {
+  public function getSQL($override=false)
+  {
 
-  	$datamap = $this->_DataMap;
-  	$hexuid  = $datamap['_usehexuid'];
+      $datamap = $this->_DataMap;
+      $hexuid  = $datamap['_usehexuid'];
 
-  	$tables = $this->getTableColumns();
+      $tables = $this->getTableColumns();
 
-  	$return1 = array();
-  	$return2 = array();
-  	foreach ($tables as $table => $fields) {
-  		if (!$table || strlen($table) < 1) continue;
+      $return1 = array();
+      $return2 = array();
+      foreach ($tables as $table => $fields) {
+          if (!$table || strlen($table) < 1) continue;
 
-  		$delete = (($override == true) ? "DROP TABLE IF EXISTS `$table`;" : '');
+          $delete = (($override == true) ? "DROP TABLE IF EXISTS `$table`;" : '');
 
-  		$temp = "--\n-- Structure for table `$table`\n--\n\n";
+          $temp = "--\n-- Structure for table `$table`\n--\n\n";
 
-			if($delete) $return2[] = $delete."\n";
-  		$temp .= "CREATE TABLE IF NOT EXISTS `$table` ( \n";
+            if ($delete) $return2[] = $delete."\n";
+          $temp .= "CREATE TABLE IF NOT EXISTS `$table` ( \n";
 
-  		$fields_sql = array();
-  		foreach ($fields as $field) {
-  			$datatype = false;
+          $fields_sql = array();
+          foreach ($fields as $field) {
+              $datatype = false;
 
-  			if (isset($datamap['_datatypes'][$field])) {
-  				if (substr($datamap['_datatypes'][$field], 0, 1) == ':') {
-  					if (preg_match('/^:([A-Za-z]+):(null|):(.+)$/', $datamap['_datatypes'][$field], $matches)) {
-  						$datatype = sprintf($this->predefined_datatypes[($matches[1])], (($matches[2] == 'null') ? 'NULL' : 'NOT NULL'), (($matches[3] == 'null') ? 'NULL' : '\''.$matches[3].'\''));
-  					}
-  				} else {
-  					$datatype = $datamap['_datatypes'][$field];
-  				}
-  			} else {
+              if (isset($datamap['_datatypes'][$field])) {
+                  if (substr($datamap['_datatypes'][$field], 0, 1) == ':') {
+                      if (preg_match('/^:([A-Za-z]+):(null|):(.+)$/', $datamap['_datatypes'][$field], $matches)) {
+                          $datatype = sprintf($this->predefined_datatypes[($matches[1])], (($matches[2] == 'null') ? 'NULL' : 'NOT NULL'), (($matches[3] == 'null') ? 'NULL' : '\''.$matches[3].'\''));
+                      }
+                  } else {
+                      $datatype = $datamap['_datatypes'][$field];
+                  }
+              } else {
 
-  				foreach ($this->predefined_fields as $dfield => $dtype) {
-  					if ($dfield == $field || preg_match('/_'.$dfield.'$/', $field)) {
-  						$datatype = $dtype;
-  					}
-  				}
+                  foreach ($this->predefined_fields as $dfield => $dtype) {
+                      if ($dfield == $field || preg_match('/_'.$dfield.'$/', $field)) {
+                          $datatype = $dtype;
+                      }
+                  }
 
-  				if (!$datatype) {
-  					$datatype = $this->default_datatype;
-  				}
+                  if (!$datatype) {
+                      $datatype = $this->default_datatype;
+                  }
 
-  			}
-
-
-  			$fields_sql[] = "`$field` $datatype";
+              }
 
 
-  		}
-  		foreach ($fields as $field) {
-
-	  		foreach ($this->predefined_indexes as $ident => $index) {
-	  			if ($ident == $field) {
-	  				$indexes_sql[$ident] = $index['_type']." ".uniqid('index_')." (`".join("`, `", $index['_fields'])."`)";
-	  			}
-	  		}
-
-	  		if (isset($datamap['_indexes'])) {
-			  	foreach ($datamap['_indexes'] as $ident => $index) {
-			  		if ($ident == $field) {
-			  			$indexes_sql[$ident] = $index['_type']." ".uniqid('index_')." (`".join("`, `", $index['_fields'])."`)";
-			  		}
-			 		}
-	  		}
-
-	  		if (preg_match('/_uid$/', $field) && !isset($indexes_sql[$field])) {
-	  			$indexes_sql[$field] = "KEY ".uniqid('index_')." (`".$field."`)";
-	  		}
-	 		}
+              $fields_sql[] = "`$field` $datatype";
 
 
-	  	$fields_sql = array_merge($fields_sql, $indexes_sql);
-  		$indexes_sql = array();
+          }
+          foreach ($fields as $field) {
 
-  		$temp_sql = $fields_sql;
-  		$fields_sql = array();
-  		foreach ($temp_sql as $row) {
-  			$fields_sql[] = "    ".$row;
-  		}
+              foreach ($this->predefined_indexes as $ident => $index) {
+                  if ($ident == $field) {
+                      $indexes_sql[$ident] = $index['_type']." ".uniqid('index_')." (`".join("`, `", $index['_fields'])."`)";
+                  }
+              }
 
-  		$temp .= join(",\n", $fields_sql)."\n";
+              if (isset($datamap['_indexes'])) {
+                  foreach ($datamap['_indexes'] as $ident => $index) {
+                      if ($ident == $field) {
+                          $indexes_sql[$ident] = $index['_type']." ".uniqid('index_')." (`".join("`, `", $index['_fields'])."`)";
+                      }
+                     }
+              }
 
-  		$temp .= ") ENGINE=MyISAM DEFAULT CHARSET=utf8;\n";
+              if (preg_match('/_uid$/', $field) && !isset($indexes_sql[$field])) {
+                  $indexes_sql[$field] = "KEY ".uniqid('index_')." (`".$field."`)";
+              }
+             }
 
-  		$return1[] = $temp;
-  	}
+
+          $fields_sql = array_merge($fields_sql, $indexes_sql);
+          $indexes_sql = array();
+
+          $temp_sql = $fields_sql;
+          $fields_sql = array();
+          foreach ($temp_sql as $row) {
+              $fields_sql[] = "    ".$row;
+          }
+
+          $temp .= join(",\n", $fields_sql)."\n";
+
+          $temp .= ") ENGINE=MyISAM DEFAULT CHARSET=utf8;\n";
+
+          $return1[] = $temp;
+      }
 
 
-  	#var_dump(array(0 => $return1, 1 => $return2));
-  	return array(0 => $return1, 1 => $return2);
-  	#return $return;
+      #var_dump(array(0 => $return1, 1 => $return2));
+      return array(0 => $return1, 1 => $return2);
+      #return $return;
   }
 
-  public function copy($clearFields=false) {
+  public function copy($clearFields=false)
+  {
 
     $array = $this->getAllAttributes();
 
@@ -392,41 +405,44 @@ abstract class VModelConnector extends VModelDefault {
     return $newObject;
   }
 
-  public function getCurrentLanguage() {
-  	return VFactory::getLanguage();
-  	/*if (VInstance::f('DataLanguage') && VInstance::f('DataLanguage')->isValid()) {
-  		return VInstance::f('DataLanguage');
-  	}
-  	if (VInstance::f('Language') && VInstance::f('Language')->isValid()) {
-  		return VInstance::f('Language');
-  	}
+  public function getCurrentLanguage()
+  {
+      return VFactory::getLanguage();
+      /*if (VInstance::f('DataLanguage') && VInstance::f('DataLanguage')->isValid()) {
+          return VInstance::f('DataLanguage');
+      }
+      if (VInstance::f('Language') && VInstance::f('Language')->isValid()) {
+          return VInstance::f('Language');
+      }
 
-  	throw new Exception("Could not determine language");*/
+      throw new Exception("Could not determine language");*/
   }
 
-  public function hasField($__field) {
+  public function hasField($__field)
+  {
 
-  	foreach ($this->_DataMap as $key => $attributes) {
-  		if (preg_match('/^_/', $key)) continue;
+      foreach ($this->_DataMap as $key => $attributes) {
+          if (preg_match('/^_/', $key)) continue;
 
-  		if (in_array($__field, $attributes['_mapping'])) {
-  			return true;
-  		}
+          if (in_array($__field, $attributes['_mapping'])) {
+              return true;
+          }
 
-  		if (isset($attributes['_unique']) && $attributes['_unique'] == $__field) {
-  			return true;
-  		}
+          if (isset($attributes['_unique']) && $attributes['_unique'] == $__field) {
+              return true;
+          }
 
-  		if (isset($attributes['_locale']) && $attributes['_unique'] == $__field) {
-  			return true;
-  		}
+          if (isset($attributes['_locale']) && $attributes['_unique'] == $__field) {
+              return true;
+          }
 
-  	}
+      }
 
-  	return false;
+      return false;
   }
 
-  protected function createNewAtDatabase() {
+  protected function createNewAtDatabase()
+  {
     $this->objDB->setTable($this->_DataMap['_head'], true);
 
     if ($this->usingHexUid === true) {
@@ -445,11 +461,12 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
 
-  protected function updateRelation($param, $what, $bOnCreate) {
+  protected function updateRelation($param, $what, $bOnCreate)
+  {
     $dbLayout = isset($this->_DataMap[$what]) ? $this->_DataMap[$what] : false;
 
     if (!$dbLayout || isset($dbLayout['_ignore'])) {
-    	return null;
+        return null;
     }
 
     $param = $this->parseSpecials($param, $dbLayout, $bOnCreate);
@@ -474,7 +491,8 @@ abstract class VModelConnector extends VModelDefault {
    *
    * @return array
    */
-  protected function updateRelationKeyValue($param, $dbLayout) {
+  protected function updateRelationKeyValue($param, $dbLayout)
+   {
     if ( !is_object($this->objDB) ) {
       throw new Exceptoin("\$this->objDB is not a Valid 'VDatabase' instance.");
     }
@@ -513,7 +531,8 @@ abstract class VModelConnector extends VModelDefault {
   }
 
 
-  protected function updateRelationAllInARow($param, $dbLayout) {
+  protected function updateRelationAllInARow($param, $dbLayout)
+  {
     if ( !is_object($this->objDB) ) {
       throw new Exception("\$this->objDB is not a Valid 'VDatabase' instance.");
     }
@@ -527,10 +546,10 @@ abstract class VModelConnector extends VModelDefault {
     $fieldUnique  = $dbLayout['_unique'];
     $where_language = "";
 
-  	if (isset($dbLayout['_locale'])) {
-    	$where_language .= " AND `".$dbLayout['_locale']."` = '".$this->getCurrentLanguage()->uid."'";
-    	$sFields = "`".$dbLayout['_locale']."`";
-    	$sValues = "'".$this->objDB->escape(stripslashes($this->getCurrentLanguage()->uid))."'";
+      if (isset($dbLayout['_locale'])) {
+        $where_language .= " AND `".$dbLayout['_locale']."` = '".$this->getCurrentLanguage()->uid."'";
+        $sFields = "`".$dbLayout['_locale']."`";
+        $sValues = "'".$this->objDB->escape(stripslashes($this->getCurrentLanguage()->uid))."'";
     }
 
     /*
@@ -560,7 +579,8 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
 
-  public function delete() {
+  public function delete()
+  {
     if (!$this->isValid()) {
       return false;
     }
@@ -590,11 +610,12 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
 
-  protected function deleteRelation($what) {
+  protected function deleteRelation($what)
+  {
     $dbLayout = isset($this->_DataMap[$what]) ? $this->_DataMap[$what] : false;
 
-  	if (!$dbLayout || isset($dbLayout['_ignore'])) {
-    	return null;
+      if (!$dbLayout || isset($dbLayout['_ignore'])) {
+        return null;
     }
 
     switch ($dbLayout['_type']) {
@@ -612,17 +633,20 @@ abstract class VModelConnector extends VModelDefault {
     }
   }
 
-  protected function deleteRelationKeyValue($dbLayout) {
+  protected function deleteRelationKeyValue($dbLayout)
+    {
     $this->objDB->setTable($dbLayout['_table'], true);
     return $this->objDB->deleteRow("`".$dbLayout['_unique']."` = '".$this->getUID()."'");
   }
 
-  protected function deleteRelationAllInARow($dbLayout) {
+  protected function deleteRelationAllInARow($dbLayout)
+  {
     $this->objDB->setTable($dbLayout['_table'], true);
     return $this->objDB->deleteRow("`".$dbLayout['_unique']."` = '".$this->getUID()."'");
   }
 
-  private function parseSpecials($param, $dbLayout, $bOnCreate) {
+  private function parseSpecials($param, $dbLayout, $bOnCreate)
+  {
     if (!isset($dbLayout['_specials'])) {
       return $param;
     }
@@ -649,25 +673,30 @@ abstract class VModelConnector extends VModelDefault {
     return $param;
   }
 
-  private function SpecialAction_unixtimestamp() {
+  private function SpecialAction_unixtimestamp()
+  {
     return time();
   }
 
-  private function SpecialAction_mysqltimestamp() {
+  private function SpecialAction_mysqltimestamp()
+  {
     return date("Y-m-d H:i:s");
   }
 
-  protected function rowExists($where) {
+  protected function rowExists($where)
+  {
     $this->objDB->selectRows("*", $where);
     return (bool)$this->objDB->getNumRows();
   }
 
-  public function reloadAttributes() {
+  public function reloadAttributes()
+  {
     $this->clearAttributes();
     $this->loadAttributesByUID($this->uid);
   }
 
-  protected function loadAttributesByUID($uid) {
+  protected function loadAttributesByUID($uid)
+  {
     foreach (array_keys($this->_DataMap) as $key) {
       if ( !preg_match('/^_/', $key) ) {
         $this->importDatabase($uid, $key);
@@ -685,7 +714,8 @@ abstract class VModelConnector extends VModelDefault {
     }
   }
 
-  protected function runSafeMode() {
+  protected function runSafeMode()
+      {
     if ($this->getAttribute('user_uid')) {
       $refUserManager = new UserManager();
       return $refUserManager->safeMode($this->uid);
@@ -697,13 +727,14 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
 
-  protected function importDatabase($uid, $database) {
+  protected function importDatabase($uid, $database)
+  {
     if ( !isset($this->_DataMap[$database]) ) {
       throw new Exception("_DataMap['".$database."'] is missing.");
     }
 
-	  if (!$this->_DataMap[$database] || isset($this->_DataMap[$database]['_ignore'])) {
-	  	return null;
+      if (!$this->_DataMap[$database] || isset($this->_DataMap[$database]['_ignore'])) {
+          return null;
     }
 
     switch ($this->_DataMap[$database]['_type']) {
@@ -723,13 +754,14 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
 
-  private function importDatabaseAllInARow($uid, $database) {
+  private function importDatabaseAllInARow($uid, $database)
+  {
     $dbLayout = $this->_DataMap[$database];
     $select   = "";
     $where    = "`".$dbLayout['_unique']."` = '".$uid."'";
 
     if (isset($dbLayout['_locale'])) {
-    	$where .= " AND `".$dbLayout['_locale']."` = '".$this->getCurrentLanguage()->uid."'";;
+        $where .= " AND `".$dbLayout['_locale']."` = '".$this->getCurrentLanguage()->uid."'";;
     }
 
     foreach ($dbLayout['_mapping'] as $ident => $dbfield) {
@@ -742,7 +774,7 @@ abstract class VModelConnector extends VModelDefault {
     $this->objDB->selectRows($select, $where);
     if ( !$this->objDB->getNumRows() ) {
       return false;
-    	#throw new Exception("No Data found by Query: SELECT $select FROM ".$dbLayout['_table']." WHERE $where");
+        #throw new Exception("No Data found by Query: SELECT $select FROM ".$dbLayout['_table']." WHERE $where");
     }
     $this->objDB->nextRecord();
     $values = $this->objDB->getRecord();
@@ -753,13 +785,14 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
 
-  private function importDatabaseKeyValue($uid, $database) {
+  private function importDatabaseKeyValue($uid, $database)
+  {
     $dbLayout = $this->_DataMap[$database];
     $select   = "`".$dbLayout['_key']."`, `".$dbLayout['_value']."`";
     $where    = "`".$dbLayout['_unique']."` = '".$uid."'";
 
-  	if (isset($dbLayout['_locale'])) {
-    	$where .= " AND `".$dbLayout['_locale']."` = '".$this->getCurrentLanguage()->uid."'";;
+      if (isset($dbLayout['_locale'])) {
+        $where .= " AND `".$dbLayout['_locale']."` = '".$this->getCurrentLanguage()->uid."'";;
     }
 
     $this->openDatabase();
@@ -778,7 +811,8 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
 
-  private function getReverseMapping($field, $database='default') {
+  private function getReverseMapping($field, $database='default')
+  {
     if ( !isset($this->_DataMap[$database]) ) {
       throw new Exception("_DataMap['".$database."'] is missing.");
     }
@@ -787,7 +821,8 @@ abstract class VModelConnector extends VModelDefault {
     }
   }
 
-  protected function setUID($uid) {
+  protected function setUID($uid)
+    {
     if ($this->usingHexUid === false && !Validator::is($uid, 'uid')) {
       return false;
     }
@@ -801,7 +836,8 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
 
-  protected function openDatabase() {
+  protected function openDatabase()
+  {
     /*if (!Instance::f('db_'.$this->_DataMap['_database'])) {
       $this->objDB = new DBTransaction($this->_DataMap['_database']);
     } else {
@@ -813,7 +849,8 @@ abstract class VModelConnector extends VModelDefault {
     return true;
   }
 
-  protected function closeDatabase() {
+  protected function closeDatabase()
+  {
     if (is_object($this->objDB)) {
       unset($this->objDB);
     }

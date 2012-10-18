@@ -14,7 +14,8 @@
  * @version $Id: Dir.php 2926 2007-11-09 16:25:44Z pmjones $
  * 
  */
-class Solar_Dir {
+class Solar_Dir 
+{
     
     /**
      * 
@@ -47,7 +48,7 @@ class Solar_Dir {
      * 
      */
     public static function exists($dir)
-    {
+     {
         // no file requested?
         $dir = trim($dir);
         if (! $dir) {
@@ -92,7 +93,7 @@ class Solar_Dir {
      * 
      */
     public static function fix($dir)
-    {
+     {
         $dir = str_replace('/', DIRECTORY_SEPARATOR, $dir);
         return rtrim($dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     }
@@ -110,7 +111,7 @@ class Solar_Dir {
      * 
      */
     public static function name($file, $up = 0)
-    {
+     {
         $dir = dirname($file);
         while ($up --) {
             $dir = dirname($dir);
@@ -129,12 +130,13 @@ class Solar_Dir {
      * 
      */
     public static function tmp($sub = '')
-    {
+     {
         // find the tmp dir if needed
         if (! Solar_Dir::$_tmp) {
             
             // use the system if we can
-            if (function_exists('sys_get_temp_dir')) {
+            if (function_exists('sys_get_temp_dir'))
+           {
                 $tmp = sys_get_temp_dir();
             } else {
                 $tmp = Solar_Dir::_tmp();
@@ -164,7 +166,7 @@ class Solar_Dir {
      * 
      */
     protected static function _tmp()
-    {
+     {
         // non-Windows system?
         if (strtolower(substr(PHP_OS, 0, 3)) != 'win') {
             $tmp = empty($_ENV['TMPDIR']) ? getenv('TMPDIR') : $_ENV['TMPDIR'];

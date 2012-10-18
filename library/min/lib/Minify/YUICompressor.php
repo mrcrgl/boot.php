@@ -26,7 +26,8 @@
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_YUICompressor {
+class Minify_YUICompressor 
+{
 
     /**
      * Filepath of the YUI Compressor jar file. This must be set before
@@ -63,7 +64,7 @@ class Minify_YUICompressor {
      * @return string 
      */
     public static function minifyJs($js, $options = array())
-    {
+ {
         return self::_minify('js', $js, $options);
     }
     
@@ -79,7 +80,7 @@ class Minify_YUICompressor {
      * @return string 
      */
     public static function minifyCss($css, $options = array())
-    {
+ {
         return self::_minify('css', $css, $options);
     }
     

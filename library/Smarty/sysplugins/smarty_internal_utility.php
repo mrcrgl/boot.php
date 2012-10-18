@@ -38,13 +38,14 @@
  * @package Smarty
  * @subpackage Security
  */
-class Smarty_Internal_Utility {
+class Smarty_Internal_Utility 
+{
 
     /**
      * private constructor to prevent calls creation of new instances
      */
     private final function __construct()
-    {
+     {
         // intentionally left blank
     }
 
@@ -59,16 +60,17 @@ class Smarty_Internal_Utility {
      * @return integer number of template files compiled
      */
     public static function compileAllTemplates($extention, $force_compile, $time_limit, $max_errors, Smarty $smarty)
-    {
+     {
         // switch off time limit
-        if (function_exists('set_time_limit')) {
+        if (function_exists('set_time_limit'))
+       {
             @set_time_limit($time_limit);
         }
         $smarty->force_compile = $force_compile;
         $_count = 0;
         $_error_count = 0;
         // loop over array of template directories
-        foreach($smarty->getTemplateDir() as $_dir) {
+        foreach ($smarty->getTemplateDir() as $_dir) {
             $_compileDirs = new RecursiveDirectoryIterator($_dir);
             $_compile = new RecursiveIteratorIterator($_compileDirs);
             foreach ($_compile as $_fileinfo) {
@@ -122,16 +124,17 @@ class Smarty_Internal_Utility {
      * @return integer number of config files compiled
      */
     public static function compileAllConfig($extention, $force_compile, $time_limit, $max_errors, Smarty $smarty)
-    {
+     {
         // switch off time limit
-        if (function_exists('set_time_limit')) {
+        if (function_exists('set_time_limit'))
+       {
             @set_time_limit($time_limit);
         }
         $smarty->force_compile = $force_compile;
         $_count = 0;
         $_error_count = 0;
         // loop over array of template directories
-        foreach($smarty->getConfigDir() as $_dir) {
+        foreach ($smarty->getConfigDir() as $_dir) {
             $_compileDirs = new RecursiveDirectoryIterator($_dir);
             $_compile = new RecursiveIteratorIterator($_compileDirs);
             foreach ($_compile as $_fileinfo) {
@@ -180,7 +183,7 @@ class Smarty_Internal_Utility {
      * @return integer number of template files deleted
      */
     public static function clearCompiledTemplate($resource_name, $compile_id, $exp_time, Smarty $smarty)
-    {
+     {
         $_compile_dir = $smarty->getCompileDir();
         $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
         $_dir_sep = $smarty->use_sub_dirs ? DS : '^';
@@ -274,7 +277,7 @@ class Smarty_Internal_Utility {
      * @return array of tag/attributes
      */
     public static function getTags(Smarty_Internal_Template $template)
-    {
+     {
         $template->smarty->get_used_tags = true;
         $template->compileTemplateSource();
         return $template->used_tags;
@@ -291,7 +294,7 @@ class Smarty_Internal_Utility {
      * @return bool status, true if everything is fine, false else
      */
     public static function testInstall(Smarty $smarty, &$errors=null)
-    {
+     {
         $status = true;
 
         if ($errors === null) {
@@ -303,7 +306,7 @@ class Smarty_Internal_Utility {
         $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
 
         // test if all registered template_dir are accessible
-        foreach($smarty->getTemplateDir() as $template_dir) {
+        foreach ($smarty->getTemplateDir() as $template_dir) {
             $_template_dir = $template_dir;
             $template_dir = realpath($template_dir);
             // resolve include_path or fail existance
@@ -424,7 +427,7 @@ class Smarty_Internal_Utility {
         // and if core plugins directory is still registered
         $_core_plugins_dir = realpath(dirname(__FILE__) .'/../plugins');
         $_core_plugins_available = false;
-        foreach($smarty->getPluginsDir() as $plugin_dir) {
+        foreach ($smarty->getPluginsDir() as $plugin_dir) {
             $_plugin_dir = $plugin_dir;
             $plugin_dir = realpath($plugin_dir);
             // resolve include_path or fail existance
@@ -556,7 +559,7 @@ class Smarty_Internal_Utility {
         }
 
         // test if all registered config_dir are accessible
-        foreach($smarty->getConfigDir() as $config_dir) {
+        foreach ($smarty->getConfigDir() as $config_dir) {
             $_config_dir = $config_dir;
             $config_dir = realpath($config_dir);
             // resolve include_path or fail existance

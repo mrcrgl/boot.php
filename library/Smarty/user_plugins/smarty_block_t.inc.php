@@ -20,10 +20,10 @@
  *
  * Installation: simply copy this file to the smarty plugins directory.
  *
- * @package	smarty-gettext
- * @version	$Id: block.t.php,v 1.1 2005/07/27 17:58:56 sagi Exp $
- * @link	http://smarty-gettext.sourceforge.net/
- * @author	Sagi Bashari <sagi@boom.org.il>
+ * @package    smarty-gettext
+ * @version    $Id: block.t.php,v 1.1 2005/07/27 17:58:56 sagi Exp $
+ * @link    http://smarty-gettext.sourceforge.net/
+ * @author    Sagi Bashari <sagi@boom.org.il>
  * @copyright 2004-2005 Sagi Bashari
  */
 
@@ -31,28 +31,28 @@
  * Replaces arguments in a string with their values.
  * Arguments are represented by % followed by their number.
  *
- * @param	string	Source string
- * @param	mixed	Arguments, can be passed in an array or through single variables.
- * @returns	string	Modified string
+ * @param    string    Source string
+ * @param    mixed    Arguments, can be passed in an array or through single variables.
+ * @returns    string    Modified string
  */
 function smarty_gettext_strarg($str)
-{
-	$tr = array();
-	$p = 0;
+ {
+    $tr = array();
+    $p = 0;
 
-	for ($i=1; $i < func_num_args(); $i++) {
-		$arg = func_get_arg($i);
+    for ($i=1; $i < func_num_args(); $i++) {
+        $arg = func_get_arg($i);
 
-		if (is_array($arg)) {
-			foreach ($arg as $aarg) {
-				$tr['%'.++$p] = $aarg;
-			}
-		} else {
-			$tr['%'.++$p] = $arg;
-		}
-	}
+        if (is_array($arg)) {
+            foreach ($arg as $aarg) {
+                $tr['%'.++$p] = $aarg;
+            }
+        } else {
+            $tr['%'.++$p] = $arg;
+        }
+    }
 
-	return strtr($str, $tr);
+    return strtr($str, $tr);
 }
 
 /**
@@ -70,13 +70,14 @@ function smarty_gettext_strarg($str)
  *   - plural - The plural version of the text (2nd parameter of ngettext())
  *   - count - The item count for plural mode (3rd parameter of ngettext())
  */
-function smarty_block_t($params, $text, &$smarty) {
-	if (empty($text)) return null;
+function smarty_block_t($params, $text, &$smarty)
+ {
+    if (empty($text)) return null;
 
-	if (isset($params['assign'])) {
-	  $assign = $params['assign'];
-	  unset($params['assign']);
-	}
+    if (isset($params['assign'])) {
+      $assign = $params['assign'];
+      unset($params['assign']);
+    }
 
   $text = stripslashes($text);
 
@@ -88,5 +89,5 @@ function smarty_block_t($params, $text, &$smarty) {
     return null;
   }
 
-	return $text;
+    return $text;
 }

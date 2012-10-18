@@ -14,7 +14,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Break extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Break extends Smarty_Internal_CompileBase 
+{
 
     /**
      * Attribute definition: Overwrites base class.
@@ -40,7 +41,7 @@ class Smarty_Internal_Compile_Break extends Smarty_Internal_CompileBase {
      * @return string compiled code
      */
     public function compile($args, $compiler, $parameter)
-    {
+     {
         static $_is_loopy = array('for' => true, 'foreach' => true, 'while' => true, 'section' => true);
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);

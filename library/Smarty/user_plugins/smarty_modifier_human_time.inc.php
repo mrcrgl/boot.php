@@ -1,6 +1,7 @@
 <?php 
 
-function smarty_modifier_human_time($iNumber) {
+function smarty_modifier_human_time($iNumber)
+ {
   if (Instance::f('settings')->date_format) {
     date_format();
   }

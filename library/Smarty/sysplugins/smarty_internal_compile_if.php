@@ -15,7 +15,8 @@
 * @package Smarty
 * @subpackage Compiler
 */
-class Smarty_Internal_Compile_If extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_If extends Smarty_Internal_CompileBase 
+{
 
     /**
     * Compiles code for the {if} tag
@@ -70,7 +71,8 @@ class Smarty_Internal_Compile_If extends Smarty_Internal_CompileBase {
 * @package Smarty
 * @subpackage Compiler
 */
-class Smarty_Internal_Compile_Else extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Else extends Smarty_Internal_CompileBase 
+{
 
     /**
     * Compiles code for the {else} tag
@@ -96,7 +98,8 @@ class Smarty_Internal_Compile_Else extends Smarty_Internal_CompileBase {
 * @package Smarty
 * @subpackage Compiler
 */
-class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase 
+{
 
     /**
     * Compiles code for the {elseif} tag
@@ -147,7 +150,7 @@ class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase {
                 return $_output;
             } else {
                 $this->openTag($compiler, 'elseif', array($nesting, $compiler->tag_nocache));
-                return "<?php }elseif({$parameter['if condition']}){?>";
+                return "<?php }elseif ({$parameter['if condition']}){?>";
             }
         } else {
             $tmp = '';
@@ -178,7 +181,8 @@ class Smarty_Internal_Compile_Elseif extends Smarty_Internal_CompileBase {
 * @package Smarty
 * @subpackage Compiler
 */
-class Smarty_Internal_Compile_Ifclose extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Ifclose extends Smarty_Internal_CompileBase 
+{
 
     /**
     * Compiles code for the {/if} tag

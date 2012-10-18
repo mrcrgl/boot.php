@@ -25,8 +25,8 @@ foreach ($DBC->getInstances() as $db) {
 
 
 if (!Instance::f('Language')) {
-	$LanguageManager = new LanguageManager();
-	Instance::_new($LanguageManager->getUserLanguage(), 'Language', true);
+    $LanguageManager = new LanguageManager();
+    Instance::_new($LanguageManager->getUserLanguage(), 'Language', true);
 }
 
 // Loading Global Instances
@@ -35,19 +35,21 @@ if (!Instance::f('Language')) {
 if (isset(ENV::$config['enableSettings']) && ENV::$config['enableSettings'] == true) Instance::_new(new Settings(), 'settings', true);
 if (isset(ENV::$config['enableLinkGenerator']) && ENV::$config['enableLinkGenerator'] == true) Instance::_new(new LinkGenerator(), 'LinkGenerator');
 
-ENV::$parse['_user']		 	= Instance::f('Login')->obj;
-ENV::$parse['_language'] 	= Instance::f('Language');
-ENV::$parse['_langcc'] 		= Instance::f('Language')->country_code;
+ENV::$parse['_user']             = Instance::f('Login')->obj;
+ENV::$parse['_language']     = Instance::f('Language');
+ENV::$parse['_langcc']         = Instance::f('Language')->country_code;
 
 if (Instance::f('Hotel') && Instance::f('Hotel')->isValid())
-	ENV::$parse['_hotel'] 		= Instance::f('Hotel');
+    ENV::$parse['_hotel']         = Instance::f('Hotel');
 
 
-if (!function_exists('exception_handler')) {
-  function exception_handler($exception) {
+if (!function_exists('exception_handler'))
+ {
+  function exception_handler($exception)
+ {
     //return false;
 
-  	$errorMsg = str_replace("\#", "\\n", $exception->getMessage());
+      $errorMsg = str_replace("\#", "\\n", $exception->getMessage());
     $errorNumber = uniqid();
     $errorFile   = date("c").'-'.$errorNumber;
 
@@ -70,7 +72,7 @@ if (!function_exists('exception_handler')) {
       $backtrace = "";
       $arrTrace = debug_backtrace();
       foreach ($arrTrace as $id => $row) {
-      	$backtrace .= '#' . $id . '' . $row['file'] . '(' . $row['line'] . '): ' . $row['function'] . '(' . join(', ', $row['args']) . ')'."\n";
+          $backtrace .= '#' . $id . '' . $row['file'] . '(' . $row['line'] . '): ' . $row['function'] . '(' . join(', ', $row['args']) . ')'."\n";
       }
 
       fwrite($errorlog, 'Backtrace:'."\n".$backtrace."\n\n");

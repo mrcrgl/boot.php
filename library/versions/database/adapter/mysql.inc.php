@@ -1,8 +1,9 @@
 <?php
 
-class VDatabaseMysql extends VDatabase {
+class VDatabaseMysql extends VDatabase 
+{
 
-	private $strHost;
+    private $strHost;
   private $strUser;
   private $strPass;
   protected $strDb;
@@ -23,24 +24,25 @@ class VDatabaseMysql extends VDatabase {
   protected $arrRecord = "";
 
   private $sTable;
-	private $result;
-	public $debug = 0;
+    private $result;
+    public $debug = 0;
 
   /**
    *
    * the php5 constructor - get all data connection data
    *
    */
-  function __construct($host=null, $database=null, $user=null, $pass=null) {
+  function __construct($host=null, $database=null, $user=null, $pass=null)
+   {
     #parent::__construct();
     // put the data into the related class vars
 
-  	if (is_null($host) || is_null($database)) {
-  		$host			= VSettings::f('database.host');
-  		$database = VSettings::f('database.database');
-  		$user			= VSettings::f('database.user');
-  		$pass			= VSettings::f('database.password');
-  	}
+      if (is_null($host) || is_null($database)) {
+          $host            = VSettings::f('database.host');
+          $database = VSettings::f('database.database');
+          $user            = VSettings::f('database.user');
+          $pass            = VSettings::f('database.password');
+      }
 
     $this->strHost    = $host;
     $this->strUser    = $user;
@@ -48,15 +50,17 @@ class VDatabaseMysql extends VDatabase {
     $this->strDb      = $database;
   }
 
-	function setTable($__table, $setBacksticks=false) {
-		$this->sTable = ($setBacksticks == true) ? "`".$__table."`" : $__table;
-	}
+    function setTable($__table, $setBacksticks=false)
+  {
+        $this->sTable = ($setBacksticks == true) ? "`".$__table."`" : $__table;
+    }
 
-	/**
+    /**
    * Starts a transaction
    *
    */
-  public function startTransaction() {
+  public function startTransaction()
+   {
     if ($this->bTransactionInProgress) {
       return true;
     }
@@ -71,7 +75,8 @@ class VDatabaseMysql extends VDatabase {
    * Commits a transaction
    *
    */
-  public function commitTransaction() {
+  public function commitTransaction()
+   {
     if ( !$this->bTransactionInProgress ) {
       #print "moop";
       return false;
@@ -85,89 +90,98 @@ class VDatabaseMysql extends VDatabase {
     return true;
   }
 
-  public function userQuery($query) {
+  public function userQuery($query)
+  {
     $this->query($query);
     return true;
   }
 
-	public function prepareQuery($__what = "*", $__where = "none", $__order = "none", $__limit = "none") {
+    public function prepareQuery($__what = "*", $__where = "none", $__order = "none", $__limit = "none")
+  {
     $this->selectRows($__what, $__where, $__order, $__limit);
     $this->bQueryPrepared = true;
   }
 
-	/**
+    /**
    * @param $sWhat = "*", $sWhere = "none", $sOrder = "none", $sLimit = "none"
    */
-	function selectRows($sWhat = "*", $sWhere = "none", $sOrder = "none", $sLimit = "none") {
-		$sQueryString = "SELECT $sWhat FROM {$this->sTable}";
-		$sQueryString.= ($sWhere!="none") ? (" WHERE $sWhere ") : ("");
-		$sQueryString.= ($sOrder!="none") ? (" ORDER BY $sOrder ") : ("");
-		$sQueryString.= ($sLimit!="none") ? (" LIMIT $sLimit ") : ("");
-		if ($this->debug == 1) {
-			echo 'DB: '.$this->strDb.' - Query: '.$sQueryString;
-		}
-		try {
-		  $this->query($sQueryString);
-		} catch (Exception $e) {
-		  throw new Exception($e);
-		}
-	}
+    function selectRows($sWhat = "*", $sWhere = "none", $sOrder = "none", $sLimit = "none")
+   {
+        $sQueryString = "SELECT $sWhat FROM {$this->sTable}";
+        $sQueryString.= ($sWhere!="none") ? (" WHERE $sWhere ") : ("");
+        $sQueryString.= ($sOrder!="none") ? (" ORDER BY $sOrder ") : ("");
+        $sQueryString.= ($sLimit!="none") ? (" LIMIT $sLimit ") : ("");
+        if ($this->debug == 1) {
+            echo 'DB: '.$this->strDb.' - Query: '.$sQueryString;
+        }
+        try {
+          $this->query($sQueryString);
+        } catch (Exception $e) {
+          throw new Exception($e);
+        }
+    }
 
   /**
    * $param string $__fields Fields to insert in
    * $param string $__values Values to insert in
    * $param bool   $__ignoreException Not in Use
    */
-	function insertRow ($__fields,$__values, $__ignoreException=false) {
-		$queryString = "INSERT INTO {$this->sTable} ($__fields) VALUES ($__values)";
-		try {
-		  $this->query($queryString);
-		} catch (Exception $e) {
-		  throw new Exception('DBLayer could not insert row: '.$e);
-		}
-	}
+    function insertRow ($__fields,$__values, $__ignoreException=false)
+   {
+        $queryString = "INSERT INTO {$this->sTable} ($__fields) VALUES ($__values)";
+        try {
+          $this->query($queryString);
+        } catch (Exception $e) {
+          throw new Exception('DBLayer could not insert row: '.$e);
+        }
+    }
 
-	function updateRow ($__what,$__where, $__ignoreException=false) {
-		$queryString = "UPDATE {$this->sTable} SET $__what WHERE $__where";
-	  try {
-		  $this->query($queryString);
-		} catch (Exception $e) {
-		  throw new Exception('DBLayer could not update row: '.$e);
-		}
-	}
+    function updateRow ($__what,$__where, $__ignoreException=false)
+        {
+        $queryString = "UPDATE {$this->sTable} SET $__what WHERE $__where";
+      try {
+          $this->query($queryString);
+        } catch (Exception $e) {
+          throw new Exception('DBLayer could not update row: '.$e);
+        }
+    }
 
-	function deleteRow ($__where) {
-		$queryString = "DELETE FROM {$this->sTable} WHERE $__where";
-	  try {
-		  $this->query($queryString);
-		} catch (Exception $e) {
-		  throw new Exception('DBLayer could not delete row: '.$e);
-		}
-	}
+    function deleteRow ($__where)
+        {
+        $queryString = "DELETE FROM {$this->sTable} WHERE $__where";
+      try {
+          $this->query($queryString);
+        } catch (Exception $e) {
+          throw new Exception('DBLayer could not delete row: '.$e);
+        }
+    }
 
-	function getLastInsertID() {
-		return $this->getLastID();
-	}
+    function getLastInsertID()
+        {
+        return $this->getLastID();
+    }
 
-	function getType() {
-	  return mysqli_field_type($this->refResult);
-	}
+    function getType()
+    {
+      return mysqli_field_type($this->refResult);
+    }
 
   /**
    *
    * open a connection to the database
    *
    */
-  function connect() {
+  function connect()
+   {
 
     // check if there is already an connection
-    if($this->resConnectionID == 0) {
+    if ($this->resConnectionID == 0) {
 
       // connect to database and save the connection_ressource_id
       $this->resConnectionID = mysqli_connect($this->strHost, $this->strUser, $this->strPass, $this->strDb);
 
       // if there is no connection - create error
-      if(!$this->resConnectionID) {
+      if (!$this->resConnectionID) {
         //$this->sql_abort("No Connection-Id - connection failed");
         #$this->sql_abort('Could not connect to database.');
         throw new Exception("No Connection-Id - connection failed");
@@ -177,7 +191,7 @@ class VDatabaseMysql extends VDatabase {
       if (!mysqli_select_db($this->resConnectionID, $this->strDb)) {
         //$this->sql_abort("Could not select ". $this->strDb, $this->resConnectionID);
         if ($this->ignoreDatabaseException == false)
-        	throw new Exception("Could not select ". $this->strDb.' '.$this->resConnectionID);
+            throw new Exception("Could not select ". $this->strDb.' '.$this->resConnectionID);
       }
 
       // set connection collation
@@ -193,16 +207,17 @@ class VDatabaseMysql extends VDatabase {
    * close the connection to the database
    *
    */
-  function close() {
+  function close()
+   {
 
     // check if there is an res - if using php5 this will often be called twice 1. close 2. __destruct
-    if(!is_null($this->resConnectionID)) {
+    if (!is_null($this->resConnectionID)) {
 
       // close the connection to database
       $boolClose = mysqli_close($this->resConnectionID);
 
       // if close fails - print error message and abort
-      if(!$boolClose) {
+      if (!$boolClose) {
         $this->sql_abort("Cannot close the connection to ".$this->db);
       }
 
@@ -216,9 +231,10 @@ class VDatabaseMysql extends VDatabase {
    * abort script and print error message
    *
    */
-  function sql_abort($strMessage) {
-  	/**Tracker::error("Database Error:".$strMessage);
-  	Tracker::error("MySQL Error:".$this->intErrNumber."(".$this->strError.")");
+  function sql_abort($strMessage)
+   {
+      /**Tracker::error("Database Error:".$strMessage);
+      Tracker::error("MySQL Error:".$this->intErrNumber."(".$this->strError.")");
     Tracker::error("Host: ".$this->strHost." Database: ".$this->strDb." User: ".$this->strUser." PW: ***");*/
     $message =  sprintf("</td></tr></table>");
     $message .= sprintf("<b>Database error:</b> %s<br>\n", $strMessage);
@@ -235,7 +251,8 @@ class VDatabaseMysql extends VDatabase {
    * send a query and return a result (if there is one)
    *
    */
-  protected function query($strQueryString) {
+  protected function query($strQueryString)
+   {
     if (!$this->displayOnly) {
       // send the query to database and save the ressource
 
@@ -245,9 +262,9 @@ class VDatabaseMysql extends VDatabase {
         $profiler = VProfiler::getInstance('db');
       }
 
-    	if (!$this->resConnectionID) {
-    		$this->connect();
-    	}
+        if (!$this->resConnectionID) {
+            $this->connect();
+        }
 
       /*if ($this->logCounter) {
         ENV::$countSQLQuerys[(preg_match('/^(SET|SELECT)/', $strQueryString)) ? "r" : "w"]++;
@@ -279,7 +296,7 @@ class VDatabaseMysql extends VDatabase {
     $this->strError = mysqli_error($this->resConnectionID);
 
     // if there is no ressource - die with error message
-    if(!$refResult){
+    if (!$refResult){
 
       //$this->sql_abort("DB: ".$this->strDb." - Query: ".$strQueryString);
       throw new Exception("Failure with query: <br /><br />".$this->sql_abort($strQueryString));
@@ -291,54 +308,62 @@ class VDatabaseMysql extends VDatabase {
     return $this->refResult;
   }
 
-	function getErrorNumber() {
-		$this->intErrNumber;
-	}
+    function getErrorNumber()
+  {
+        $this->intErrNumber;
+    }
 
-	function getErrorMsg() {
-		$this->strError;
-	}
+    function getErrorMsg()
+    {
+        $this->strError;
+    }
 
-	function freeResult() {
-	  if ($this->refResult)
-	    mysqli_free_result($this->refResult);
-	}
-	/*function userQuery($strQueryString) {
+    function freeResult()
+    {
+      if ($this->refResult)
+        mysqli_free_result($this->refResult);
+    }
+    /*function userQuery($strQueryString)
+    {
     return $this->query($strQueryString);
   }*/
 
-	function f($sName) {
-		//return utf8_decode($this->arrRecord[$sName]);
+    function f($sName)
+  {
+        //return utf8_decode($this->arrRecord[$sName]);
     return $this->arrRecord[$sName];
-	}
-
-  function nextRecord() {
-		if (!$this->refResult) {
-		  return false;
-		}
-    $this->arrRecord = mysqli_fetch_assoc($this->refResult);
-		if (!Validator::is($this->arrRecord, 'array')) {
-			mysqli_free_result($this->refResult);
-			$this->refResult = 0;
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	function escape($value) {
-		if (!$this->resConnectionID) {
-    	$this->connect();
     }
-		return mysqli_real_escape_string($this->resConnectionID, $value);
-	}
+
+  function nextRecord()
+    {
+        if (!$this->refResult) {
+          return false;
+        }
+    $this->arrRecord = mysqli_fetch_assoc($this->refResult);
+        if (!Validator::is($this->arrRecord, 'array')) {
+            mysqli_free_result($this->refResult);
+            $this->refResult = 0;
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function escape($value)
+        {
+        if (!$this->resConnectionID) {
+        $this->connect();
+    }
+        return mysqli_real_escape_string($this->resConnectionID, $value);
+    }
 
   /**
    *
    * return the id of the last inserted row
    *
    */
-  function getLastID(){
+  function getLastID()
+   {
 
     // return the id of the last inserted row
     return intval(mysqli_insert_id($this->resConnectionID));
@@ -350,19 +375,22 @@ class VDatabaseMysql extends VDatabase {
    * count the number of affected rows
    *
    */
-  function getNumRows() {
+  function getNumRows()
+   {
 
     // return the number of affected rows
     return intval(mysqli_affected_rows($this->resConnectionID));
 
   }
 
-  function createDatabaseIfNotExists() {
-  	$this->userQuery("CREATE DATABASE IF NOT EXISTS ".$this->strDb." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;");
+  function createDatabaseIfNotExists()
+  {
+      $this->userQuery("CREATE DATABASE IF NOT EXISTS ".$this->strDb." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;");
   }
 
-  function dropDatabase(){
-  	$this->userQuery("DROP DATABASE ".$this->strDb);
+  function dropDatabase()
+  {
+      $this->userQuery("DROP DATABASE ".$this->strDb);
   }
 
   /**
@@ -370,7 +398,8 @@ class VDatabaseMysql extends VDatabase {
    * function to get an array with all table, the db contains
    *
    */
-  function getListOfTables() {
+  function getListOfTables()
+   {
 
     // the sql-query for getting all tables out of this db
     $strSql = "SHOW TABLES FROM $this->strDb";
@@ -382,7 +411,7 @@ class VDatabaseMysql extends VDatabase {
     $arrTableList = array();
 
     // loop - "make" out of each line of the ressource an array
-    while($arrTable = mysqli_fetch_array($resSqlResult)) {
+    while ($arrTable = mysqli_fetch_array($resSqlResult)) {
 
       // push the data into the empty array
       array_push($arrTableList, $arrTable[0]);
@@ -399,7 +428,8 @@ class VDatabaseMysql extends VDatabase {
    * function to get an array with all columns of givin table
    *
    */
-  function getListOfColumns($table) {
+  function getListOfColumns($table)
+   {
 
     // the sql-query for getting all tables out of this db
     $strSql = sprintf("SHOW COLUMNS FROM `%s`", $table);
@@ -411,7 +441,7 @@ class VDatabaseMysql extends VDatabase {
     $arrTableList = array();
 
     // loop - "make" out of each line of the ressource an array
-    while($arrTable = mysqli_fetch_array($resSqlResult)) {
+    while ($arrTable = mysqli_fetch_array($resSqlResult)) {
 
       // push the data into the empty array
       array_push($arrTableList, $arrTable[0]);
@@ -428,27 +458,32 @@ class VDatabaseMysql extends VDatabase {
    *
    * @return string
    */
-  public function getVersion() {
+  public function getVersion()
+   {
     $this->query("SELECT VERSION()");
     $this->nextRecord();
     $array = $this->getRecord();
     return array_pop($array);
   }
 
-	function getRecord() {
-		return $this->arrRecord;
-	}
+    function getRecord()
+  {
+        return $this->arrRecord;
+    }
 
-  public function setAutoCommit($b=false) {
+  public function setAutoCommit($b=false)
+    {
     $choose = ($b === false) ? "0" : "1";
     $this->query("SET autocommit=$choose");
   }
 
-  public function doCommit() {
+  public function doCommit()
+  {
     $this->query("COMMIT");
   }
 
-  public function setConnectionCollationUnicode() {
+  public function setConnectionCollationUnicode()
+  {
     // Check if the used MySQL version supports charsets
     list($v_upper, $v_major, $v_minor) = explode('.', $this->getVersion());
     if ( ($v_upper >= 5) || ($v_upper >= 4 && $v_major >= 1) ) {
@@ -465,7 +500,8 @@ class VDatabaseMysql extends VDatabase {
    * destructor for php5
    *
    */
-  function __destruct() {
+  function __destruct()
+   {
 
     //$this->close();
 

@@ -13,7 +13,8 @@ require_once 'Minify/Controller/Base.php';
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_Controller_Page extends Minify_Controller_Base {
+class Minify_Controller_Page extends Minify_Controller_Base 
+{
     
     /**
      * Set up source of HTML content
@@ -35,7 +36,8 @@ class Minify_Controller_Page extends Minify_Controller_Base {
      *
      * @todo Add 'file' option to read HTML file.
      */
-    public function setupSources($options) {
+    public function setupSources($options)
+     {
         if (isset($options['file'])) {
             $sourceSpec = array(
                 'filepath' => $options['file']
@@ -69,7 +71,7 @@ class Minify_Controller_Page extends Minify_Controller_Base {
      * @see Minify_Controller_Base::loadMinifier()
      */
     public function loadMinifier($minifierCallback)
-    {
+     {
         if ($this->_loadCssJsMinifiers) {
             // Minify will not call for these so we must manually load
             // them when Minify/HTML.php is called for.

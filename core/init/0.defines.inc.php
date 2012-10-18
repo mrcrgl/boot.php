@@ -1,8 +1,8 @@
 <?php
 
 if (!defined('PROJECT_HTDOCS')) {
-	echo 'constant PROJECT_HTDOCS not defined. Exiting...';
-	exit(0);
+    echo 'constant PROJECT_HTDOCS not defined. Exiting...';
+    exit(0);
 }
 
 /**
@@ -17,83 +17,83 @@ define('DS', DIRECTORY_SEPARATOR);
 define('NL', ((PHP_SAPI != 'cli') ? '<br />' : "\n"));
 
 /**
- * @var	VFRAMEWORK		Versions core directory
+ * @var    VFRAMEWORK        Versions core directory
  */
 define('VFRAMEWORK', realpath(dirname(__FILE__).DS.'..'.DS.'..'));
 define('VROOT', realpath(VFRAMEWORK.DS.'..'));
 
 /**
- * @var VCONFIG		Versions config directory
+ * @var VCONFIG        Versions config directory
  */
 define('VCONFIG', VFRAMEWORK.DS.'config');
 
 /**
- * @var VLIB	Versions library
+ * @var VLIB    Versions library
  */
 define('VLIB', VFRAMEWORK.DS.'library');
 
 /**
- * @var VCORE	Versions core
+ * @var VCORE    Versions core
  */
 define('VCORE', VFRAMEWORK.DS.'core');
 
 /**
- * @var VCOMPONENTS	Versions components directory
+ * @var VCOMPONENTS    Versions components directory
  */
 define('VCOMPONENTS', VFRAMEWORK.DS.'vcomponents');
 
 /**
- * @var	VMODULES	Versions modules directory
+ * @var    VMODULES    Versions modules directory
  */
 define('VMODULES', VFRAMEWORK.DS.'vmodules');
 
 /**
- * @var	VMODELS	Versions modules directory
+ * @var    VMODELS    Versions modules directory
  */
 define('VMODELS', VFRAMEWORK.DS.'vmodels');
 
 /**
- * @var	VPLUGINS	Versions plugin directory
+ * @var    VPLUGINS    Versions plugin directory
  */
 define('VPLUGINS', VFRAMEWORK.DS.'vplugins');
 
 /**
- * @var	VMIDDLEWARES	Versions middleware directory
+ * @var    VMIDDLEWARES    Versions middleware directory
  */
 define('VMIDDLEWARES', VFRAMEWORK.DS.'vmiddlewares');
 
 /**
- * @var	VTEMPLATES	Versions template directory
+ * @var    VTEMPLATES    Versions template directory
  */
 define('VTEMPLATES', VFRAMEWORK.DS.'templates');
 
 /**
- * @var PROJECT_ROOT		Project root directory
+ * @var PROJECT_ROOT        Project root directory
  */
 define('PROJECT_ROOT', realpath(PROJECT_HTDOCS.DS.'..'));
 
 /**
- * @var PROJECT_CONFIG		Project config directory
+ * @var PROJECT_CONFIG        Project config directory
  */
 define('PROJECT_CONFIG', PROJECT_ROOT.DS.'config');
 
 /**
- * @var PROJECT_COMPONENTS		Project config directory
+ * @var PROJECT_COMPONENTS        Project config directory
  */
 define('PROJECT_COMPONENTS', PROJECT_ROOT.DS.'components');
 
 /**
- * @var PROJECT_MODELS		Project models directory
+ * @var PROJECT_MODELS        Project models directory
  */
 define('PROJECT_MODELS', PROJECT_ROOT.DS.'models');
 
 /**
- * @var PROJECT_PLUGINS		Project config directory
+ * @var PROJECT_PLUGINS        Project config directory
  */
 define('PROJECT_PLUGINS', PROJECT_ROOT.DS.'plugins');
 
 /**
- * @var	PROJECT_MIDDLEWARES	Project middleware directory
+ * @var    PROJECT_MIDDLEWARES    Project middleware directory
  */
 define('PROJECT_MIDDLEWARES', PROJECT_ROOT.DS.'middlewares');
 
@@ -111,11 +111,12 @@ define('PROJECT_TEMPLATES', PROJECT_ROOT.DS.'templates');
 /**
  * @var 'HTTP_USER' User which runs the Webserver
  */
-if (function_exists('posix_getuid')) {
-	$http_user = posix_getpwuid(posix_getuid()); // Get http user
-	define('HTTP_USER', $http_user["name"]);
+if (function_exists('posix_getuid'))
+ {
+    $http_user = posix_getpwuid(posix_getuid()); // Get http user
+    define('HTTP_USER', $http_user["name"]);
 } else {
-	define('HTTP_USER', ":undef:");
+    define('HTTP_USER', ":undef:");
 }
 
 

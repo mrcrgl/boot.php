@@ -13,7 +13,8 @@
 * @subpackage Cacher
 * @author Rodney Rehm
 */
-abstract class Smarty_CacheResource {
+abstract class Smarty_CacheResource 
+{
     /**
     * cache for Smarty_CacheResource instances
     * @var array
@@ -102,7 +103,7 @@ abstract class Smarty_CacheResource {
 
 
     public function locked(Smarty $smarty, Smarty_Template_Cached $cached)
-    {
+   {
         // theoretically locking_timeout should be checked against time_limit (max_execution_time)
         $start = microtime(true);
         $hadLock = null;
@@ -169,7 +170,8 @@ abstract class Smarty_CacheResource {
         }
         // try plugins dir
         $cache_resource_class = 'Smarty_CacheResource_' . ucfirst($type);
-        if ($smarty->loadPlugin($cache_resource_class)) {
+        if ($smarty->loadPlugin($cache_resource_class)) 
+{
             if (!isset(self::$resources[$type])) {
                 self::$resources[$type] = new $cache_resource_class();
             }
@@ -204,7 +206,8 @@ abstract class Smarty_CacheResource {
 * @subpackage TemplateResources
 * @author Rodney Rehm
 */
-class Smarty_Template_Cached {
+class Smarty_Template_Cached 
+{
     /**
     * Source Filepath
     * @var string
@@ -328,7 +331,7 @@ class Smarty_Template_Cached {
                     if ($smarty->debugging) {
                         Smarty_Internal_Debug::start_cache($_template);
                     }
-                    if($handler->process($_template, $this) === false) {
+                    if ($handler->process($_template, $this) === false) {
                         $this->valid = false;
                     } else {
                         $this->processed = true;

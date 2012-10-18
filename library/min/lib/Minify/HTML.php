@@ -16,7 +16,8 @@
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_HTML {
+class Minify_HTML 
+{
 
     /**
      * "Minify" an HTML page
@@ -36,7 +37,8 @@ class Minify_HTML {
      * 
      * @return string
      */
-    public static function minify($html, $options = array()) {
+    public static function minify($html, $options = array())
+     {
         $min = new Minify_HTML($html, $options);
         return $min->process();
     }
@@ -61,7 +63,7 @@ class Minify_HTML {
      * @return null
      */
     public function __construct($html, $options = array())
-    {
+     {
         $this->_html = str_replace("\r\n", "\n", trim($html));
         if (isset($options['xhtml'])) {
             $this->_isXhtml = (bool)$options['xhtml'];
@@ -81,7 +83,7 @@ class Minify_HTML {
      * @return string
      */
     public function process()
-    {
+     {
         if ($this->_isXhtml === null) {
             $this->_isXhtml = (false !== strpos($this->_html, '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML'));
         }
@@ -155,7 +157,7 @@ class Minify_HTML {
     }
     
     protected function _reservePlace($content)
-    {
+            {
         $placeholder = '%' . $this->_replacementHash . count($this->_placeholders) . '%';
         $this->_placeholders[$placeholder] = $content;
         return $placeholder;
@@ -168,12 +170,12 @@ class Minify_HTML {
     protected $_jsMinifier = null;
 
     protected function _outsideTagCB($m)
-    {
+   {
         return '>' . preg_replace('/^\\s+|\\s+$/', ' ', $m[1]) . '<';
     }
     
     protected function _removePreCB($m)
-    {
+ {
         return $this->_reservePlace($m[1]);
     }
     
@@ -205,7 +207,7 @@ class Minify_HTML {
     }
 
     protected function _removeScriptCB($m)
-    {
+        {
         $openScript = $m[2];
         $js = $m[3];
         
@@ -232,7 +234,7 @@ class Minify_HTML {
     }
 
     protected function _removeCdata($str)
-    {
+        {
         return (false !== strpos($str, '<![CDATA['))
             ? str_replace(array('<![CDATA[', ']]>'), '', $str)
             : $str;

@@ -10,7 +10,8 @@
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_CommentPreserver {
+class Minify_CommentPreserver 
+{
     
     /**
      * String to be prepended to each preserved comment
@@ -41,7 +42,7 @@ class Minify_CommentPreserver {
      * @return string
      */
     public static function process($content, $processor, $args = array())
-    {
+     {
         $ret = '';
         while (true) {
             list($beforeComment, $comment, $afterComment) = self::_nextComment($content);
@@ -70,7 +71,7 @@ class Minify_CommentPreserver {
      * 1st element and the other two are false.
      */
     private static function _nextComment($in)
-    {
+     {
         if (
             false === ($start = strpos($in, '/*!'))
             || false === ($end = strpos($in, '*/', $start + 3))

@@ -19,7 +19,7 @@ class VMiddlewareBaseSession extends VMiddleware
      * @return void
      */
     public function onBeforeRoute()
-    {
+     {
         $session =& VFactory::getSession();
     }
 
@@ -29,7 +29,7 @@ class VMiddlewareBaseSession extends VMiddleware
      * @return void
      */
     public function onBeforeQuit()
-    {
+     {
         session_write_close();
     }
 }

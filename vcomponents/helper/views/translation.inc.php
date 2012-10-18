@@ -1,17 +1,19 @@
 <?php
 
-class ComponentHelperViewTranslation extends VApplicationView {
+class ComponentHelperViewTranslation extends VApplicationView 
+{
 
-	public function show() {
+    public function show()
+ {
     $document =& VFactory::getDocument();
-	  $input    =& VFactory::getInput();
+      $input    =& VFactory::getInput();
 
-	  $document->setTemplate('translation/index.htpl');
+      $document->setTemplate('translation/index.htpl');
 
-	  if (VSettings::f('localization.engine', 'none') == 'none') {
-	    VMessages::_("Localization not enabled!", "ini file jedoens", 'info');
-	    $document->assign('is_disabled', true);
-	  }
+      if (VSettings::f('localization.engine', 'none') == 'none') {
+        VMessages::_("Localization not enabled!", "ini file jedoens", 'info');
+        $document->assign('is_disabled', true);
+      }
 
     $localization =& VLocalization::getInstance();
     $separator    = $localization->get('key_sep');
@@ -55,22 +57,23 @@ class ComponentHelperViewTranslation extends VApplicationView {
     $document->assign('to', $to);
     $document->assign('from_data', $from_data);
     $document->assign('to_data', $to_data);
-	}
+    }
 
-	public function save() {
-	  $document =& VFactory::getDocument();
-	  $input    =& VFactory::getInput();
+    public function save()
+    {
+      $document =& VFactory::getDocument();
+      $input    =& VFactory::getInput();
 
 
-	  $localization =& VLocalization::getInstance();
-	  $separator    = $localization->get('key_sep');
+      $localization =& VLocalization::getInstance();
+      $separator    = $localization->get('key_sep');
 
-	  $to   = $input->get('to', null, 'post');
+      $to   = $input->get('to', null, 'post');
 
-	  // the cache
-	  $c = array();
+      // the cache
+      $c = array();
 
-	  foreach (array_keys($_POST) as $key) {
+      foreach (array_keys($_POST) as $key) {
       if (substr($key, 0, 1) != '_') continue;
       $area = substr($key, 1);
 
@@ -93,19 +96,20 @@ class ComponentHelperViewTranslation extends VApplicationView {
 
       $ckey = $to.$separator.$area;
       $c[$ckey] = $area_data;
-	  }
+      }
 
-	  $localization->saveFiles($c);
+      $localization->saveFiles($c);
 
-	  VMessages::_("Success", "Translation saved!", "success");
-	  VResponse::redirect($_SERVER['HTTP_REFERER']);
-	}
+      VMessages::_("Success", "Translation saved!", "success");
+      VResponse::redirect($_SERVER['HTTP_REFERER']);
+    }
 
-	public function flush_cache() {
-	  $localization =& VLocalization::getInstance();
-	  $localization->clearCache();
+    public function flush_cache()
+    {
+      $localization =& VLocalization::getInstance();
+      $localization->clearCache();
 
-	  VMessages::_("Success", "Cache cleared!", "success");
-	  VResponse::redirect($_SERVER['HTTP_REFERER']);
-	}
+      VMessages::_("Success", "Cache cleared!", "success");
+      VResponse::redirect($_SERVER['HTTP_REFERER']);
+    }
 }

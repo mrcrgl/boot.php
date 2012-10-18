@@ -1,15 +1,17 @@
 <?php
 
-class VModelFieldBoolean extends VModelField {
+class VModelFieldBoolean extends VModelField 
+{
 
-	var $type = 'boolean';
+    var $type = 'boolean';
 
-	var $default = 1;
+    var $default = 1;
 
-	var $null = false;
+    var $null = false;
 
-	public function __construct($options=array()) {
-		parent::__construct($options);
-	}
+    public function __construct($options=array())
+   {
+        parent::__construct($options);
+    }
 
 }

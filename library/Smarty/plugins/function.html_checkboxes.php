@@ -43,7 +43,7 @@
  * @uses smarty_function_escape_special_chars()
  */
 function smarty_function_html_checkboxes($params, $template)
-{
+ {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
 
     $name = 'checkbox';
@@ -58,7 +58,7 @@ function smarty_function_html_checkboxes($params, $template)
 
     $extra = '';
 
-    foreach($params as $_key => $_val) {
+    foreach ($params as $_key => $_val) {
         switch($_key) {
             case 'name':
             case 'separator':
@@ -117,7 +117,7 @@ function smarty_function_html_checkboxes($params, $template)
                 break;
 
             default:
-                if(!is_array($_val)) {
+                if (!is_array($_val)) {
                     $extra .= ' '.$_key.'="'.smarty_function_escape_special_chars($_val).'"';
                 } else {
                     trigger_error("html_checkboxes: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
@@ -142,7 +142,7 @@ function smarty_function_html_checkboxes($params, $template)
         }
     }
 
-    if(!empty($params['assign'])) {
+    if (!empty($params['assign'])) {
         $template->assign($params['assign'], $_html_result);
     } else {
         return implode("\n", $_html_result);
@@ -150,7 +150,8 @@ function smarty_function_html_checkboxes($params, $template)
 
 }
 
-function smarty_function_html_checkboxes_output($name, $value, $output, $selected, $extra, $separator, $labels, $label_ids, $escape=true) {
+function smarty_function_html_checkboxes_output($name, $value, $output, $selected, $extra, $separator, $labels, $label_ids, $escape=true)
+    {
     $_output = '';
     
     if (is_object($value)) {

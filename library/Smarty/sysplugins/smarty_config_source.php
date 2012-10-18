@@ -19,7 +19,8 @@
  * @property int    $timestamp
  * @property bool   $exists
  */
-class Smarty_Config_Source extends Smarty_Template_Source {
+class Smarty_Config_Source extends Smarty_Template_Source 
+{
 
     /**
      * create Config Object container
@@ -32,7 +33,7 @@ class Smarty_Config_Source extends Smarty_Template_Source {
      * @param string          $unique_resource  unqiue resource name
      */
     public function __construct(Smarty_Resource $handler, Smarty $smarty, $resource, $type, $name, $unique_resource)
-    {
+     {
         $this->handler = $handler; // Note: prone to circular references
 
         // Note: these may be ->config_compiler_class etc in the future
@@ -55,7 +56,7 @@ class Smarty_Config_Source extends Smarty_Template_Source {
      * @throws SmartyException when the given property name is not valid
      */
     public function __set($property_name, $value)
-    {
+     {
         switch ($property_name) {
             case 'content':
             case 'timestamp':
@@ -75,7 +76,7 @@ class Smarty_Config_Source extends Smarty_Template_Source {
      * @throws SmartyException when the given property name is not valid
      */
     public function __get($property_name)
-    {
+     {
         switch ($property_name) {
             case 'timestamp':
             case 'exists':

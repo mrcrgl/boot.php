@@ -35,7 +35,7 @@
  * @uses smarty_function_escape_special_chars()
  */
 function smarty_function_html_image($params, $template)
-{
+ {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
  
     $alt = '';
@@ -47,7 +47,7 @@ function smarty_function_html_image($params, $template)
     $suffix = '';
     $path_prefix = '';
     $basedir = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '';
-    foreach($params as $_key => $_val) {
+    foreach ($params as $_key => $_val) {
         switch ($_key) {
             case 'file':
             case 'height':
@@ -106,12 +106,12 @@ function smarty_function_html_image($params, $template)
     if (isset($template->smarty->security_policy)) {
         if ($protocol) {
             // remote resource (or php stream, …)
-            if(!$template->smarty->security_policy->isTrustedUri($params['file'])) {
+            if (!$template->smarty->security_policy->isTrustedUri($params['file'])) {
                 return;
             }
         } else {
             // local file
-            if(!$template->smarty->security_policy->isTrustedResourceDir($params['file'])) {
+            if (!$template->smarty->security_policy->isTrustedResourceDir($params['file'])) {
                 return;
             }
         }

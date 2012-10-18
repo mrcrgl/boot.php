@@ -15,7 +15,7 @@ class TPC_yyToken implements ArrayAccess
     public $metadata = array();
 
     function __construct($s, $m = array())
-    {
+   {
         if ($s instanceof TPC_yyToken) {
             $this->string = $s->string;
             $this->metadata = $s->metadata;
@@ -30,7 +30,7 @@ class TPC_yyToken implements ArrayAccess
     }
 
     function __toString()
-    {
+            {
         return $this->_string;
     }
 
@@ -68,7 +68,7 @@ class TPC_yyToken implements ArrayAccess
     }
 
     function offsetUnset($offset)
-    {
+        {
         unset($this->metadata[$offset]);
     }
 }
@@ -94,7 +94,8 @@ class Smarty_Internal_Configfileparser#line 79 "smarty_internal_configfileparser
     private $lex;
     private $internalError = false;
 
-    function __construct($lex, $compiler) {
+    function __construct($lex, $compiler)
+   {
         // set instance object
         self::instance($this);
         $this->lex = $lex;
@@ -109,7 +110,8 @@ class Smarty_Internal_Configfileparser#line 79 "smarty_internal_configfileparser
         return $instance;
     }
 
-    private function parse_bool($str) {
+    private function parse_bool($str)
+    {
         if (in_array(strtolower($str) ,array('on','yes','true'))) {
             $res = true;
         } else {
@@ -120,7 +122,8 @@ class Smarty_Internal_Configfileparser#line 79 "smarty_internal_configfileparser
 
     private static $escapes_single = Array('\\' => '\\',
                                           '\'' => '\'');
-    private static function parse_single_quoted_string($qstr) {
+    private static function parse_single_quoted_string($qstr)
+ {
         $escaped_string = substr($qstr, 1, strlen($qstr)-2); //remove outer quotes
 
         $ss = preg_split('/(\\\\.)/', $escaped_string, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -139,16 +142,19 @@ class Smarty_Internal_Configfileparser#line 79 "smarty_internal_configfileparser
         return $str;
     }
 
-    private static function parse_double_quoted_string($qstr) {
+    private static function parse_double_quoted_string($qstr)
+    {
         $inner_str = substr($qstr, 1, strlen($qstr)-2);
         return stripcslashes($inner_str);
     }
 
-    private static function parse_tripple_double_quoted_string($qstr) {
+    private static function parse_tripple_double_quoted_string($qstr)
+    {
         return stripcslashes($qstr);
     }
 
-    private function set_var(Array $var, Array &$target_array) {
+    private function set_var(Array $var, Array &$target_array)
+    {
         $key = $var["key"];
         $value = $var["value"];
 
@@ -160,7 +166,8 @@ class Smarty_Internal_Configfileparser#line 79 "smarty_internal_configfileparser
         }
     }
 
-    private function add_global_vars(Array $vars) {
+    private function add_global_vars(Array $vars)
+        {
         if (!isset($this->compiler->config_data['vars'])) {
       $this->compiler->config_data['vars'] = Array();
         }
@@ -169,7 +176,8 @@ class Smarty_Internal_Configfileparser#line 79 "smarty_internal_configfileparser
         }
     }
 
-    private function add_section_vars($section_name, Array $vars) {
+    private function add_section_vars($section_name, Array $vars)
+        {
         if (!isset($this->compiler->config_data['sections'][$section_name]['vars'])) {
             $this->compiler->config_data['sections'][$section_name]['vars'] = Array();
         }
@@ -350,14 +358,14 @@ static public $yy_action = array(
     }
 
     static function yy_destructor($yymajor, $yypminor)
-    {
+        {
         switch ($yymajor) {
             default:  break;   /* If no destructor action specified: do nothing */
         }
     }
 
     function yy_pop_parser_stack()
-    {
+ {
         if (!count($this->yystack)) {
             return;
         }
@@ -384,7 +392,7 @@ static public $yy_action = array(
     }
 
     function yy_get_expected_tokens($token)
-    {
+        {
         $state = $this->yystack[$this->yyidx]->stateno;
         $expected = self::$yyExpectedTokens[$state];
         if (in_array($token, self::$yyExpectedTokens[$state], true)) {
@@ -411,7 +419,7 @@ static public $yy_action = array(
                         $this->yystack[$this->yyidx]->stateno,
                         self::$yyRuleInfo[$yyruleno]['lhs']);
                     if (isset(self::$yyExpectedTokens[$nextstate])) {
-		        $expected = array_merge($expected, self::$yyExpectedTokens[$nextstate]);
+                $expected = array_merge($expected, self::$yyExpectedTokens[$nextstate]);
                             if (in_array($token,
                                   self::$yyExpectedTokens[$nextstate], true)) {
                             $this->yyidx = $yyidx;
@@ -446,8 +454,8 @@ static public $yy_action = array(
             }
             break;
         } while (true);
-	$this->yyidx = $yyidx;
-	$this->yystack = $stack;
+    $this->yyidx = $yyidx;
+    $this->yystack = $stack;
         return array_unique($expected);
     }
 
@@ -557,7 +565,7 @@ static public $yy_action = array(
     }
 
     function yy_find_reduce_action($stateno, $iLookAhead)
-    {
+        {
         /* $stateno = $this->yystack[$this->yyidx]->stateno; */
 
         if (!isset(self::$yy_reduce_ofst[$stateno])) {
@@ -580,7 +588,7 @@ static public $yy_action = array(
     }
 
     function yy_shift($yyNewState, $yyMajor, $yypMinor)
-    {
+        {
         $this->yyidx++;
         if ($this->yyidx >= self::YYSTACKDEPTH) {
             $this->yyidx--;
@@ -664,23 +672,27 @@ static public $yy_action = array(
         18 => 17,
     );
 #line 131 "smarty_internal_configfileparser.y"
-    function yy_r0(){
+    function yy_r0()
+   {
     $this->_retvalue = null;
     }
 #line 666 "smarty_internal_configfileparser.php"
 #line 136 "smarty_internal_configfileparser.y"
-    function yy_r1(){
+    function yy_r1()
+   {
     $this->add_global_vars($this->yystack[$this->yyidx + 0]->minor); $this->_retvalue = null;
     }
 #line 671 "smarty_internal_configfileparser.php"
 #line 149 "smarty_internal_configfileparser.y"
-    function yy_r4(){
+    function yy_r4()
+   {
     $this->add_section_vars($this->yystack[$this->yyidx + -3]->minor, $this->yystack[$this->yyidx + 0]->minor);
     $this->_retvalue = null;
     }
 #line 677 "smarty_internal_configfileparser.php"
 #line 154 "smarty_internal_configfileparser.y"
-    function yy_r5(){
+    function yy_r5()
+   {
     if ($this->smarty->config_read_hidden) {
         $this->add_section_vars($this->yystack[$this->yyidx + -3]->minor, $this->yystack[$this->yyidx + 0]->minor);
     }
@@ -688,62 +700,74 @@ static public $yy_action = array(
     }
 #line 685 "smarty_internal_configfileparser.php"
 #line 162 "smarty_internal_configfileparser.y"
-    function yy_r6(){
+    function yy_r6()
+   {
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
 #line 690 "smarty_internal_configfileparser.php"
 #line 166 "smarty_internal_configfileparser.y"
-    function yy_r7(){
+    function yy_r7()
+   {
     $this->_retvalue = array_merge($this->yystack[$this->yyidx + -1]->minor, Array($this->yystack[$this->yyidx + 0]->minor));
     }
 #line 695 "smarty_internal_configfileparser.php"
 #line 170 "smarty_internal_configfileparser.y"
-    function yy_r8(){
+    function yy_r8()
+   {
     $this->_retvalue = Array();
     }
 #line 700 "smarty_internal_configfileparser.php"
 #line 176 "smarty_internal_configfileparser.y"
-    function yy_r9(){
+    function yy_r9()
+   {
     $this->_retvalue = Array("key" => $this->yystack[$this->yyidx + -2]->minor, "value" => $this->yystack[$this->yyidx + 0]->minor);
     }
 #line 705 "smarty_internal_configfileparser.php"
 #line 181 "smarty_internal_configfileparser.y"
-    function yy_r10(){
+    function yy_r10()
+   {
     $this->_retvalue = (float) $this->yystack[$this->yyidx + 0]->minor;
     }
 #line 710 "smarty_internal_configfileparser.php"
 #line 185 "smarty_internal_configfileparser.y"
-    function yy_r11(){
+    function yy_r11()
+   {
     $this->_retvalue = (int) $this->yystack[$this->yyidx + 0]->minor;
     }
 #line 715 "smarty_internal_configfileparser.php"
 #line 189 "smarty_internal_configfileparser.y"
-    function yy_r12(){
+    function yy_r12()
+   {
     $this->_retvalue = $this->parse_bool($this->yystack[$this->yyidx + 0]->minor);
     }
 #line 720 "smarty_internal_configfileparser.php"
 #line 193 "smarty_internal_configfileparser.y"
-    function yy_r13(){
+    function yy_r13()
+   {
     $this->_retvalue = self::parse_single_quoted_string($this->yystack[$this->yyidx + 0]->minor);
     }
 #line 725 "smarty_internal_configfileparser.php"
 #line 197 "smarty_internal_configfileparser.y"
-    function yy_r14(){
+    function yy_r14()
+   {
     $this->_retvalue = self::parse_double_quoted_string($this->yystack[$this->yyidx + 0]->minor);
     }
 #line 730 "smarty_internal_configfileparser.php"
 #line 201 "smarty_internal_configfileparser.y"
-    function yy_r15(){
+    function yy_r15()
+   {
     $this->_retvalue = self::parse_tripple_double_quoted_string($this->yystack[$this->yyidx + -1]->minor);
     }
 #line 735 "smarty_internal_configfileparser.php"
 #line 205 "smarty_internal_configfileparser.y"
-    function yy_r16(){
+    function yy_r16()
+   {
     $this->_retvalue = '';
     }
 #line 740 "smarty_internal_configfileparser.php"
 #line 209 "smarty_internal_configfileparser.y"
-    function yy_r17(){
+    function yy_r17()
+   {
     $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
     }
 #line 745 "smarty_internal_configfileparser.php"
@@ -751,7 +775,7 @@ static public $yy_action = array(
     private $_retvalue;
 
     function yy_reduce($yyruleno)
-    {
+   {
         $yymsp = $this->yystack[$this->yyidx];
         if (self::$yyTraceFILE && $yyruleno >= 0
               && $yyruleno < count(self::$yyRuleName)) {
@@ -792,7 +816,7 @@ static public $yy_action = array(
     }
 
     function yy_parse_failed()
-    {
+        {
         if (self::$yyTraceFILE) {
             fprintf(self::$yyTraceFILE, "%sFail!\n", self::$yyTracePrompt);
         }
@@ -802,7 +826,7 @@ static public $yy_action = array(
     }
 
     function yy_syntax_error($yymajor, $TOKEN)
-    {
+        {
 #line 118 "smarty_internal_configfileparser.y"
 
     $this->internalError = true;

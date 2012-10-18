@@ -16,7 +16,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase 
+{
 
     /**
      * Attribute definition: Overwrites base class.
@@ -48,7 +49,7 @@ class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase {
      * @return string compiled code
      */
     public function compile($args, $compiler)
-    {
+     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         // never compile as nocache code
@@ -82,7 +83,7 @@ class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase {
                     $_dir = $compiler->smarty->trusted_dir;
                 }
                 if (!empty($_dir)) {
-                    foreach((array)$_dir as $_script_dir) {
+                    foreach ((array)$_dir as $_script_dir) {
                         $_script_dir = rtrim($_script_dir, '/\\') . DS;
                         if (file_exists($_script_dir . $_script)) {
                             $_filepath = $_script_dir . $_script;
@@ -97,16 +98,19 @@ class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase {
             // code for script file loading
             $_output .= "require_once '{$_filepath}' ;";
             require_once $_filepath;
-            if (!is_callable($_function)) {
+            if (!is_callable($_function))
+           {
                 $compiler->trigger_template_error(" {insert} function '{$_function}' is not callable in script file '{$_script}'", $compiler->lex->taglineno);
             }
         } else {
             $_filepath = 'null';
             $_function = "insert_{$_name}";
             // function in PHP script ?
-            if (!is_callable($_function)) {
+            if (!is_callable($_function))
+ {
                 // try plugin
-                if (!$_function = $compiler->getPlugin($_name, 'insert')) {
+                if (!$_function = $compiler->getPlugin($_name, 'insert'))
+               {
                     $compiler->trigger_template_error("{insert} no function or plugin found for '{$_name}'", $compiler->lex->taglineno);
                 }
             }

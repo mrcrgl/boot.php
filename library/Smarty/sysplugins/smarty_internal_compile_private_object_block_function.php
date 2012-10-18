@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Private_Object_Block_Function extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Private_Object_Block_Function extends Smarty_Internal_CompileBase 
+{
 
     /**
      * Attribute definition: Overwrites base class.
@@ -36,7 +37,7 @@ class Smarty_Internal_Compile_Private_Object_Block_Function extends Smarty_Inter
      * @return string compiled code
      */
     public function compile($args, $compiler, $parameter, $tag, $method)
-    {
+     {
         if (!isset($tag[5]) || substr($tag, -5) != 'close') {
             // opening tag of block plugin
             // check and get attributes
