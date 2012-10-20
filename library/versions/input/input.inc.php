@@ -40,7 +40,7 @@ class VInput
      * @var    array
      * @since  2.0
      */
-    protected $inputs = array();
+    protected $oInputs = array();
 
     /**
      * Constructor.

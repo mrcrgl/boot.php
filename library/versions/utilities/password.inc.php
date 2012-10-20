@@ -108,38 +108,38 @@ class VPassword
      * @param  integer Key
      * @return string
      */
-    function createFromLogin($login, $type, $key = 0)
+    function createFromLogin($oLogin, $type, $key = 0)
      {
         switch ($type) {
         case 'reverse':
-            return strrev($login);
+            return strrev($oLogin);
 
         case 'shuffle':
-            return VPassword::_shuffle($login);
+            return VPassword::_shuffle($oLogin);
 
         case 'xor':
-            return VPassword::_xor($login, $key);
+            return VPassword::_xor($oLogin, $key);
 
         case 'rot13':
-            return str_rot13($login);
+            return str_rot13($oLogin);
 
         case 'rotx':
-            return VPassword::_rotx($login, $key);
+            return VPassword::_rotx($oLogin, $key);
 
         case 'rotx++':
-            return VPassword::_rotxpp($login, $key);
+            return VPassword::_rotxpp($oLogin, $key);
 
         case 'rotx--':
-            return VPassword::_rotxmm($login, $key);
+            return VPassword::_rotxmm($oLogin, $key);
 
         case 'ascii_rotx':
-            return VPassword::_asciiRotx($login, $key);
+            return VPassword::_asciiRotx($oLogin, $key);
 
         case 'ascii_rotx++':
-            return VPassword::_asciiRotxpp($login, $key);
+            return VPassword::_asciiRotxpp($oLogin, $key);
 
         case 'ascii_rotx--':
-            return VPassword::_asciiRotxmm($login, $key);
+            return VPassword::_asciiRotxmm($oLogin, $key);
         }
     }
 
@@ -154,15 +154,15 @@ class VPassword
      * @param  integer Key
      * @return array   Array containing the passwords
      */
-    function createMultipleFromLogin($login, $type, $key = 0)
+    function createMultipleFromLogin($oLogin, $type, $key = 0)
      {
         $passwords = array();
-        $number    = count($login);
+        $number    = count($oLogin);
         $save      = $number;
 
         while ($number > 0) {
             while (true) {
-                $password = VPassword::createFromLogin($login[$save - $number], $type, $key);
+                $password = VPassword::createFromLogin($oLogin[$save - $number], $type, $key);
                 if (!in_array($password, $passwords)) {
                     $passwords[] = $password;
                     break;
@@ -183,12 +183,12 @@ class VPassword
      * @param  integer Key
      * @return string
      */
-    function _xor($login, $key)
+    function _xor($oLogin, $key)
      {
         $tmp = '';
 
-        for ($i = 0; $i < strlen($login); $i++) {
-            $next = ord($login{$i}) ^ $key;
+        for ($i = 0; $i < strlen($oLogin); $i++) {
+            $next = ord($oLogin{$i}) ^ $key;
             if ($next > 255) {
                 $next -= 255;
             } elseif ($next < 0) {
@@ -211,14 +211,14 @@ class VPassword
      * @param  integer Key
      * @return string
      */
-    function _rotx($login, $key)
+    function _rotx($oLogin, $key)
      {
         $tmp = '';
-        $login = strtolower($login);
+        $oLogin = strtolower($oLogin);
 
-        for ($i = 0; $i < strlen($login); $i++) {
-            if ((ord($login{$i}) >= 97) && (ord($login{$i}) <= 122)) { // 65, 90 for uppercase
-                $next = ord($login{$i}) + $key;
+        for ($i = 0; $i < strlen($oLogin); $i++) {
+            if ((ord($oLogin{$i}) >= 97) && (ord($oLogin{$i}) <= 122)) { // 65, 90 for uppercase
+                $next = ord($oLogin{$i}) + $key;
                 if ($next > 122) {
                     $next -= 26;
                 } elseif ($next < 97) {
@@ -226,7 +226,7 @@ class VPassword
                 }
                 $tmp .= chr($next);
             } else {
-                $tmp .= $login{$i};
+                $tmp .= $oLogin{$i};
             }
         }
 
@@ -244,14 +244,14 @@ class VPassword
      * @param  integer Key
      * @return string
      */
-    function _rotxpp($login, $key)
+    function _rotxpp($oLogin, $key)
      {
         $tmp = '';
-        $login = strtolower($login);
+        $oLogin = strtolower($oLogin);
 
-        for ($i = 0; $i < strlen($login); $i++, $key++) {
-            if ((ord($login{$i}) >= 97) && (ord($login{$i}) <= 122)) { // 65, 90 for uppercase
-                $next = ord($login{$i}) + $key;
+        for ($i = 0; $i < strlen($oLogin); $i++, $key++) {
+            if ((ord($oLogin{$i}) >= 97) && (ord($oLogin{$i}) <= 122)) { // 65, 90 for uppercase
+                $next = ord($oLogin{$i}) + $key;
                 if ($next > 122) {
                     $next -= 26;
                 } elseif ($next < 97) {
@@ -259,7 +259,7 @@ class VPassword
                 }
                 $tmp .= chr($next);
             } else {
-                $tmp .= $login{$i};
+                $tmp .= $oLogin{$i};
             }
         }
 
@@ -277,14 +277,14 @@ class VPassword
      * @param  integer Key
      * @return string
      */
-    function _rotxmm($login, $key)
+    function _rotxmm($oLogin, $key)
      {
         $tmp = '';
-        $login = strtolower($login);
+        $oLogin = strtolower($oLogin);
 
-        for ($i = 0; $i < strlen($login); $i++, $key--) {
-            if ((ord($login{$i}) >= 97) && (ord($login{$i}) <= 122)) { // 65, 90 for uppercase
-                $next = ord($login{$i}) + $key;
+        for ($i = 0; $i < strlen($oLogin); $i++, $key--) {
+            if ((ord($oLogin{$i}) >= 97) && (ord($oLogin{$i}) <= 122)) { // 65, 90 for uppercase
+                $next = ord($oLogin{$i}) + $key;
                 if ($next > 122) {
                     $next -= 26;
                 } elseif ($next < 97) {
@@ -292,7 +292,7 @@ class VPassword
                 }
                 $tmp .= chr($next);
             } else {
-                $tmp .= $login{$i};
+                $tmp .= $oLogin{$i};
             }
         }
 
@@ -309,12 +309,12 @@ class VPassword
      * @param  integer Key
      * @return string
      */
-    function _asciiRotx($login, $key)
+    function _asciiRotx($oLogin, $key)
      {
         $tmp = '';
 
-        for ($i = 0; $i < strlen($login); $i++) {
-            $next = ord($login{$i}) + $key;
+        for ($i = 0; $i < strlen($oLogin); $i++) {
+            $next = ord($oLogin{$i}) + $key;
             if ($next > 255) {
                 $next -= 255;
             } elseif ($next < 0) {
@@ -343,12 +343,12 @@ class VPassword
      * @param  integer Key
      * @return string
      */
-    function _asciiRotxpp($login, $key)
+    function _asciiRotxpp($oLogin, $key)
      {
         $tmp = '';
 
-        for ($i = 0; $i < strlen($login); $i++, $key++) {
-            $next = ord($login{$i}) + $key;
+        for ($i = 0; $i < strlen($oLogin); $i++, $key++) {
+            $next = ord($oLogin{$i}) + $key;
             if ($next > 255) {
                 $next -= 255;
             } elseif ($next < 0) {
@@ -377,12 +377,12 @@ class VPassword
      * @param  integer Key
      * @return string
      */
-    function _asciiRotxmm($login, $key)
+    function _asciiRotxmm($oLogin, $key)
      {
         $tmp = '';
 
-        for ($i = 0; $i < strlen($login); $i++, $key--) {
-            $next = ord($login{$i}) + $key;
+        for ($i = 0; $i < strlen($oLogin); $i++, $key--) {
+            $next = ord($oLogin{$i}) + $key;
             if ($next > 255) {
                 $next -= 255;
             } elseif ($next < 0) {
@@ -410,12 +410,12 @@ class VPassword
      * @param  string  Login
      * @return string
      */
-    function _shuffle($login)
+    function _shuffle($oLogin)
      {
         $tmp = array();
 
-        for ($i = 0; $i < strlen($login); $i++) {
-            $tmp[] = $login{$i};
+        for ($i = 0; $i < strlen($oLogin); $i++) {
+            $tmp[] = $oLogin{$i};
         }
 
         shuffle($tmp);

@@ -45,13 +45,12 @@ class VSessionStorageMemcache extends VSessionStorage
     public function __construct($options = array())
      {
         if (!$this->test()) {
-            return JError::raiseError(404, JText::_('JLIB_SESSION_MEMCACHE_EXTENSION_NOT_AVAILABLE'));
+            VResponse::error(404);
         }
 
         parent::__construct($options);
 
-        $config = JFactory::getConfig();
-        $params = $config->get('memcache_settings');
+        $params = VSettings::f('memcache_settings', array());
         if (!Validator::is($params, 'array')) {
             $params = unserialize(stripslashes($params));
         }

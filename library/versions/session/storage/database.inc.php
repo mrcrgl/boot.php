@@ -2,12 +2,12 @@
 /**
  * Database session storage handler for PHP
  *
- * @package     Joomla.Platform
+ * @package     Versions.core
  * @subpackage  Session
  * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
  * @since       11.1
  */
-class JSessionStorageDatabase extends JSessionStorage
+class VSessionStorageDatabase extends VSessionStorage
 {
     /**
      * @var    unknown  No idea what this does.
@@ -54,7 +54,7 @@ class JSessionStorageDatabase extends JSessionStorage
     public function read($id)
      {
         // Get the database connection object and verify its connected.
-        $db = JFactory::getDbo();
+        $db = VFactory::getDatabase();
         if (!$db->connected()) {
             return false;
         }
@@ -83,7 +83,7 @@ class JSessionStorageDatabase extends JSessionStorage
     public function write($id, $data)
      {
         // Get the database connection object and verify its connected.
-        $db = JFactory::getDbo();
+        $db = VFactory::getDatabase();
         if (!$db->connected()) {
             return false;
         }
@@ -124,7 +124,7 @@ class JSessionStorageDatabase extends JSessionStorage
     public function destroy($id)
      {
         // Get the database connection object and verify its connected.
-        $db = JFactory::getDbo();
+        $db = VFactory::getDatabase();
         if (!$db->connected()) {
             return false;
         }
@@ -150,7 +150,7 @@ class JSessionStorageDatabase extends JSessionStorage
     public function gc($lifetime = 1440)
      {
         // Get the database connection object and verify its connected.
-        $db = JFactory::getDbo();
+        $db = VFactory::getDatabase();
         if (!$db->connected()) {
             return false;
         }

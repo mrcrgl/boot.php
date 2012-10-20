@@ -1,23 +1,21 @@
 <?php
 /**
- * @package     Joomla.Platform
+ * @package     Versions.core
  * @subpackage  Session
  *
  * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_PLATFORM') or die;
-
 /**
  * WINCACHE session storage handler for PHP
  *
- * @package     Joomla.Platform
+ * @package     Versions.core
  * @subpackage  Session
  * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
  * @since       11.1
  */
-class JSessionStorageWincache extends JSessionStorage
+class VSessionStorageWincache extends VSessionStorage
 {
     /**
      * Constructor
@@ -29,7 +27,7 @@ class JSessionStorageWincache extends JSessionStorage
     public function __construct($options = array())
      {
         if (!$this->test()) {
-            return JError::raiseError(404, JText::_('JLIB_SESSION_WINCACHE_EXTENSION_NOT_AVAILABLE'));
+            VResponse::error(404);
         }
 
         parent::__construct($options);

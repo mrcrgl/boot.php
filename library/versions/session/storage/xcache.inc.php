@@ -2,11 +2,11 @@
 /**
  * XCache session storage handler
  *
- * @package     Joomla.Platform
+ * @package     Versions.core
  * @subpackage  Cache
  * @since       11.1
  */
-class JSessionStorageXcache extends JSessionStorage 
+class VSessionStorageXcache extends VSessionStorage
 {
     /**
      * Constructor
@@ -18,7 +18,7 @@ class JSessionStorageXcache extends JSessionStorage
     public function __construct($options = array())
      {
         if (!$this->test()) {
-            return JError::raiseError(404, JText::_('JLIB_SESSION_XCACHE_EXTENSION_NOT_AVAILABLE'));
+            VResponse::error(404);
         }
 
         parent::__construct($options);

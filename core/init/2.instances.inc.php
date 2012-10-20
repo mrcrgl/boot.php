@@ -1,15 +1,14 @@
 <?php
-
-
-/*
-function myErrorHandler($errno, $errstr, $errfile, $errline) {
-    print "pssst. theres a error, but i wont tell u ($errno, $errstr, $errfile, $errline)<br />";
-}
-
-set_error_handler("myErrorHandler");
-*/
-
+/**
+ * Initialize VSettings and VDebug.
+ *
+ * @license   MIT Licence (see LICENSE file)
+ * @copyright 2012 Marc Riegel
+ *
+ * @author  Marc Riegel <mail@marclab.de>
+ * @package Versions.core
+ * @subpackage Init
+ */
 
 VSettings::init();
 VDebug::init();
-//VInput::init();

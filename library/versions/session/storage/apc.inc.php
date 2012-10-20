@@ -2,12 +2,12 @@
 /**
  * APC session storage handler for PHP
  *
- * @package     Joomla.Platform
+ * @package     Versions.core
  * @subpackage  Session
  * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
- * @since       11.1
+ * @since       2.0
  */
-class JSessionStorageApc extends JSessionStorage
+class VSessionStorageApc extends VSessionStorage
 {
     /**
      * Constructor

@@ -1,6 +1,6 @@
 <?php
 
-class ComponentAuthViewLogin extends VApplicationView 
+class ComponentAuthViewLogin extends VApplicationView
 {
   
   
@@ -35,8 +35,8 @@ class ComponentAuthViewLogin extends VApplicationView
       {
       
       $oDocument =& VFactory::getDocument();
-      $input         =& VFactory::getInput();
-      $session     =& VFactory::getSession();
+      $oInput         =& VFactory::getInput();
+      $oSession     =& VFactory::getSession();
       
       if ($oInput->get('do_login', false, 'post')) {
       $refLogin = new ComponentAuthModelLogin("User");
@@ -67,8 +67,7 @@ class ComponentAuthViewLogin extends VApplicationView
   public function logout()
   {
       $oDocument =& VFactory::getDocument();
-      $input         =& VFactory::getInput();
-      $session     =& VFactory::getSession();
+      $oSession     =& VFactory::getSession();
       
       #$oDocument->setTemplate('login.htpl');
       

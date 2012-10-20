@@ -11,7 +11,7 @@ abstract class VFactory
 
     public static $router = null;
 
-    public static $input = null;
+    public static $oInput = null;
 
     public static $controller = null;
 
@@ -95,16 +95,16 @@ abstract class VFactory
     static public function getInput($instance='default')
     {
 
-        if (!self::$input) {
-            self::$input = array();
+        if (!self::$oInput) {
+            self::$oInput = array();
         }
 
-        if (!array_key_exists($instance, self::$input) || !is_object(self::$input[$instance])) {
+        if (!array_key_exists($instance, self::$oInput) || !is_object(self::$oInput[$instance])) {
 
-            self::$input[$instance] = VInput::getInstance();
+            self::$oInput[$instance] = VInput::getInstance();
         }
 
-        return self::$input[$instance];
+        return self::$oInput[$instance];
     }
 
     static public function getController($instance='default')
@@ -170,10 +170,10 @@ abstract class VFactory
       if (!self::$user) {
 
         $oSession =& self::getSession();
-        $login =& $oSession->get('login');
-        if ($login && is_object($login) && $login->loggedIn()) {
+        $oLogin =& $oSession->get('login');
+        if ($oLogin && is_object($oLogin) && $oLogin->loggedIn()) {
           self::$user = new User();
-          self::$user->load($login->obj->uid);
+          self::$user->load($oLogin->obj->uid);
         } else {
           return true;
         }
