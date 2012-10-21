@@ -61,7 +61,7 @@ class VApplicationController extends VObject
      * @return void
      */
     public function __construct()
-     {
+    {
 
     }
 
@@ -87,7 +87,7 @@ class VApplicationController extends VObject
         if (!class_exists($sControllerClassname))
             VLoader::autoload($sControllerClassname);
 
-        if (!class_exists($sControllerClassname)) 
+        if (!class_exists($sControllerClassname))
 {
             $sMessage = sprintf(
                 "Controller '%s' not found!",
@@ -96,7 +96,7 @@ class VApplicationController extends VObject
             throw new Exception($sMessage);
         }
 
-        if (!class_exists('VArray')) 
+        if (!class_exists('VArray'))
 {
           VLoader::import('versions.utilities.array');
         }
@@ -189,7 +189,7 @@ class VApplicationController extends VObject
     }
 
     public function handleRequest()
-                {
+    {
 
         VMiddleware::trigger('onBeforePrepareRequest');
         $this->prepareRequest();
@@ -225,7 +225,7 @@ class VApplicationController extends VObject
         // Import view file
         if (!VLoader::check_extensions($sFilename)) {
             // Throw 404
-          VResponse::error(404);
+            VResponse::error(404);
         }
 
 
