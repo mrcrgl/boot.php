@@ -42,7 +42,7 @@ class UserSearch extends UserManager
     
     if ($this->boolSearchRequestDone == true) {
       $query = "DROP TEMPORARY TABLE `search_request`";
-      $dbo =& VFactory::getDatabase();
+      $dbo =& BFactory::getDatabase();
         $dbo->userQuery($query);
     }
     
@@ -93,7 +93,7 @@ class UserSearch extends UserManager
              "FROM `user` AS m " .
              "WHERE 1 ORDER BY rel DESC LIMIT 500)";
     #print $query;
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->userQuery($query);
     
     if (!$dbo->getNumRows()) {
@@ -109,7 +109,7 @@ class UserSearch extends UserManager
   {
     $this->searchRequest();
     
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->userQuery("SELECT `uid`, `relevance` FROM `search_request` WHERE `relevance` IS NOT NULL ORDER BY `relevance` DESC, `ts_update` DESC LIMIT ".((isset($this->pagination)) ? $this->pagination->getLimitStatement() : "0,15"));
     
     $record = array();
@@ -123,7 +123,7 @@ class UserSearch extends UserManager
   private function requestNumRows()
   {
     $this->searchRequest();
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->userQuery("SELECT COUNT(*) AS `count` FROM `search_request` WHERE `relevance` IS NOT NULL");
     $dbo->nextRecord();
     return $dbo->f("count");

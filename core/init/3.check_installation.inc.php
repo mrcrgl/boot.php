@@ -6,9 +6,9 @@
  * @copyright 2012 Marc Riegel
  *
  * @author  Marc Riegel <mail@marclab.de>
- * @package Versions.core
+ * @package boot.php.core
  * @subpackage Init
  */
 
 // Currently not used.
-null;
+#null;

@@ -2,7 +2,7 @@
 
 VLoader::import('versions.utilities.string');
 
-class ComponentCrudViewModel extends VApplicationView 
+class ComponentCrudViewModel extends BApplicationView 
 {
 
     var $object_name = null;
@@ -21,7 +21,7 @@ class ComponentCrudViewModel extends VApplicationView
    {
         $this->fetchObject();
 
-        $oDocument =& VFactory::getDocument();
+        $oDocument =& BFactory::getDocument();
         $oRenderer =& $oDocument->getRenderer();
         $oRenderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 
@@ -31,7 +31,7 @@ class ComponentCrudViewModel extends VApplicationView
             $oDocument->assign('user_defined_template', $this->getAlternateTemplate('create.htpl'));
         }
 
-      $oInput =& VFactory::getInput();
+      $oInput =& BFactory::getInput();
       if (strtolower($oInput->getMethod()) == 'post') {
           $this->updateObject();
           header( sprintf("Location: /%s%s", $oDocument->getUrlPrefix(), (($this->object->getModelVersion() == 1) ? $this->object->uid : $this->object->get('uid'))) );
@@ -44,7 +44,7 @@ class ComponentCrudViewModel extends VApplicationView
       {
         $this->fetchObject();
 
-        $oDocument =& VFactory::getDocument();
+        $oDocument =& BFactory::getDocument();
         $oRenderer =& $oDocument->getRenderer();
         $oRenderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 
@@ -60,7 +60,7 @@ class ComponentCrudViewModel extends VApplicationView
         {
         $this->fetchObject();
 
-        $oDocument =& VFactory::getDocument();
+        $oDocument =& BFactory::getDocument();
       $oRenderer =& $oDocument->getRenderer();
         $oRenderer->appendTemplateDirPart( $this->getAlternateTemplatePath() );
 
@@ -72,7 +72,7 @@ class ComponentCrudViewModel extends VApplicationView
 
       $oDocument->assign('delete_url', sprintf("/%s%s/delete", $oDocument->getUrlPrefix(), $this->object->uid));
 
-        $oInput =& VFactory::getInput();
+        $oInput =& BFactory::getInput();
       if (strtolower($oInput->getMethod()) == 'post') {
           if ($this->updateObject()) {
               header( sprintf("Location: /%s%s", $oDocument->getUrlPrefix(), (($this->object->getModelVersion() == 1) ? $this->object->uid : $this->object->get('uid'))) );
@@ -85,11 +85,11 @@ class ComponentCrudViewModel extends VApplicationView
           {
         $this->fetchObject();
 
-        $oDocument =& VFactory::getDocument();
+        $oDocument =& BFactory::getDocument();
 
         $this->object->delete();
 
-        VMessages::_('Ok', 'L&ouml;schung erfolgreich!', 'success');
+        BMessages::_('Ok', 'L&ouml;schung erfolgreich!', 'success');
 
         header( sprintf("Location: /%s", $oDocument->getUrlPrefix()) );
       exit;
@@ -98,7 +98,7 @@ class ComponentCrudViewModel extends VApplicationView
     private function fetchObject()
     {
 
-        $oInput =& VFactory::getInput();
+        $oInput =& BFactory::getInput();
 
         $parent = $oInput->get('parent', false, 'get');
 
@@ -121,11 +121,11 @@ class ComponentCrudViewModel extends VApplicationView
 
         } else {
             #print "before init jacket";
-            $this->object_manager = new VModelManagerJacket(&$this->object);
+            $this->object_manager = new BModelManagerJacket(&$this->object);
             #print "after init jacket";
         }
 
-        $oDocument =& VFactory::getDocument();
+        $oDocument =& BFactory::getDocument();
 
         if ($parent) {
             $this->object_manager->filter($parent, $oInput->get($parent, null, 'get'));
@@ -140,7 +140,7 @@ class ComponentCrudViewModel extends VApplicationView
 
     private function getAlternateTemplate($__method)
     {
-        $path = strtolower(implode(DS, VString::explode_camelcase($this->object_name)));
+        $path = strtolower(implode(DS, BString::explode_camelcase($this->object_name)));
 
         if (strpos($path, '/model/') !== false) {
             $newpath = 'crud'.DS.substr($path, strpos($path, '/model/')+strlen('/model/')).DS.$__method;
@@ -153,7 +153,7 @@ class ComponentCrudViewModel extends VApplicationView
 
     private function getAlternateTemplatePath()
     {
-        $path = strtolower(implode(DS, VString::explode_camelcase($this->object_name)));
+        $path = strtolower(implode(DS, BString::explode_camelcase($this->object_name)));
 
       $newpath = 'crud'.DS.substr($path, strpos($path, '/model/')+strlen('/model/'));
       return $newpath;
@@ -161,7 +161,7 @@ class ComponentCrudViewModel extends VApplicationView
 
     private function updateObject()
     {
-        $oInput =& VFactory::getInput();
+        $oInput =& BFactory::getInput();
 
         $params = array();
         foreach ($_POST as $key => $value) {
@@ -191,9 +191,9 @@ class ComponentCrudViewModel extends VApplicationView
 
 
         if (!$bok) {
-            VMessages::_('Error', 'Speichern fehlgeschlagen', 'error');
+            BMessages::_('Error', 'Speichern fehlgeschlagen', 'error');
         } else {
-            VMessages::_('Ok', 'Speichern erfolgreich!', 'success');
+            BMessages::_('Ok', 'Speichern erfolgreich!', 'success');
         }
 
         return $bok;

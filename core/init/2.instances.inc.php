@@ -1,14 +1,14 @@
 <?php
 /**
- * Initialize VSettings and VDebug.
+ * Initialize BSettings and BDebug.
  *
  * @license   MIT Licence (see LICENSE file)
  * @copyright 2012 Marc Riegel
  *
  * @author  Marc Riegel <mail@marclab.de>
- * @package Versions.core
+ * @package boot.php.core
  * @subpackage Init
  */
 
-VSettings::init();
-VDebug::init();
+BSettings::init();
+BDebug::init();

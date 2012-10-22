@@ -7,10 +7,10 @@
  * @desc      Load this Middleware to Start and Close PHP Sessions
  * 
  * @author    mriegel
- * @package   Versions.Middleware
+ * @package   boot.php.Middleware
  * @version   1.0
  */
-class VMiddlewareBaseSession extends VMiddleware
+class BMiddlewareBaseSession extends BMiddleware
 {
     
     /**
@@ -20,7 +20,7 @@ class VMiddlewareBaseSession extends VMiddleware
      */
     public function onBeforeRoute()
      {
-        $oSession =& VFactory::getSession();
+        $oSession =& BFactory::getSession();
     }
 
     /**

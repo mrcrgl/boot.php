@@ -12,13 +12,13 @@
  * 
  */
 
-abstract class UserAbstraction extends VModelConnector 
+abstract class UserAbstraction extends BModelConnector 
 {
   
   public function changePassword($param=false, $sendMail=false)
  {
     if ($param === false) {
-      $strNewPass = VPassword::create(8);
+      $strNewPass = BPassword::create(8);
       Instance::f('smarty')->assign('created_password', $strNewPass);
     } elseif (is_array($param) && isset($param['password']) && isset($param['password_retype'])) {
       

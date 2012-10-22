@@ -1,6 +1,6 @@
 <?php
 
-class ComponentCrudUrls extends VUrl 
+class ComponentCrudUrls extends BUrl 
 {
     
     var $pattern = array(

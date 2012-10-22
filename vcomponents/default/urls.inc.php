@@ -1,6 +1,6 @@
 <?php
 
-class ComponentPrueglUrls extends VUrl 
+class ComponentPrueglUrls extends BUrl 
 {
     
     var $pattern = array(

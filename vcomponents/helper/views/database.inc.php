@@ -1,16 +1,16 @@
 <?php
 
-class ComponentHelperViewDatabase extends VApplicationView 
+class ComponentHelperViewDatabase extends BApplicationView 
 {
     
     public function show()
  {
-        $oDocument =& VFactory::getDocument();
+        $oDocument =& BFactory::getDocument();
         $oDocument->setTemplate('database/index.htpl');
         $oDocument->assign('_current_step_tpl', 'database/step/check.htpl');
         
         try {
-            $dbo =& VFactory::getDatabase();
+            $dbo =& BFactory::getDatabase();
             $dbo->connect();
             
         } catch (Exception $e) {
@@ -22,9 +22,9 @@ class ComponentHelperViewDatabase extends VApplicationView
     
     public function configure()
         {
-        $oDocument =& VFactory::getDocument();
-        $input    =& VFactory::getInput();
-        $session  =& VFactory::getSession();
+        $oDocument =& BFactory::getDocument();
+        $input    =& BFactory::getInput();
+        $session  =& BFactory::getSession();
         
         $oDocument->setTemplate('database/index.htpl');
         $oDocument->assign('_current_step_tpl', 'database/step/configure.htpl');
@@ -49,23 +49,23 @@ class ComponentHelperViewDatabase extends VApplicationView
             $oDocument->assign('db_main_user', $db_main_user);
             $oDocument->assign('db_main_pass', $db_main_pass);
             
-            #$dbo =& VDatabase::getInstance('mysql', $db_host, $db_database, $db_main_user, $db_main_pass);
+            #$dbo =& BDatabase::getInstance('mysql', $db_host, $db_database, $db_main_user, $db_main_pass);
             
             
             $dbo = mysql_connect($db_host, $db_main_user, $db_main_pass, true);
             if (!$dbo) {
-                VMessages::_("Error", sprintf("Die angegebenen Daten sind nicht g&uuml;tig: %s", mysql_error()), 'error');
+                BMessages::_("Error", sprintf("Die angegebenen Daten sind nicht g&uuml;tig: %s", mysql_error()), 'error');
                 mysql_close($dbo);
                 return false;
             }
             
             if (!mysql_stat($dbo)) {
-                VMessages::_("Error", sprintf("Die angegebenen Daten sind nicht g&uuml;tig: %s", mysql_error()), 'error');
+                BMessages::_("Error", sprintf("Die angegebenen Daten sind nicht g&uuml;tig: %s", mysql_error()), 'error');
                 mysql_close($dbo);
                 return false;
             }
             
-            VMessages::_("Ok", sprintf("Verbindung konnte erfolgreich hergestellt werden."), 'success');
+            BMessages::_("Ok", sprintf("Verbindung konnte erfolgreich hergestellt werden."), 'success');
             
             header( sprintf("Location: /%sdatabase/create", $oDocument->getUrlPrefix()) );
             exit;
@@ -76,9 +76,9 @@ class ComponentHelperViewDatabase extends VApplicationView
     
     public function create()
             {
-        $oDocument =& VFactory::getDocument();
-        $input    =& VFactory::getInput();
-        $session  =& VFactory::getSession();
+        $oDocument =& BFactory::getDocument();
+        $input    =& BFactory::getInput();
+        $session  =& BFactory::getSession();
         
         $oDocument->setTemplate('database/index.htpl');
         $oDocument->assign('_current_step_tpl', 'database/step/create.htpl');
@@ -125,44 +125,44 @@ class ComponentHelperViewDatabase extends VApplicationView
             
             $dbo = mysql_connect($db_host, $db_main_user, $db_main_pass, true);
             if (mysql_select_db($db_database, $dbo)) {
-                VMessages::_("Error", sprintf("Die angegebenen Datenbank existiert bereits: %s", $db_database), 'error');
+                BMessages::_("Error", sprintf("Die angegebenen Datenbank existiert bereits: %s", $db_database), 'error');
                 mysql_close($dbo);
                 return false;
             }
             
             if ($create_user && !$db_user) {
-                VMessages::_("Error", sprintf("Bitte geben Sie einen Benutzer ein f&uuml;r die Datenbank."), 'error');
+                BMessages::_("Error", sprintf("Bitte geben Sie einen Benutzer ein f&uuml;r die Datenbank."), 'error');
                 return false;
             }
             
             if ($create_user && !$db_pass) {
-                VLoader::import('versions.utilities.password');
-                $db_pass = VPassword::create(12);
-                VMessages::_("Notice", sprintf("Generiertes Passwort: %s", $db_pass));
+                BLoader::import('versions.utilities.password');
+                $db_pass = BPassword::create(12);
+                BMessages::_("Notice", sprintf("Generiertes Passwort: %s", $db_pass));
                 $oSession->set('db_pass', $db_pass, 'formvalue');
                 $oDocument->assign('db_pass', $db_pass);
             }
             
             if (mysql_query(sprintf("CREATE DATABASE `%s` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci", $db_database), $dbo)) {
-                VMessages::_("OK", sprintf("Datenbank %s wurde erfolgreich erstellt.", $db_database), 'success');
+                BMessages::_("OK", sprintf("Datenbank %s wurde erfolgreich erstellt.", $db_database), 'success');
             } else {
-                VMessages::_("Error", sprintf("Datenbank %s wurde nicht erstellt: %s", $db_database, mysql_error($dbo)), 'error');
+                BMessages::_("Error", sprintf("Datenbank %s wurde nicht erstellt: %s", $db_database, mysql_error($dbo)), 'error');
                 mysql_close($dbo);
                 return false;
             }
             
             if ($create_user) {
                 if (mysql_query(sprintf("CREATE USER '%s'@'%%' IDENTIFIED BY '%s'", $db_user, $db_pass), $dbo)) {
-                    VMessages::_("OK", sprintf("Benutzer %s wurde erfolgreich erstellt.", $db_user), 'success');
+                    BMessages::_("OK", sprintf("Benutzer %s wurde erfolgreich erstellt.", $db_user), 'success');
                 } else {
-                    VMessages::_("Error", sprintf("Benutzer %s wurde nicht erstellt: %s", $db_user, mysql_error($dbo)), 'error');
+                    BMessages::_("Error", sprintf("Benutzer %s wurde nicht erstellt: %s", $db_user, mysql_error($dbo)), 'error');
                     mysql_close($dbo);
                     return false;
                 }
                 if (mysql_query(sprintf("GRANT ALL PRIVILEGES ON `%s`.* TO '%s'@'%%' WITH GRANT OPTION", $db_database, $db_user), $dbo)) {
-                    VMessages::_("OK", sprintf("Zugriffsrechte f&uuml;r %s@%% wurde erfolgreich erteilt.", $db_user), 'success');
+                    BMessages::_("OK", sprintf("Zugriffsrechte f&uuml;r %s@%% wurde erfolgreich erteilt.", $db_user), 'success');
                 } else {
-                    VMessages::_("Error", sprintf("Zugriffsrechte f�r %s@%% wurden nicht erteilt: %s", $db_user, mysql_error($dbo)), 'error');
+                    BMessages::_("Error", sprintf("Zugriffsrechte f�r %s@%% wurden nicht erteilt: %s", $db_user, mysql_error($dbo)), 'error');
                     mysql_close($dbo);
                     return false;
                 }
@@ -179,9 +179,9 @@ class ComponentHelperViewDatabase extends VApplicationView
     
     public function showconfig()
             {
-        $oDocument =& VFactory::getDocument();
-        $input    =& VFactory::getInput();
-        $session  =& VFactory::getSession();
+        $oDocument =& BFactory::getDocument();
+        $input    =& BFactory::getInput();
+        $session  =& BFactory::getSession();
         
         $oDocument->setTemplate('database/index.htpl');
         $oDocument->assign('_current_step_tpl', 'database/step/showconfig.htpl');

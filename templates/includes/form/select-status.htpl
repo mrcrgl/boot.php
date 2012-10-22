@@ -1,5 +1,5 @@
       <div class="control-group">
-	 <label class="control-label" for="{$name|default:'status'}">{$label|default:'Status'}</label>
+     <label class="control-label" for="{$name|default:'status'}">{$label|default:'Status'}</label>
         <div class="controls">
           <select class="span4 required" id="{$name|default:'status'}" name="{$name|default:'status'}">
            <option value="1" {if $value == "1" }selected="selected"{/if}>aktiv</option>

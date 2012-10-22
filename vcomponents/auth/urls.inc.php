@@ -1,6 +1,6 @@
 <?php
 
-class ComponentAuthUrls extends VUrl 
+class ComponentAuthUrls extends BUrl 
 {
     
     var $pattern = array(

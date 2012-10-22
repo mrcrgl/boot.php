@@ -234,7 +234,7 @@ class User extends UserAbstraction
     $refLog->update(
       array(
         'user_uid'    => $this->uid,
-        'project_name'=> VSettings::f('default.title'),
+        'project_name'=> BSettings::f('default.title'),
         'object_type' => $object_type,
         'object_uid'  => $object_uid,
         'remote_addr' => $remote_addr,

@@ -12,7 +12,7 @@
  *
  */
 
-class ComponentAuthModelLogin extends VObject 
+class ComponentAuthModelLogin extends BObject 
 {
 
   private $tsLogin    = false;
@@ -46,12 +46,12 @@ class ComponentAuthModelLogin extends VObject
     {
     if (!Validator::is($username, 'filled')) {
       #$this->setErrorMsg("loginUserRequired");
-      VMessages::_('Error', 'loginUserRequired', 'error');
+      BMessages::_('Error', 'loginUserRequired', 'error');
       return false;
     }
     if (!Validator::is($password, 'filled')) {
       #$this->setErrorMsg("loginPassRequired");
-      VMessages::_('Error', 'loginPassRequired', 'error');
+      BMessages::_('Error', 'loginPassRequired', 'error');
       return false;
     }
 
@@ -70,7 +70,7 @@ class ComponentAuthModelLogin extends VObject
 
       if ($this->strPermission && !$this->objUser->hasPermission($this->strPermission, true)) {
         #$this->setErrorMsg("permissionDenied");
-        VMessages::_('Error', 'permissionDenied', 'error');
+        BMessages::_('Error', 'permissionDenied', 'error');
         unset($this->objUser);
         return false;
       }
@@ -79,7 +79,7 @@ class ComponentAuthModelLogin extends VObject
       return true;
     } else {
       #$this->setErrorMsg("invalidUserPasswordCombi");
-      VMessages::_('Error', 'invalidUserPasswordCombi', 'error');
+      BMessages::_('Error', 'invalidUserPasswordCombi', 'error');
       return false;
     }
   }
@@ -87,7 +87,7 @@ class ComponentAuthModelLogin extends VObject
   public function doLogout()
     {
 
-      $oSession =& VFactory::getSession();
+      $oSession =& BFactory::getSession();
       $oSession->clear('login');
 
     unset($this->objUser);
@@ -126,7 +126,7 @@ class ComponentAuthModelLogin extends VObject
   private function registerLogin()
   {
     $this->tsLogin = time();
-    $oSession =& VFactory::getSession();
+    $oSession =& BFactory::getSession();
     $oSession->set('login', &$this);
   }
 

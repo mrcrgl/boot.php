@@ -1,13 +1,13 @@
 <?php
 
-class ComponentDefaultViewIndex extends VApplicationView 
+class ComponentDefaultViewIndex extends BApplicationView 
 {
   
   
   public function show()
  {
     
-      $oDocument =& VFactory::getDocument();
+      $oDocument =& BFactory::getDocument();
       $oRenderer =& $oDocument->getRenderer();
       
       $oDocument->setTemplate('index.htpl');

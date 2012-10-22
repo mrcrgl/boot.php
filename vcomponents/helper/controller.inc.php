@@ -2,7 +2,7 @@
 
 
 
-class ComponentHelperController extends VApplicationControllerWeb 
+class ComponentHelperController extends BApplicationControllerWeb 
 {
     
     var $default_view = 'index';
@@ -10,13 +10,13 @@ class ComponentHelperController extends VApplicationControllerWeb
 public function __construct()
     {
       
-        $oDocument =& VFactory::getDocument();
+        $oDocument =& BFactory::getDocument();
       $oDocument->setTitle('Versions 2.0 - Helper');
       $oDocument->setProjectName('Versions 2.0 - Helper');
       
       /*
-      $session     =& VFactory::getSession();
-      $input         =& VFactory::getInput();
+      $session     =& BFactory::getSession();
+      $input         =& BFactory::getInput();
       $login         =& $oSession->get('login');
       
       if (!is_object($login) || !$login->loggedIn()) {

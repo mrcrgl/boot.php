@@ -12,7 +12,7 @@
  * 
  */
 
-class UserLogManager extends VModelManagerDefault 
+class UserLogManager extends BModelManagerDefault 
 {
   
   var $pagination;

@@ -12,7 +12,7 @@ requires support for:
      <span class="add-on"><i class="icon-calendar"></i></span>
 
     <input style="text-align: center; width: 80px; " {if $disabled}disabled="" {/if}type="{$type|default:"text"}" class="span2 {$class} {$validate}"{if $minlength} minlength="{$minlength}"{/if}{if $maxlength} maxlength="{$maxlength}"{/if}{if $rangelength} rangelength="{$rangelength}"{/if}{if $range} range="{$range}"{/if}{if $min} min="{$min}"{/if}{if $max} max="{$max}"{/if} id="{$id}" name="{$name}" value="{$value}" />
-    {*																				
+    {*                                                                                
     <input type="text" class="{$class}-hidden" name="{$name}" value="{$value}" />
     *}
 

@@ -32,10 +32,10 @@
  
     
       {*literal}
-			  <script type="text/javascript">
-			  $('input#country').suggest();
-			  </script>
-		  {/literal*}
+              <script type="text/javascript">
+              $('input#country').suggest();
+              </script>
+          {/literal*}
 
 
 {*literal}
@@ -50,14 +50,14 @@ $('#street, #house_number, #zipcode, #city, #country').change(function(){
   address = $('#street').val()+$('#house_number').val()+', '+$('#zipcode').val()+' '+$('#city').val()+', '+country;
   var geocoder = new google.maps.Geocoder();
     geocoder.geocode({'address' : address}, function(r, s){
-	if (r[0]){
+    if (r[0]){
         lng = r[0].geometry.location.lng();
         lat = r[0].geometry.location.lat();
         $('#longitude').val(lng);
         $('#latitude').val(lat);
-	} else {
-	  $('#latlng_hint').text('Es können keine Koordinaten gefunden werden, bitte überprüfen Sie die Adresse');
-	}
+    } else {
+      $('#latlng_hint').text('Es können keine Koordinaten gefunden werden, bitte überprüfen Sie die Adresse');
+    }
     })
 
 })

@@ -1,13 +1,13 @@
 <?php
 
-class ComponentViewMediaLib extends VApplicationView 
+class ComponentViewMediaLib extends BApplicationView 
 {
   
   
   public function style()
  {
     
-      $oDocument =& VFactory::getDocument();
+      $oDocument =& BFactory::getDocument();
       $oRenderer =& $oDocument->getRenderer();
       
       $oDocument->setTemplate('login.htpl');

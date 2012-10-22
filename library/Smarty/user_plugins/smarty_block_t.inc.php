@@ -81,7 +81,7 @@ function smarty_block_t($params, $text, &$smarty)
 
   $text = stripslashes($text);
 
-  $localization =& VLocalization::getInstance();
+  $localization =& BLocalization::getInstance();
   $text = $localization->_($text, $params);
 
   if (isset($assign)) {

@@ -1,16 +1,16 @@
 <?php
 
-class ComponentAuthViewLogin extends VApplicationView
+class ComponentAuthViewLogin extends BApplicationView
 {
   
   
   public function show()
  {
     
-      $oDocument =& VFactory::getDocument();
+      $oDocument =& BFactory::getDocument();
       $oRenderer =& $oDocument->getRenderer();
-      $oSession =& VFactory::getSession();
-      $oInput =& VFactory::getInput();
+      $oSession =& BFactory::getSession();
+      $oInput =& BFactory::getInput();
       
       $login =& $oSession->get('login');
       if (is_object($login) && $login->loggedIn()) {
@@ -34,9 +34,9 @@ class ComponentAuthViewLogin extends VApplicationView
   public function verify()
       {
       
-      $oDocument =& VFactory::getDocument();
-      $oInput         =& VFactory::getInput();
-      $oSession     =& VFactory::getSession();
+      $oDocument =& BFactory::getDocument();
+      $oInput         =& BFactory::getInput();
+      $oSession     =& BFactory::getSession();
       
       if ($oInput->get('do_login', false, 'post')) {
       $refLogin = new ComponentAuthModelLogin("User");
@@ -66,8 +66,8 @@ class ComponentAuthViewLogin extends VApplicationView
   
   public function logout()
   {
-      $oDocument =& VFactory::getDocument();
-      $oSession     =& VFactory::getSession();
+      $oDocument =& BFactory::getDocument();
+      $oSession     =& BFactory::getSession();
       
       #$oDocument->setTemplate('login.htpl');
       
@@ -77,7 +77,7 @@ class ComponentAuthViewLogin extends VApplicationView
       }
       
       
-      VMessages::_('Ok', 'Logout erfolgreich!', 'success');
+      BMessages::_('Ok', 'Logout erfolgreich!', 'success');
       
       header( sprintf('Location: /%s', $oDocument->getUrlPrefix()) );
       exit;

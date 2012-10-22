@@ -5,32 +5,32 @@
  * Load this Middleware to enable CSRF Protection
  *
  * @author  Marc Riegel
- * @package Versions.Middleware
+ * @package boot.php.Middleware
  * @version 1.0
  */
 
 /**
  * Enable Middleware: CSRF.
- * 
- * @name    VMiddlewareProtectionCsrf
- * @package Versions.Middleware
- * @see     VMiddleware
+ *
+ * @name    BMiddlewareProtectionCsrf
+ * @package boot.php.Middleware
+ * @see     BMiddleware
  */
-class VMiddlewareProtectionCsrf extends VMiddleware
+class BMiddlewareProtectionCsrf extends BMiddleware
 {
 
     /**
      * Event fired before Route.
-     * 
-     * Checks on request method POST the csrf token, 
+     *
+     * Checks on request method POST the csrf token,
      * if it doesnt compare set reponsecode to 500
      *
      * @return void
      */
     function onBeforeRoute()
      {
-        $oInput =& VFactory::getInput();
-        $oSession =& VFactory::getSession();
+        $oInput =& BFactory::getInput();
+        $oSession =& BFactory::getSession();
 
         if (strtolower($oInput->getMethod()) == 'post') {
             
@@ -44,8 +44,8 @@ class VMiddlewareProtectionCsrf extends VMiddleware
                           . "is blocked due security reasons. Please go "
                           . "back and try again.";
                 // Go to error page.
-                VResponse::error(
-                    500, 
+                BResponse::error(
+                    500,
                     $sMessage
                 );
             }
@@ -56,30 +56,30 @@ class VMiddlewareProtectionCsrf extends VMiddleware
 
     /**
      * Event fired before preparing Response.
-     * 
+     *
      * Generate new CSRF token, store it to session and assign to template
-     * 
+     *
      * @return void
      */
     function onBeforePrepareResponse()
      {
-        VLoader::import('versions.utilities.password');
+        BLoader::import('boot.utilities.password');
 
-        $sCsrfToken = VPassword::create(rand(32, 64));
-        $sCsrfKey   = VPassword::create(rand(16, 32));
+        $sCsrfToken = BPassword::create(rand(32, 64));
+        $sCsrfKey   = BPassword::create(rand(16, 32));
 
-        $oSession =& VFactory::getSession();
+        $oSession =& BFactory::getSession();
         
         $oSession->set('session.csrf_token', $sCsrfToken);
         $oSession->set('session.csrf_key', $sCsrfKey);
 
         $sHiddenField = sprintf(
-            "<input type='hidden' name='%s' value='%s' />", 
+            "<input type='hidden' name='%s' value='%s' />",
             $sCsrfKey,
             $sCsrfToken
         );
         
-        $oDocument =& VFactory::getDocument();
+        $oDocument =& BFactory::getDocument();
         $oDocument->assign('csrf_token', $sHiddenField);
     }
 

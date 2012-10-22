@@ -6,16 +6,20 @@
  * @copyright 2012 Marc Riegel
  *
  * @author  Marc Riegel <mail@marclab.de>
- * @package Versions.core
+ * @package boot.php.core
  * @subpackage Init
  */
 
-require_once VLIB.DS.'versions'.DS.'base'.DS.'loader.inc.php';
+require_once VLIB.DS.'boot'.DS.'base'.DS.'loader.inc.php';
 
-VLoader::init();
+BLoader::init();
 
-VLoader::register(
-    'VProfiler', VLIB.DS.'versions'.DS.'debug'.DS.'profiler.inc.php'
+BLoader::register(
+    'BProfiler', VLIB.DS.'boot'.DS.'debug'.DS.'profiler.inc.php'
+);
+
+BLoader::register(
+    'BObject', VLIB.DS.'boot'.DS.'base'.DS.'object.inc.php'
 );
 
 /**
@@ -27,7 +31,7 @@ VLoader::register(
  */
 function __autoload($sClassname)
 {
-    return VLoader::autoload($sClassname);
+    return BLoader::autoload($sClassname);
 }
 
 spl_autoload_register();

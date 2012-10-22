@@ -12,7 +12,7 @@
  * 
  */
 
-class UserLog extends VModelConnector 
+class UserLog extends BModelConnector 
 {
   
   var $_DataMap = array(

@@ -6,7 +6,7 @@
  * @copyright 2012 Marc Riegel
  *
  * @author  Marc Riegel <mail@marclab.de>
- * @package Versions.core
+ * @package boot.php.core
  * @subpackage Init
  */
 
@@ -33,7 +33,7 @@ define('VROOT', realpath(VFRAMEWORK.DS.'..'));
 define('VCONFIG', VFRAMEWORK.DS.'config');
 
 
-// Define: @var VLIB    Versions library .
+// Define: @var VLIB    boot library .
 define('VLIB', VFRAMEWORK.DS.'library');
 
 

@@ -8,10 +8,10 @@
  *            and prepare URLs with language tags
  * 
  * @author    mriegel
- * @package   Versions.Middleware
+ * @package   boot.php.Middleware
  * @version   1.0
  */
-class VMiddlewareBaseLocalization extends VMiddleware
+class BMiddlewareBaseLocalization extends BMiddleware
 {
 
     /**
@@ -23,7 +23,7 @@ class VMiddlewareBaseLocalization extends VMiddleware
      */
     public function onBeforeRoute()
      {
-        $localization =& VLocalization::getInstance();
+        $localization =& BLocalization::getInstance();
         
         if (preg_match(
             '/^\/([a-z]{2})\/(.{0,255})/', 
@@ -41,7 +41,7 @@ class VMiddlewareBaseLocalization extends VMiddleware
                         $localization->getLocale(),
                         $_SERVER['REQUEST_URI']
                     );
-                    VResponse::redirect($sRedirectTo);
+                    BResponse::redirect($sRedirectTo);
                     exit;
                 }
             }
@@ -51,7 +51,7 @@ class VMiddlewareBaseLocalization extends VMiddleware
                 $localization->getLocale(),
                 $_SERVER['REQUEST_URI']
             );
-            VResponse::redirect($sRedirectTo);
+            BResponse::redirect($sRedirectTo);
             exit;
         }
 
@@ -65,8 +65,8 @@ class VMiddlewareBaseLocalization extends VMiddleware
      */
     public function onBeforePrepareView()
      {
-        $localization =& VLocalization::getInstance();
-        $oDocument =& VFactory::getDocument();
+        $localization =& BLocalization::getInstance();
+        $oDocument =& BFactory::getDocument();
 
         $sUrlPrefix = sprintf(
             "%s/%s",
@@ -85,8 +85,8 @@ class VMiddlewareBaseLocalization extends VMiddleware
      */
     public function onBeforeQuit()
      {
-        if (VSettings::f('localization.record', false)) {
-            $localization =& VLocalization::getInstance();
+        if (BSettings::f('localization.record', false)) {
+            $localization =& BLocalization::getInstance();
             $localization->record();
         }
     }

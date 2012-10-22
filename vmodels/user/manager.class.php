@@ -12,7 +12,7 @@
  *
  */
 
-class UserManager extends VModelManagerSearch 
+class UserManager extends BModelManagerSearch 
 {
   
   var $pagination;
@@ -25,7 +25,7 @@ class UserManager extends VModelManagerSearch
       return array();
     }
     
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", $this->getWhereCondition("`puid` IN (".$user_list.") AND `uid` != '".Instance::f("Login")->obj->getUID()."'"), "none", (isset($this->pagination)) ? $this->pagination->getLimitStatement() : "none");
     if (!$dbo->getNumRows()) {
@@ -42,7 +42,7 @@ class UserManager extends VModelManagerSearch
   
     public function getUserByMail($username, $email)
   {
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", $this->getWhereCondition("((`email` = '$email') AND (`username` = '$username'))"));
     if (!$dbo->getNumRows()) {
@@ -58,7 +58,7 @@ class UserManager extends VModelManagerSearch
   
   public function getAllByCustomer(Customer $Customer)
   {
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", "`customer_uid` = '".$Customer->uid."'", "none", (isset($this->pagination)) ? $this->pagination->getLimitStatement() : "none");
     if (!$dbo->getNumRows()) {
@@ -81,7 +81,7 @@ class UserManager extends VModelManagerSearch
       return 0;
     }
     
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("COUNT(*) AS count", $this->getWhereCondition("`puid` IN (".$user_list.")"));
     $dbo->nextRecord();
@@ -91,7 +91,7 @@ class UserManager extends VModelManagerSearch
   
   public function doLogin($username, $password)
   {
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", $this->getWhereCondition("((`email` = '$username') OR (`username` = '$username')) AND `password` = MD5('$password')"));
     if (!$dbo->getNumRows()) {
@@ -114,7 +114,7 @@ class UserManager extends VModelManagerSearch
     if (!is_array($user_list)) {
       $user_list = array($user_uid);
     }
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", $this->getWhereCondition("`puid` = '$user_uid'"));
     if ($dbo->getNumRows()) {
@@ -152,7 +152,7 @@ class UserManager extends VModelManagerSearch
   
   public function getSubUserList()
   {
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", $this->getWhereCondition("`puid` = '$user_uid'"));
     if ($dbo->getNumRows()) {
@@ -191,7 +191,7 @@ class UserManager extends VModelManagerSearch
     if (!is_array($user_list)) {
       $user_list = array($user_uid);
     }
-    $dbo =& VFactory::getDatabase();
+    $dbo =& BFactory::getDatabase();
     $dbo->setTable("user");
     $dbo->selectRows("uid", $this->getWhereCondition("`puid` = '$user_uid'"));
     if ($dbo->getNumRows()) {

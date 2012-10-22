@@ -2,7 +2,7 @@
 
 
 
-class ComponentDefaultController extends VApplicationControllerWeb 
+class ComponentDefaultController extends BApplicationControllerWeb 
 {
     
     var $default_view = 'index';

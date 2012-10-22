@@ -1,6 +1,6 @@
 <?php
 
-class ComponentHelperViewIndex extends VApplicationView 
+class ComponentHelperViewIndex extends BApplicationView 
 {
     
     public function show()

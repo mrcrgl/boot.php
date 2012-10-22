@@ -12,7 +12,7 @@
  * 
  */
 
-class FilePicture extends VModelFile 
+class FilePicture extends BModelFile 
 {
   /*
    * 'Picture', Bilder
@@ -58,10 +58,10 @@ class FilePicture extends VModelFile
   {
     if ($__memberName == 'status_string') {
       if ($this->status == 1) {
-        return VText::_('state_active');
+        return BText::_('state_active');
       }
       if ($this->status == 0) {
-        return VText::_('state_inactive');;
+        return BText::_('state_inactive');;
       }
     }
     

@@ -6,13 +6,13 @@
  * @copyright 2012 Marc Riegel
  *
  * @author  Marc Riegel <mail@marclab.de>
- * @package Versions.core
+ * @package boot.php.core
  * @subpackage Init
  */
 
 // TODO: Check if this is used.
-VLoader::import('versions.utilities.instance');
+BLoader::import('boot.utilities.instance');
 
 // Start routing.
-$router =& VFactory::getRouter();
+$router =& BFactory::getRouter();
 $router->route();

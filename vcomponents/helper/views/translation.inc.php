@@ -1,21 +1,21 @@
 <?php
 
-class ComponentHelperViewTranslation extends VApplicationView 
+class ComponentHelperViewTranslation extends BApplicationView 
 {
 
     public function show()
  {
-    $oDocument =& VFactory::getDocument();
-      $input    =& VFactory::getInput();
+    $oDocument =& BFactory::getDocument();
+      $input    =& BFactory::getInput();
 
       $oDocument->setTemplate('translation/index.htpl');
 
-      if (VSettings::f('localization.engine', 'none') == 'none') {
-        VMessages::_("Localization not enabled!", "ini file jedoens", 'info');
+      if (BSettings::f('localization.engine', 'none') == 'none') {
+        BMessages::_("Localization not enabled!", "ini file jedoens", 'info');
         $oDocument->assign('is_disabled', true);
       }
 
-    $localization =& VLocalization::getInstance();
+    $localization =& BLocalization::getInstance();
     $separator    = $localization->get('key_sep');
 
     $enabled_locales = $localization->enabled;
@@ -30,7 +30,7 @@ class ComponentHelperViewTranslation extends VApplicationView
     $to   = $oInput->get('to', null, 'get');
 
     if (is_null($from) || is_null($to)) {
-      VResponse::redirect(sprintf('%s?from=%s&to=%s', $_SERVER['REDIRECT_URL'], $default_locale, $translate_to[0]));
+      BResponse::redirect(sprintf('%s?from=%s&to=%s', $_SERVER['REDIRECT_URL'], $default_locale, $translate_to[0]));
     }
 
     $data = array();
@@ -61,11 +61,11 @@ class ComponentHelperViewTranslation extends VApplicationView
 
     public function save()
     {
-      $oDocument =& VFactory::getDocument();
-      $input    =& VFactory::getInput();
+      $oDocument =& BFactory::getDocument();
+      $input    =& BFactory::getInput();
 
 
-      $localization =& VLocalization::getInstance();
+      $localization =& BLocalization::getInstance();
       $separator    = $localization->get('key_sep');
 
       $to   = $oInput->get('to', null, 'post');
@@ -100,16 +100,16 @@ class ComponentHelperViewTranslation extends VApplicationView
 
       $localization->saveFiles($c);
 
-      VMessages::_("Success", "Translation saved!", "success");
-      VResponse::redirect($_SERVER['HTTP_REFERER']);
+      BMessages::_("Success", "Translation saved!", "success");
+      BResponse::redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function flush_cache()
     {
-      $localization =& VLocalization::getInstance();
+      $localization =& BLocalization::getInstance();
       $localization->clearCache();
 
-      VMessages::_("Success", "Cache cleared!", "success");
-      VResponse::redirect($_SERVER['HTTP_REFERER']);
+      BMessages::_("Success", "Cache cleared!", "success");
+      BResponse::redirect($_SERVER['HTTP_REFERER']);
     }
 }

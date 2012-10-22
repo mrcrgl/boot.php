@@ -1,16 +1,16 @@
 <?php
 
-class ComponentHelperViewModels extends VApplicationView 
+class ComponentHelperViewModels extends BApplicationView 
 {
 
     public function show()
  {
 
-        $oDocument =& VFactory::getDocument();
+        $oDocument =& BFactory::getDocument();
         $oDocument->setTemplate('database/index.htpl');
         $oDocument->assign('_current_step_tpl', 'models/step/show.htpl');
 
-        VLoader::register('ProjectUrls', PROJECT_CONFIG.DS.'urls.inc.php');
+        BLoader::register('ProjectUrls', PROJECT_CONFIG.DS.'urls.inc.php');
         $project_urls = new ProjectUrls();
 
         $return = $this->parsePattern($project_urls, 'project', true);
@@ -20,32 +20,32 @@ class ComponentHelperViewModels extends VApplicationView
         #$oDocument->assign('db_designer', &$designer);
         $oDocument->assign('map', $return);
 
-        $host     = VSettings::get('database.host',         'undef');
-        $database = VSettings::get('database.database', 'undef');
-        $user     = VSettings::get('database.user',         'undef');
+        $host     = BSettings::get('database.host',         'undef');
+        $database = BSettings::get('database.database', 'undef');
+        $user     = BSettings::get('database.user',         'undef');
 
-        VMessages::_('', sprintf('U\'re modifying host: %s / database: %s / user: %s', $host, $database, $user));
+        BMessages::_('', sprintf('U\'re modifying host: %s / database: %s / user: %s', $host, $database, $user));
     }
 
     public function sql_create()
     {
 
-        $oDocument =& VFactory::getDocument();
-        $input    =& VFactory::getInput();
-        $dbo      =& VFactory::getDatabase();
+        $oDocument =& BFactory::getDocument();
+        $input    =& BFactory::getInput();
+        $dbo      =& BFactory::getDatabase();
 
         $classname= $oInput->get('model', false, 'get');
         $check    = true;
 
         if (!$classname) 
 {
-            VMessages::_('Error', 'Invalid Model', 'error');
+            BMessages::_('Error', 'Invalid Model', 'error');
             $check = false;
         }
-        VLoader::autoload($classname);
+        BLoader::autoload($classname);
         if ($check && !class_exists($classname)) 
 {
-            VMessages::_('Error', sprintf('Class \'%s\' not found!', $classname), 'error');
+            BMessages::_('Error', sprintf('Class \'%s\' not found!', $classname), 'error');
             $check = false;
         }
 
@@ -61,7 +61,7 @@ class ComponentHelperViewModels extends VApplicationView
                   try {
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
-                      VMessages::_('Databse error', $e->getMessage(), 'error');
+                      BMessages::_('Databse error', $e->getMessage(), 'error');
                       header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
@@ -73,14 +73,14 @@ class ComponentHelperViewModels extends VApplicationView
                     try {
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
-                      VMessages::_('Databse error', $e->getMessage(), 'error');
+                      BMessages::_('Databse error', $e->getMessage(), 'error');
                       header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
                 }
             }
         } elseif ($model->getModelVersion() == 2) {
-            $designer         = VDatabaseDesigner::getInstance();
+            $designer         = BDatabaseDesigner::getInstance();
             $drop_table     = $designer->getDropTable($model);
             $create_table = $designer->getCreateTable($model);
             $create_index = $designer->getCreateIndex($model);
@@ -90,7 +90,7 @@ class ComponentHelperViewModels extends VApplicationView
                   try {
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
-                      VMessages::_('Databse error', $e->getMessage(), 'error');
+                      BMessages::_('Databse error', $e->getMessage(), 'error');
                       header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
@@ -102,7 +102,7 @@ class ComponentHelperViewModels extends VApplicationView
                   try {
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
-                      VMessages::_('Databse error', $e->getMessage(), 'error');
+                      BMessages::_('Databse error', $e->getMessage(), 'error');
                       header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
@@ -114,7 +114,7 @@ class ComponentHelperViewModels extends VApplicationView
                   try {
                       $dbo->userQuery($tmp);
                     } catch (Exception $e) {
-                      VMessages::_('Databse error', $e->getMessage(), 'error');
+                      BMessages::_('Databse error', $e->getMessage(), 'error');
                       header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
                       exit;
                     }
@@ -124,7 +124,7 @@ class ComponentHelperViewModels extends VApplicationView
             $dbo->userQuery("SET foreign_key_checks = 1;");
         }
 
-        VMessages::_('Success!', sprintf('Database Layout for Modal \'%s\' installed!', $classname), 'success');
+        BMessages::_('Success!', sprintf('Database Layout for Modal \'%s\' installed!', $classname), 'success');
 
         header( sprintf("Location: /%sdatabase/models", $oDocument->getUrlPrefix()) );
         exit;
@@ -189,7 +189,7 @@ class ComponentHelperViewModels extends VApplicationView
             'is_deprecated_layout' => false
         );
 
-        $designer = VDatabaseDesigner::getInstance();
+        $designer = BDatabaseDesigner::getInstance();
 
         $obj = new $model();
         if ($obj->getModelVersion() == 1) {
@@ -266,7 +266,7 @@ class ComponentHelperViewModels extends VApplicationView
                $class_token = true;
             } else if ($class_token && $token[0] == T_STRING) 
 {
-                VLoader::register($token[1], $file);
+                BLoader::register($token[1], $file);
               $temp = new $token[1]();
               if (isset($temp->_DataMap)) {
                   $classes[] = $token[1];
