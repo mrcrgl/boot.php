@@ -26,25 +26,26 @@ class BUrl
      * @var object
      */
     static $oInstance = null;
-    
+
     /**
      * Overwritten by UrlConfig.
      *
      * @var array
      */
     public $pattern = array();
-    
+
     /**
      * Constructor.
      */
     public function __construct()
     {
-        if (get_class($this) == 'BUrl'
+        // DEPRECATED
+        /*if (get_class($this) == 'BUrl'
             && is_file(PROJECT_CONFIG.DS.'urls.inc.php')) {
             BLoader::register('ProjectUrls', PROJECT_CONFIG.DS.'urls.inc.php');
             $oProjectUrls = new ProjectUrls();
             $this->register($oProjectUrls->getPattern());
-        }
+        }*/
     }
 
     /**
@@ -56,53 +57,15 @@ class BUrl
     {
         if (!is_object(self::$oInstance)) {
 
-            self::$oInstance = new BUrl();
+            #self::$oInstance = new BUrl();
+            BLoader::register('ProjectUrls', PROJECT_CONFIG.DS.'urls.inc.php');
+            self::$oInstance = new ProjectUrls();
         }
 
         return self::$oInstance;
     }
 
-    /**
-     * Get, if exists, the dest component.
-     *
-     * @param string $sDestination The pattern destination.
-     *
-     * @return string if destination not a component, false
-     */
-    public function getDestinationComponent($sDestination)
-    {
-        if (substr($sDestination, 0, strlen('include:')) == 'include:') {
-            return substr($sDestination, strlen('include:'));
-        }
-        return false;
-    }
-
-    /**
-     * Splits, if the destination is an array, the values to dest and args.
-     *
-     * @param string  $sDestination The pattern destination.
-     * @param boolean $bPublishArgs If true, sends args to GET (Default:true).
-     *
-     * @return string The real destination.
-     */
-    public function splitDestination($sDestination, $bPublishArgs=true)
-    {
-        if (!class_exists('Validator'))
-            BLoader::import('boot.utilities.validator');
-
-        if (Validator::is($sDestination, 'array')) {
-            $temp = $sDestination;
-            $args = array();
-            if (isset($temp[1])) $args = $temp[1];
-            $sDestination = $temp[0];
-            if ($bPublishArgs) {
-                foreach ($args as $argk => $argv) {
-                    $_GET[$argk] = $argv;
-                }
-            }
-        }
-        return $sDestination;
-    }
+    
 
     /**
      * The big funky method, that do all for us.
@@ -123,7 +86,7 @@ class BUrl
             $oInput =& BFactory::getInput();
             $sRequestUri = $oInput->get('REQUEST_URI', '/', 'server');
         }
-
+        
         $sParsedUrl = parse_url($sRequestUri);
         $sPath = implode(
             '/',
@@ -133,93 +96,121 @@ class BUrl
             )
         );
 
-        if (substr($sPath, -1) != '/') {
-            $sPath = $sPath.'/';
-        }
+        $sPath = $this->checkTrailingSlash($sPath);
 
         if (!$sChainedUri) $sChainedUri = $sPath;
 
-        $aPatternList = $this->getPattern();
+        $aPatternList =& $this->getPattern();
 
         foreach ($aPatternList as $sPattern => $sDestination) {
             $sPattern = str_replace('/', '\/', $sPattern);
             $epattern = '/'.$sPattern.'/';
 
-            if (preg_match($epattern, $sPath, $aMatches, PREG_OFFSET_CAPTURE)) {
-                foreach ($aMatches as $key => $match) {
-                    if (!is_numeric($key)) {
-                        $_GET[$key] = $match[0];
-                    }
+            if (!preg_match($epattern, $sPath, $aMatches, PREG_OFFSET_CAPTURE)) {
+                // This one does not match. Next one.
+                continue;
+            }
+            
+            foreach ($aMatches as $key => $match) {
+                if (!is_numeric($key)) {
+                    // TODO: Check what it is.
+                    $_GET[$key] = $match[0];
                 }
+            }
+            
+            $oUrlPattern = new BUrlPattern($sPattern, $sDestination);
+            
+            $sDestination    = $oUrlPattern->splitDestination();
+            $sComponentIdent = $oUrlPattern->getDestinationComponent();
+            
+            #print "Destination: ".$sComponentIdent.NL;
+            
+            $oComponent = BComponentFactory::getInstance($sComponentIdent);
+            
+            // Register template path to renderer.
+            // TODO: This must be delegated
+            $oDocument =& BFactory::getDocument();
+            $oRenderer =& $oDocument->getRenderer();
+            
+            
+            // If class is not
+            /*if (!substr($sComponentPath, 0, strlen(PROJECT_ROOT)) == PROJECT_ROOT) {
+                $sComponentPath = PROJECT_ROOT;
+            }*/
+            
+            
+            
+            // TODO: Move to BComponent
+            $oRenderer->unshiftTemplateDir($oComponent->getTemplatePath());
+            
+            
+            // Found, next level.
+            if ($oComponent->isValid()) {
+                // There is another Component linked.
+                $sMatchedPart = $aMatches[0][0];
 
-                $sDestination = $this->splitDestination($sDestination);
-    
-                // Register template path to renderer.
-                $oDocument =& BFactory::getDocument();
-                $oRenderer =& $oDocument->getRenderer();
+                $sRemainingPart = str_replace($sMatchedPart, '', $sPath);
+
+                BComponentLeader::append($oComponent);
                 
-                $oReflection = new ReflectionObject($this);
                 
-                $sTemplatePath  = dirname($oReflection->getFileName());
-                $sTemplatePath .= DS.'templates';
-                
-                unset($oReflection);
-    
-                $oRenderer->unshiftTemplateDir($sTemplatePath);
-                
-                // Found, next level.
-                if ($sComponentIdent = $this->getDestinationComponent($sDestination)) {
-                    $sMatchedPart = $aMatches[0][0];
-                    
-                    $sRemainingPart = str_replace($sMatchedPart, '', $sPath);
-                    
-                    $sUrlClassname = sprintf("Component%sUrls", ucfirst($sComponentIdent));
-                    $oComponentUrls = new $sUrlClassname();
-                    
-                    if (substr($sRemainingPart, -1) != '/') {
-                        $sRemainingPart = $sRemainingPart.'/';
-                    }
-                    
-                    // Url prefix to able the component building urls.
-                    if (substr($sChainedUri, '-'.strlen($sRemainingPart)) == $sRemainingPart) {
-                        $oDocument->setUrlPrefix(
-                            substr(
-                                $sChainedUri,
-                                0,
-                                strlen($sChainedUri)-(strlen($sRemainingPart))
-                            )
-                        );
-                    } else {
-                        $oDocument->setUrlPrefix($sChainedUri);
-                    }
-                    
-                    return $oComponentUrls->parse(
-                        $sRemainingPart,
-                        $sChainedUri
+                $oComponentUrl = $oComponent->getUrl();
+
+                $sRemainingPart = $this->checkTrailingSlash($sRemainingPart);
+
+                // Url prefix to able the component building urls.
+                if (substr($sChainedUri, '-'.strlen($sRemainingPart)) == $sRemainingPart) {
+                    $oDocument->setUrlPrefix(
+                        substr(
+                            $sChainedUri,
+                            0,
+                            strlen($sChainedUri)-(strlen($sRemainingPart))
+                        )
                     );
-    
                 } else {
-    
-                    list($com, $view, $method) = explode('.', $sDestination);
-    
-                    $_GET['_vc'] = $com;
-                    $_GET['_vv'] = $view;
-                    $_GET['_vm'] = $method;
-                    
-                    return true;
-                }//end if
+                    $oDocument->setUrlPrefix($sChainedUri);
+                }
+                
+                return $oComponentUrl->parse(
+                    $sRemainingPart,
+                    $sChainedUri
+                );
 
             } else {
-                // TODO: Special Message?
+                // Destination is "component.view.method"
+                list($com, $view, $method) = explode('.', $sDestination);
+
+                $_GET['_vc'] = $com;
+                $_GET['_vv'] = $view;
+                $_GET['_vm'] = $method;
+
+                return true;
             }//end if
+
+
         }//end foreach
-        
+
         // When we are here, no file is found. Throw 404.
-        BResponse::error(404);
+        BResponse::error(404, "No Route to component.");
 
         return false;
     }
+    
+    private function getClassPath()
+    {
+        $oReflection = new ReflectionObject($this);
+        $sClassPath = dirname($oReflection->getFileName());
+        unset($oReflection);
+        return $sClassPath;
+    }
 
+    private function checkTrailingSlash($sPath)
+    {
+        if (substr($sPath, -1) != '/') {
+            $sPath = $sPath.'/';
+        }
+        return $sPath;
+    }
     /**
      * Old parse function.
      *
@@ -271,7 +262,7 @@ class BUrl
         }
 
         $this->pattern[$expression] = $sDestination;
-        
+
         return null;
     }
 

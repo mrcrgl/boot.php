@@ -3,7 +3,8 @@
  * @author Marc Riegel
  */
 
-BLoader::import('boot.base.object');
+if (!class_exists('BObject'))
+    BLoader::import('boot.base.object');
 
 /**
  * The main Application Controller
@@ -11,7 +12,7 @@ BLoader::import('boot.base.object');
  * @author marc
  *
  */
-class BApplicationController extends BObject
+class BApplicationController extends BObject implements BApplicationControllerInterface
 {
 
   /**
@@ -25,6 +26,8 @@ class BApplicationController extends BObject
      * @var unknown_type
      */
     var $sDefaultView             = null;
+    
+    var $oComponent = null;
 
     /**
      *
@@ -187,6 +190,12 @@ class BApplicationController extends BObject
             }
         }
     }
+    
+    public function register()
+    {
+        // Register this controller in the paths.
+        print "Register controller: ".get_class($this).NL;
+    }
 
     public function handleRequest()
     {
@@ -220,16 +229,16 @@ class BApplicationController extends BObject
         #$oRenderer =& $oDocument->getRenderer();
         #$oRenderer->init();
 
-        $sFilename = $this->sComponentRoot.DS.'views'.DS.$sViewIdent;
+        $sFilename = $this->oComponent->getViewPath().DS.$sViewIdent;
 
         // Import view file
         if (!BLoader::check_extensions($sFilename)) {
             // Throw 404
-            BResponse::error(404);
+            BResponse::error(404, "View not found.");
         }
 
 
-        $sViewClassname = $this->getViewClassname($sViewIdent);
+        $sViewClassname = $this->oComponent->getViewClassname($sViewIdent);
 
         $sMethod = $this->getRequestMethod();
 

@@ -17,6 +17,7 @@
  */
 class BComponent extends BObject
 {
+    
     /*
         Path of component
         Template Path if available
@@ -26,4 +27,88 @@ class BComponent extends BObject
         Ref: Config
     */
     
+    protected $_bIsComponent = false;
+    protected $_bExecute = false;
+    
+    protected $_sPath = null;
+    protected $_sTemplatePath = null;
+    protected $_sModelPath = null;
+    protected $_sViewPath = null;
+    
+    protected $_sIdentificator = null;
+    
+    protected $_oConfig = null;
+    protected $_oUrl = null;
+    protected $_oController = null;
+    
+    
+    public function getUrl()
+    {
+        if (!$this->isValid()) throw new Exception("Try to get BUrl from invalid BComponent.");
+        
+        if (null === $this->get('_oUrl', null)) {
+            
+            $sClassname = sprintf('Component%sUrls', BString::underscores_to_camelcase($this->get('_sIdentificator')));
+            
+            $this->set('_oUrl', new $sClassname());
+            
+        }
+        
+        return $this->get('_oUrl');
+    }
+    
+    public function getController()
+    {
+        if (null === $this->get('_oController', null)) {
+        
+            $sClassname = sprintf('Component%sController', BString::underscores_to_camelcase($this->get('_sIdentificator')));
+        
+            $this->set('_oController', new $sClassname());
+        }
+        
+        return $this->get('_oController');
+    }
+    
+    public function callController()
+    {
+        $oController = $this->getController();
+        $oController->oComponent =& $this;
+        $oController->register();
+        
+        //var_dump($this->get('_bExecute', false));
+        
+        if ($this->get('_bExecute', false) == true) {
+            $oController->handleRequest();
+        }
+    }
+    
+    public function getPath()
+    {
+        return $this->get('_sPath', null);
+    }
+    
+    public function getTemplatePath()
+    {
+        return $this->get('_sTemplatePath', null);
+    }
+    
+    public function getModelPath()
+    {
+        return $this->get('_sModelPath', null);
+    }
+    
+    public function getViewPath()
+    {
+        return $this->get('_sViewPath', null);
+    }
+    
+    public function getViewClassname($sViewIdent)
+    {
+        return sprintf("Component%sView%s", ucfirst($this->get('_sIdentificator')), ucfirst($sViewIdent));
+    }
+    
+    public function isValid()
+    {
+        return $this->get('_bIsComponent');
+    }
 }

@@ -1,19 +1,20 @@
 <?php
 
-class BInputWeb extends BInput 
+class BInputWeb extends BInput implements BInputInterface
 {
     
     public function __construct()
- {
-        $url =& BFactory::getUrl();
-        $url->parse($this->get('REQUEST_URI', 'index', 'server'));
+    {
+        parent::__construct();
     }
     
     
     public function get($attribute, $default=null, $method=null)
     {
         
-        BLoader::import('boot.utilities.string');
+        if (!class_exists('BLoader')) {
+            BLoader::import('boot.utilities.string');
+        }
         
         if (is_null($method)) {
             $data =& $_REQUEST;
@@ -32,5 +33,11 @@ class BInputWeb extends BInput
         }
         
         return $default;
+    }
+    
+    public function collect()
+    {
+        $url =& BFactory::getUrl();
+        $url->parse($this->get('REQUEST_URI', 'index', 'server'));
     }
 }
