@@ -194,7 +194,9 @@ class BApplicationController extends BObject implements BApplicationControllerIn
     public function register()
     {
         // Register this controller in the paths.
-        print "Register controller: ".get_class($this).NL;
+        #print "Register controller: ".get_class($this).NL;
+        
+        // TODO: Here, the paths must be told.
     }
 
     public function handleRequest()
@@ -322,17 +324,6 @@ class BApplicationController extends BObject implements BApplicationControllerIn
         if (!$sMethod) BResponse::error(404);
 
         return $sMethod;
-    }
-
-    public function getViewClassname($sViewIdent)
-    {
-        $sClassname = sprintf(
-            'Component%sView%s',
-            ucfirst($this->get('sComponentName')),
-            ucfirst($sViewIdent)
-        );
-
-        return $sClassname;
     }
 
     public function quit()

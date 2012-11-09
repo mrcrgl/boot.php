@@ -128,7 +128,7 @@ class BUrl
             $oComponent = BComponentFactory::getInstance($sComponentIdent);
             
             // Register template path to renderer.
-            // TODO: This must be delegated
+            // TODO: This must be delegated. Document and Renderer has not to be here.
             $oDocument =& BFactory::getDocument();
             $oRenderer =& $oDocument->getRenderer();
             
@@ -141,6 +141,7 @@ class BUrl
             
             
             // TODO: Move to BComponent
+            print $oComponent->getTemplatePath().NL;
             $oRenderer->unshiftTemplateDir($oComponent->getTemplatePath());
             
             
@@ -196,13 +197,13 @@ class BUrl
         return false;
     }
     
-    private function getClassPath()
+    /*private function getClassPath()
     {
         $oReflection = new ReflectionObject($this);
         $sClassPath = dirname($oReflection->getFileName());
         unset($oReflection);
         return $sClassPath;
-    }
+    }*/
 
     private function checkTrailingSlash($sPath)
     {
@@ -219,7 +220,7 @@ class BUrl
      * @deprecated since 2.0
      * @return void
      */
-    static public function _parse($url=null)
+    /*static public function _parse($url=null)
     {
 
         BLoader::import('boot.utilities.array');
@@ -239,7 +240,7 @@ class BUrl
         $_GET['_vv'] = BArray::get($aPathParts, 1);
         $_GET['_vm'] = BArray::get($aPathParts, 2);
 
-    }
+    }*/
 
     /**
      * Register a expression/destination pair.

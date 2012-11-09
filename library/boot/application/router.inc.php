@@ -15,7 +15,7 @@ class BApplicationRouter
             #BComponentLeader::reset();
             
             while ($oComponent =& BComponentLeader::walk()) {
-                print "Running...".NL;
+                #print "Running...".NL;
                 
                 
                 $this->_process($oComponent);
@@ -44,22 +44,22 @@ class BApplicationRouter
     
     protected function _input()
     {
-        print "Input called.".NL;
+        #print "Input called.".NL;
         $oInput = BFactory::getInput();
         $oInput->collect();
     }
     
     protected function _process(BComponent $oComponent)
     {
-        print "Preprocessing Component.".NL;
+        #print "Preprocessing Component.".NL;
         
         if (BComponentLeader::isLast()) {
             $oComponent->set('_bExecute', true);
         }
         
-        print "<pre>";
-        var_dump($oComponent);
-        print "</pre>";
+        #print "<pre>";
+        #var_dump($oComponent);
+        #print "</pre>";
         
         $oComponent->callController();
         
@@ -67,6 +67,6 @@ class BApplicationRouter
     
     protected function _output()
     {
-        print "Output called.".NL;
+        #print "Output called.".NL;
     }
 }
