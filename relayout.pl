@@ -14,11 +14,16 @@ foreach my $file (@ARGV) {
   #$lines =~ s/\r\n/\n/g;
   #$lines =~ s/\t/\ \ \ \ /g;
   #$lines =~ s/Versions\./boot\.php\./g;
-  $lines =~ s/\ V([A-Z]{1})([a-z]{1})/\ B$1$2/g;
-  $lines =~ s/VDebug/BDebug/g;
-  $lines =~ s/VSettings/BSettings/g;
-  $lines =~ s/VObject/BObject/g;
-  $lines =~ s/versions\./boot\./g;
+  $lines =~ s/VLIB/BLIB/g;
+  $lines =~ s/VFRAMEWORK/BFRAMEWORK/g;
+  $lines =~ s/VCORE/BCORE/g;
+  $lines =~ s/VCONFIG/BCONFIG/g;
+  $lines =~ s/VCOMPONENTS/BCOMPONENTS/g;
+  $lines =~ s/VMODULES/BMODULES/g;
+  $lines =~ s/VMODELS/BMODELS/g;
+  $lines =~ s/VPLUGINS/BPLUGINS/g;
+  $lines =~ s/VMIDDLEWARES/BMIDDLEWARES/g;
+  $lines =~ s/VTEMPLATES/BTEMPLATES/g;
 
   #$lines =~ s/\)(\s+)\{/\)\ \{/g;
   #$lines =~ s/([\ ]+)(\W+)(.*)function(.*)\)(\s?)\{/$1$2$3function$4\)\n$1\{/g;
