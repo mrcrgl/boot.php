@@ -120,28 +120,30 @@ class BUrl
             
             $oUrlPattern = new BUrlPattern($sPattern, $sDestination);
             
+            #print $sDestination.NL;
+            
             $sDestination    = $oUrlPattern->splitDestination();
-            $sComponentIdent = $oUrlPattern->getDestinationComponent();
+            $sComponentIdent = $oUrlPattern->getComponent();
             
             #print "Destination: ".$sComponentIdent.NL;
             
             $oComponent = BComponentFactory::getInstance($sComponentIdent);
+            
+            $oComponent->setRequestView($oUrlPattern->getView());
+            $oComponent->setRequestMethod($oUrlPattern->getMethod());
             
             // Register template path to renderer.
             // TODO: This must be delegated. Document and Renderer has not to be here.
             $oDocument =& BFactory::getDocument();
             $oRenderer =& $oDocument->getRenderer();
             
-            
             // If class is not
             /*if (!substr($sComponentPath, 0, strlen(PROJECT_ROOT)) == PROJECT_ROOT) {
                 $sComponentPath = PROJECT_ROOT;
             }*/
             
-            
-            
             // TODO: Move to BComponent
-            print $oComponent->getTemplatePath().NL;
+            #print $oComponent->getTemplatePath().NL;
             $oRenderer->unshiftTemplateDir($oComponent->getTemplatePath());
             
             
@@ -172,6 +174,8 @@ class BUrl
                     $oDocument->setUrlPrefix($sChainedUri);
                 }
                 
+                if (null === $oComponentUrl) return true;
+                
                 return $oComponentUrl->parse(
                     $sRemainingPart,
                     $sChainedUri
@@ -180,10 +184,11 @@ class BUrl
             } else {
                 // Destination is "component.view.method"
                 list($com, $view, $method) = explode('.', $sDestination);
+                print "Was hier?";
 
-                $_GET['_vc'] = $com;
+                /*$_GET['_vc'] = $com;
                 $_GET['_vv'] = $view;
-                $_GET['_vm'] = $method;
+                $_GET['_vm'] = $method;*/
 
                 return true;
             }//end if

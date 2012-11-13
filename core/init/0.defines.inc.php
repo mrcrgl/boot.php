@@ -24,45 +24,45 @@ define('DS', DIRECTORY_SEPARATOR);
 define('NL', ((PHP_SAPI != 'cli') ? '<br />' : "\n"));
 
 
-// Define: @var VFRAMEWORK Versions core directory .
-define('VFRAMEWORK', realpath(dirname(__FILE__).DS.'..'.DS.'..'));
-define('VROOT', realpath(VFRAMEWORK.DS.'..'));
+// Define: @var BFRAMEWORK Versions core directory .
+define('BFRAMEWORK', realpath(dirname(__FILE__).DS.'..'.DS.'..'));
+define('BROOT', realpath(BFRAMEWORK.DS.'..'));
 
 
-// Define: @var VCONFIG Versions config directory .
-define('VCONFIG', VFRAMEWORK.DS.'config');
+// Define: @var BCONFIG Versions config directory .
+define('BCONFIG', BFRAMEWORK.DS.'config');
 
 
-// Define: @var VLIB    boot library .
-define('VLIB', VFRAMEWORK.DS.'library');
+// Define: @var BLIB    boot library .
+define('BLIB', BFRAMEWORK.DS.'library');
 
 
-// Define: @var VCORE    Versions core .
-define('VCORE', VFRAMEWORK.DS.'core');
+// Define: @var BCORE    Versions core .
+define('BCORE', BFRAMEWORK.DS.'core');
 
 
-// Define: @var VCOMPONENTS    Versions components directory .
-define('VCOMPONENTS', VFRAMEWORK.DS.'vcomponents');
+// Define: @var BCOMPONENTS    Versions components directory .
+define('BCOMPONENTS', BFRAMEWORK.DS.'vcomponents');
 
 
-// Define: @var VMODULES    Versions modules directory .
-define('VMODULES', VFRAMEWORK.DS.'vmodules');
+// Define: @var BMODULES    Versions modules directory .
+define('BMODULES', BFRAMEWORK.DS.'vmodules');
 
 
-// Define: @var VMODELS    Versions modules directory .
-define('VMODELS', VFRAMEWORK.DS.'vmodels');
+// Define: @var BMODELS    Versions modules directory .
+define('BMODELS', BFRAMEWORK.DS.'vmodels');
 
 
-// Define: @var VPLUGINS    Versions plugin directory .
-define('VPLUGINS', VFRAMEWORK.DS.'vplugins');
+// Define: @var BPLUGINS    Versions plugin directory .
+define('BPLUGINS', BFRAMEWORK.DS.'vplugins');
 
 
-// Define: @var VMIDDLEWARES    Versions middleware directory .
-define('VMIDDLEWARES', VFRAMEWORK.DS.'vmiddlewares');
+// Define: @var BMIDDLEWARES    Versions middleware directory .
+define('BMIDDLEWARES', BFRAMEWORK.DS.'vmiddlewares');
 
 
-// Define: @var VTEMPLATES    Versions template directory .
-define('VTEMPLATES', VFRAMEWORK.DS.'templates');
+// Define: @var BTEMPLATES    Versions template directory .
+define('BTEMPLATES', BFRAMEWORK.DS.'templates');
 
 
 // Define: @var PROJECT_ROOT        Project root directory .

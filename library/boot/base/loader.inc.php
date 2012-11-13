@@ -1,8 +1,8 @@
 <?php
 
 
-require_once VLIB.DS.'boot'.DS.'utilities'.DS.'string.inc.php';
-require_once VLIB.DS.'boot'.DS.'debug'.DS.'debug.inc.php';
+require_once BLIB.DS.'boot'.DS.'utilities'.DS.'string.inc.php';
+require_once BLIB.DS.'boot'.DS.'debug'.DS.'debug.inc.php';
 
 /**
  * Common object loader
@@ -178,12 +178,12 @@ class BLoader
             #print $__classname.NL;
             $path = BString::strtolower(implode(DS, BString::explode_camelcase($__classname)));
             #print $path.NL;
-            $classpath = self::check_extensions(VLIB.DS.$path);
+            $classpath = self::check_extensions(BLIB.DS.$path);
             if ($classpath === false) {
                 $parts = explode(DS, $path);
                 $last = $parts[(count($parts)-1)];
                 $parts[] = $last;
-                $classpath = self::check_extensions(VLIB.DS.implode(DS, $parts));
+                $classpath = self::check_extensions(BLIB.DS.implode(DS, $parts));
             }
 
             return $classpath;
@@ -206,7 +206,7 @@ class BLoader
             $path = BString::strtolower(implode(DS, BString::explode_camelcase($__classname))); // ComponentNewsModelNews
             $path = str_replace('component'.DS, '', $path);
             #print $path;
-            foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $component_path) {
+            foreach (array(PROJECT_COMPONENTS, BCOMPONENTS) as $component_path) {
                 $classpath = self::check_extensions($component_path.DS.$path);
                 if ($classpath === false) {
                     $parts = explode(DS, $path);
@@ -228,12 +228,12 @@ class BLoader
             #print "Foo";
             $parts = explode('.', $__classname);
 
-            if (is_dir(VLIB.DS.$parts[0])) {
-                $path = self::check_extensions( VLIB.DS.implode(DS, $parts) );
+            if (is_dir(BLIB.DS.$parts[0])) {
+                $path = self::check_extensions( BLIB.DS.implode(DS, $parts) );
                 if ($path === false) {
                     $last = $parts[(count($parts)-1)];
                     $parts[] = $last;
-                    $path = self::check_extensions( VLIB.DS.implode(DS, $parts) );
+                    $path = self::check_extensions( BLIB.DS.implode(DS, $parts) );
                 }
                 return $path;
             }
@@ -241,7 +241,7 @@ class BLoader
         }
         // Models
         else {
-            foreach (array(PROJECT_MODELS, VMODELS) as $paths) {
+            foreach (array(PROJECT_MODELS, BMODELS) as $paths) {
                 #print "sdfgsdfgd";
 
                 $path = BString::strtolower(implode(DS, BString::explode_camelcase($__classname)));

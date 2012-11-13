@@ -14,7 +14,7 @@
  */
 BLoader::register(
     'Validator',
-    VLIB.DS.'boot'.DS.
+    BLIB.DS.'boot'.DS.
     'utilities'.DS.'validator.inc.php'
 );
 BLoader::discover(dirname(__FILE__).DS.'dispatcher');

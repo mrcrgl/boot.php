@@ -7,7 +7,7 @@ define('DEBUG_NOTICE',         4);
 define('DEBUG_INFO',             5);
 define('DEBUG_MESSSAGE',     6);
 
-#BLoader::register('BDirectory', VLIB.DS.'boot'.DS.'utilities'.DS.'directory.inc.php');
+#BLoader::register('BDirectory', BLIB.DS.'boot'.DS.'utilities'.DS.'directory.inc.php');
 
 /**
  * Debug Message

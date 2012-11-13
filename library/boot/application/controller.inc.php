@@ -70,14 +70,14 @@ class BApplicationController extends BObject implements BApplicationControllerIn
 
     static public function getInstance($sComponent=null)
     {
-
+        
         if (!$sComponent) {
             $oInput =& BFactory::getInput();
             $sComponent = $oInput->get('_vc', 'default', 'get');
         }
-
+        
         $sControllerClassname = self::getControllerByPrefix($sComponent);
-
+        
         if (!Validator::is($sControllerClassname, 'filled')) {
             $sMessage = sprintf(
                 "Controller for component '%s' not " .
@@ -86,26 +86,24 @@ class BApplicationController extends BObject implements BApplicationControllerIn
             );
             throw new Exception($sMessage);
         }
-
+        
         if (!class_exists($sControllerClassname))
             BLoader::autoload($sControllerClassname);
-
-        if (!class_exists($sControllerClassname))
-{
+        
+        if (!class_exists($sControllerClassname)) {
             $sMessage = sprintf(
                 "Controller '%s' not found!",
                 $sControllerClassname
             );
             throw new Exception($sMessage);
         }
-
-        if (!class_exists('BArray'))
-{
+        
+        if (!class_exists('BArray')) {
           BLoader::import('boot.utilities.array');
         }
-
+        
         $oCurrentController = new $sControllerClassname();
-
+        
         $oCurrentController->set(
             'sComponentRoot',
             dirname(BArray::get(BLoader::$registred, $sControllerClassname))
@@ -141,7 +139,7 @@ class BApplicationController extends BObject implements BApplicationControllerIn
     {
         self::$_aComponents = array();
 
-        foreach (array(PROJECT_COMPONENTS, VCOMPONENTS) as $sPath) {
+        foreach (array(PROJECT_COMPONENTS, BCOMPONENTS) as $sPath) {
 
             if (is_dir($sPath)) {
 
@@ -194,7 +192,7 @@ class BApplicationController extends BObject implements BApplicationControllerIn
     public function register()
     {
         // Register this controller in the paths.
-        #print "Register controller: ".get_class($this).NL;
+        //print "Register controller: ".get_class($this).NL;
         
         // TODO: Here, the paths must be told.
     }
@@ -304,9 +302,11 @@ class BApplicationController extends BObject implements BApplicationControllerIn
 
     public function getRequestView()
     {
-
-        $oInput =& BFactory::getInput();
-        $sViewIdent = $oInput->get('_vv', $this->sDefaultView, 'get');
+        //var_dump($this);
+        $sViewIdent = $this->oComponent->getRequestView();
+        
+        //$oInput =& BFactory::getInput();
+        //$sViewIdent = $oInput->get('_vv', $this->sDefaultView, 'get');
 
         // Throw 404
         if (!$sViewIdent) BResponse::error(404);
@@ -316,9 +316,10 @@ class BApplicationController extends BObject implements BApplicationControllerIn
 
     public function getRequestMethod()
     {
-
-        $oInput =& BFactory::getInput();
-        $sMethod = $oInput->get('_vm', 'show', 'get');
+        $sMethod = $this->oComponent->getRequestMethod();
+        
+        //$oInput =& BFactory::getInput();
+        //$sMethod = $oInput->get('_vm', 'show', 'get');
 
         // Throw 404
         if (!$sMethod) BResponse::error(404);

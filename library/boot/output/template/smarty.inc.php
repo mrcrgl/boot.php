@@ -1,6 +1,6 @@
 <?php
 
-BLoader::discover(VLIB.DS.'Smarty', true);
+BLoader::discover(BLIB.DS.'Smarty', true);
 
 class BTemplateSmarty extends Smarty 
 {

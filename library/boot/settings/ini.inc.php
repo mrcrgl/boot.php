@@ -18,7 +18,7 @@ class BSettingsIni implements BSettingsInterface
      {
 
         if (!$config_path) {
-            self::$core_config_path = VCONFIG;
+            self::$core_config_path = BCONFIG;
             self::$user_config_path = PROJECT_CONFIG;
 
             self::import_path(self::$core_config_path);

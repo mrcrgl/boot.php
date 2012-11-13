@@ -21,8 +21,7 @@ abstract class BMiddleware extends BObject
     }
     
     static function loadMiddleware()
-        {
-        
+    {
         self::$_enabled = array();
         
         $enabled_names = BSettings::f('middleware.enable');
@@ -38,10 +37,10 @@ abstract class BMiddleware extends BObject
             
             $path_tail = implode(DS, $parts).'.inc.php';
             
-            if (is_file(PROJECT_MIDDLEWARES.DS.$path_tail)) {
-                $file = PROJECT_MIDDLEWARES.DS.$path_tail;
-            } else if (is_file(VMIDDLEWARES.DS.$path_tail)) {
-                $file = VMIDDLEWARES.DS.$path_tail;
+            if (is_file(PROJECT_BIDDLEWARES.DS.$path_tail)) {
+                $file = PROJECT_BIDDLEWARES.DS.$path_tail;
+            } else if (is_file(BMIDDLEWARES.DS.$path_tail)) {
+                $file = BMIDDLEWARES.DS.$path_tail;
             } else {
                 BDebug::_(new BDebugMessage("Middleware $enabled_name not found."));
                 continue;
@@ -49,88 +48,87 @@ abstract class BMiddleware extends BObject
             
             
             BLoader::file($file);
-            
             self::$_enabled[$enabled_name] = new $classname();
         }
     }
     
     function onBeforeRoute()
-        {
+    {
         
     }
     
     function onBeforePrepareRequest()
-        {
+    {
         
     }
     
     function onAfterPrepareRequest()
-        {
+    {
         
     }
     
     function onBeforeProcessRequest()
-        {
+    {
         
     }
     
     function onBeforePrepareView()
-        {
+    {
         
     }
     
     function onAfterPrepareView()
-        {
+    {
         
     }
     
     function onBeforeProcessView()
-        {
+    {
         
     }
     
     function onAfterProcessView()
-        {
+    {
         
     }
     
     function onBeforeCleanupView()
-        {
+    {
         
     }
     
     function onAfterCleanupView()
-        {
+    {
         
     }
     
     function onAfterProcessRequest()
-        {
+    {
         
     }
     
     function onBeforePrepareResponse()
-        {
+    {
         
     }
     
     function onAfterPrepareResponse()
-        {
+    {
         
     }
     
     function onBeforePrintResponse()
-        {
+    {
         
     }
     
     function onAfterPrintResponse()
-        {
+    {
         
     }
     
     function onBeforeQuit()
-        {
+    {
         
     }
     

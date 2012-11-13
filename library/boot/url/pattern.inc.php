@@ -3,30 +3,70 @@
 class BUrlPattern
 {
     
-    public $expression = null;
+    public $sExpression = null;
     
-    public $destination = null;
+    public $sDestination = null;
+    
+    public $sComponent = null;
+    
+    public $sView = null;
+    
+    public $sMethod = null;
     
     public function __construct($sExpression, $mDestination)
     {
-        $this->expression = $sExpression;
-        $this->destination = $mDestination;
+        $this->sExpression = $sExpression;
+        $this->sDestination = $mDestination;
+        list($this->sComponent, $this->sView, $this->sMethod) = $this->decodeDestimnation();
+    }
+    
+    /**
+     * Get component.
+     *
+     * @return string component
+     */
+    public function getComponent()
+    {
+        return $this->sComponent;
+    }
+    
+    /**
+     * Get view.
+     *
+     * @return string view
+     */
+    public function getView()
+    {
+        return $this->sView;
+    }
+    
+    /**
+     * Get method.
+     *
+     * @return string method
+     */
+    public function getMethod()
+    {
+        return $this->sMethod;
     }
     
     /**
      * Get, if exists, the dest component.
      *
-     * @param string $sDestination The pattern destination.
-     *
-     * @return string if destination not a component, false
+     * @return array (component, view, method)
      */
-    public function getDestinationComponent()
+    public function decodeDestimnation()
     {
         $sDestination = $this->splitDestination();
         if (substr($sDestination, 0, strlen('include:')) == 'include:') {
-            return substr($sDestination, strlen('include:'));
+            $sComponent = substr($sDestination, strlen('include:'));
+            return array($sComponent, null, null);
         }
-        return false;
+        if (preg_match('/^([a-z]+)\.([a-z]+)\.([a-z]+)$/', $sDestination, $matches)) {
+            #var_dump($matches);
+            return array($matches[1], $matches[2], $matches[3]);
+        }
+        return array(null, null, null);
     }
     
     /**
@@ -42,8 +82,8 @@ class BUrlPattern
         if (!class_exists('Validator'))
             BLoader::import('boot.utilities.validator');
     
-        if (Validator::is($this->destination, 'array')) {
-            $temp = $this->destination;
+        if (Validator::is($this->sDestination, 'array')) {
+            $temp = $this->sDestination;
             $args = array();
             if (isset($temp[1])) $args = $temp[1];
             $sDestination = $temp[0];
@@ -53,7 +93,7 @@ class BUrlPattern
                 }
             }
         } else {
-            $sDestination = $this->destination;
+            $sDestination = $this->sDestination;
         }
         return $sDestination;
     }

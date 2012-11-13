@@ -10,16 +10,16 @@
  * @subpackage Init
  */
 
-require_once VLIB.DS.'boot'.DS.'base'.DS.'loader.inc.php';
+require_once BLIB.DS.'boot'.DS.'base'.DS.'loader.inc.php';
 
 BLoader::init();
 
 BLoader::register(
-    'BProfiler', VLIB.DS.'boot'.DS.'debug'.DS.'profiler.inc.php'
+    'BProfiler', BLIB.DS.'boot'.DS.'debug'.DS.'profiler.inc.php'
 );
 
 BLoader::register(
-    'BObject', VLIB.DS.'boot'.DS.'base'.DS.'object.inc.php'
+    'BObject', BLIB.DS.'boot'.DS.'base'.DS.'object.inc.php'
 );
 
 /**

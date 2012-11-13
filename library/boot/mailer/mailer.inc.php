@@ -1,6 +1,6 @@
 <?php
 
-BLoader::register('PHPMailer', VLIB.DS.'PHPMailer'.DS.'class.phpmailer.php');
+BLoader::register('PHPMailer', BLIB.DS.'PHPMailer'.DS.'class.phpmailer.php');
 
 class BMailer extends PHPMailer 
 {

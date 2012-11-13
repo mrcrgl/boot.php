@@ -3,10 +3,10 @@
 
 /**
  * Enable Middleware: Localization.
- * 
+ *
  * @desc      Load this Middleware to enable Localization
  *            and prepare URLs with language tags
- * 
+ *
  * @author    mriegel
  * @package   boot.php.Middleware
  * @version   1.0
@@ -16,18 +16,18 @@ class BMiddlewareBaseLocalization extends BMiddleware
 
     /**
      * onBeforeRoute()
-     * checks for localization tag in url, redirect 
+     * checks for localization tag in url, redirect
      * with default if its not available
-     * 
+     *
      * @return void
      */
     public function onBeforeRoute()
      {
         $localization =& BLocalization::getInstance();
-        
+        //print "Yeah";
         if (preg_match(
-            '/^\/([a-z]{2})\/(.{0,255})/', 
-            $_SERVER['REQUEST_URI'], 
+            '/^\/([a-z]{2})\/(.{0,255})/',
+            $_SERVER['REQUEST_URI'],
             $matches
         )) {
 
@@ -60,7 +60,7 @@ class BMiddlewareBaseLocalization extends BMiddleware
     /**
      * onBeforePrepareView()
      * Add the localization tag to UrlPrefix
-     * 
+     *
      * @return void
      */
     public function onBeforePrepareView()
@@ -78,9 +78,9 @@ class BMiddlewareBaseLocalization extends BMiddleware
 
     /**
      * onBeforeQuit()
-     * For development uses: Fetches all Text Strings 
+     * For development uses: Fetches all Text Strings
      * and store it to the translation storage
-     * 
+     *
      * @return void
      */
     public function onBeforeQuit()

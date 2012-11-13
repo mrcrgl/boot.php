@@ -41,6 +41,8 @@ class BComponent extends BObject
     protected $_oUrl = null;
     protected $_oController = null;
     
+    protected $_sRequestView = null;
+    protected $_sRequestMethod = null;
     
     public function getUrl()
     {
@@ -48,9 +50,10 @@ class BComponent extends BObject
         
         if (null === $this->get('_oUrl', null)) {
             
-            $sClassname = sprintf('Component%sUrls', BString::underscores_to_camelcase($this->get('_sIdentificator')));
-            
-            $this->set('_oUrl', new $sClassname());
+            if (file_exists($this->get('_oUrl').DS.'urls.inc.php')) {
+                $sClassname = sprintf('Component%sUrls', BString::underscores_to_camelcase($this->get('_sIdentificator')));
+                $this->set('_oUrl', new $sClassname());
+            }
             
         }
         
@@ -73,8 +76,10 @@ class BComponent extends BObject
     {
         $oController = $this->getController();
         $oController->oComponent =& $this;
+        //$oController->setRequestView($this->getRequestView());
+        //$oController->setRequestMethod($this->getRequestMethod());
         $oController->register();
-        
+        //var_dump($this);
         //var_dump($this->get('_bExecute', false));
         
         if ($this->get('_bExecute', false) == true) {
@@ -100,6 +105,26 @@ class BComponent extends BObject
     public function getViewPath()
     {
         return $this->get('_sViewPath', null);
+    }
+    
+    public function setRequestView($sView)
+    {
+        return $this->set('_sRequestView', $sView);
+    }
+    
+    public function getRequestView()
+    {
+        return $this->get('_sRequestView', null);
+    }
+    
+    public function setRequestMethod($sMethod)
+    {
+        return $this->set('_sRequestMethod', $sMethod);
+    }
+    
+    public function getRequestMethod()
+    {
+        return $this->set('_sRequestMethod', null);
     }
     
     public function getViewClassname($sViewIdent)

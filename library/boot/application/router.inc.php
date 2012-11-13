@@ -7,6 +7,8 @@ class BApplicationRouter
     
     public function route()
     {
+        BMiddleware::trigger('onBeforeRoute');
+        
         
         $this->_input();
         
@@ -21,8 +23,8 @@ class BApplicationRouter
                 $this->_process($oComponent);
             }
         } else {
-            print "Throw 500".NL;
-            BResponse::error(500);
+            #print "Throw 500".NL;
+            BResponse::error(500, "No components to walk through.");
         }
         
         $this->_output();
@@ -39,7 +41,7 @@ class BApplicationRouter
         
         #
         
-        
+        BMiddleware::trigger('onAfterRoute');
     }
     
     protected function _input()

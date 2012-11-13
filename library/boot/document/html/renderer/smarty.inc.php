@@ -1,6 +1,6 @@
 <?php
 
-BLoader::register('Smarty', VLIB.DS.'Smarty'.DS.'Smarty.class.php');
+BLoader::register('Smarty', BLIB.DS.'Smarty'.DS.'Smarty.class.php');
 
 
 class BDocumentRendererHtmlSmarty extends Smarty
@@ -40,8 +40,8 @@ class BDocumentRendererHtmlSmarty extends Smarty
             $template_dirs[] = PROJECT_TEMPLATES;
 
 
-        if (is_dir(VTEMPLATES))
-            $template_dirs[] = VTEMPLATES;
+        if (is_dir(BTEMPLATES))
+            $template_dirs[] = BTEMPLATES;
 
         #print "<pre>";
         #var_dump($this->getTemplateDir());
@@ -94,7 +94,7 @@ class BDocumentRendererHtmlSmarty extends Smarty
     public function loadUserPlugins()
     {
 
-        $extension_path = VLIB.DS.'Smarty'.DS.'user_plugins';
+        $extension_path = BLIB.DS.'Smarty'.DS.'user_plugins';
         foreach (array('function', 'compiler', 'modifier', 'block') as $type)
        {
             $prefix = 'smarty_'.$type.'_';

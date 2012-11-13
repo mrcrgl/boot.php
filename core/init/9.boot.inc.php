@@ -12,6 +12,7 @@
 
 // TODO: Check if this is used.
 BLoader::import('boot.utilities.instance');
+BLoader::import('boot.middleware');
 
 // Start routing.
 $router =& BFactory::getRouter();

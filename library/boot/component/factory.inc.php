@@ -43,8 +43,8 @@ class BComponentFactory extends BObject
         if (is_dir(PROJECT_COMPONENTS.DS.$sIdentificator)) {
             return PROJECT_COMPONENTS.DS.$sIdentificator;
         }
-        if (is_dir(VCOMPONENTS.DS.$sIdentificator)) {
-            return VCOMPONENTS.DS.$sIdentificator;
+        if (is_dir(BCOMPONENTS.DS.$sIdentificator)) {
+            return BCOMPONENTS.DS.$sIdentificator;
         }
         throw new Exception(sprintf(BText::_('Identification \'%s\' not found in component folders.')));
     }
@@ -83,8 +83,8 @@ class BComponentFactory extends BObject
         if (substr($sComponentPath, 0, strlen(PROJECT_COMPONENTS)) == PROJECT_COMPONENTS) {
             return str_replace('/', '', str_replace(realpath(PROJECT_COMPONENTS), '', $sComponentPath));
         }
-        if (substr($sComponentPath, 0, strlen(VCOMPONENTS)) == VCOMPONENTS) {
-            return str_replace('/', '', str_replace(realpath(VCOMPONENTS), '', $sComponentPath));
+        if (substr($sComponentPath, 0, strlen(BCOMPONENTS)) == BCOMPONENTS) {
+            return str_replace('/', '', str_replace(realpath(BCOMPONENTS), '', $sComponentPath));
         }
         return false;
     }
