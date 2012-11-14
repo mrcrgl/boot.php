@@ -42,23 +42,23 @@ define('BCORE', BFRAMEWORK.DS.'core');
 
 
 // Define: @var BCOMPONENTS    Versions components directory .
-define('BCOMPONENTS', BFRAMEWORK.DS.'vcomponents');
+define('BCOMPONENTS', BFRAMEWORK.DS.'bcomponents');
 
 
 // Define: @var BMODULES    Versions modules directory .
-define('BMODULES', BFRAMEWORK.DS.'vmodules');
+define('BMODULES', BFRAMEWORK.DS.'bmodules');
 
 
 // Define: @var BMODELS    Versions modules directory .
-define('BMODELS', BFRAMEWORK.DS.'vmodels');
+define('BMODELS', BFRAMEWORK.DS.'bmodels');
 
 
 // Define: @var BPLUGINS    Versions plugin directory .
-define('BPLUGINS', BFRAMEWORK.DS.'vplugins');
+define('BPLUGINS', BFRAMEWORK.DS.'bplugins');
 
 
 // Define: @var BMIDDLEWARES    Versions middleware directory .
-define('BMIDDLEWARES', BFRAMEWORK.DS.'vmiddlewares');
+define('BMIDDLEWARES', BFRAMEWORK.DS.'bmiddlewares');
 
 
 // Define: @var BTEMPLATES    Versions template directory .

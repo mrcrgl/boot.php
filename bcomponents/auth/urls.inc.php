@@ -1,11 +1,11 @@
 <?php
 
-class ComponentAuthUrls extends BUrl 
+class ComponentAuthUrls extends BUrl
 {
     
     var $pattern = array(
-        '^/$'             => 'auth.login.show',
-        '^logout/$' => 'auth.login.logout'
+        '^/$'            => 'auth.login.show',
+        '^logout/$'      => 'auth.login.logout'
     );
     
 }

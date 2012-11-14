@@ -309,11 +309,14 @@ class BApplicationController extends BObject implements BApplicationControllerIn
         //$sViewIdent = $oInput->get('_vv', $this->sDefaultView, 'get');
 
         // Throw 404
-        if (!$sViewIdent) BResponse::error(404);
+        if (!$sViewIdent) BResponse::error(
+            404,
+            "Controller got no view."
+        );
 
         return $sViewIdent;
     }
-
+    
     public function getRequestMethod()
     {
         $sMethod = $this->oComponent->getRequestMethod();
@@ -322,7 +325,10 @@ class BApplicationController extends BObject implements BApplicationControllerIn
         //$sMethod = $oInput->get('_vm', 'show', 'get');
 
         // Throw 404
-        if (!$sMethod) BResponse::error(404);
+        if (!$sMethod) BResponse::error(
+            404,
+            "Controller got no method."
+        );
 
         return $sMethod;
     }

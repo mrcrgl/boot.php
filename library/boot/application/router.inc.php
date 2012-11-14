@@ -18,7 +18,16 @@ class BApplicationRouter
             
             while ($oComponent =& BComponentLeader::walk()) {
                 #print "Running...".NL;
-                
+                /*var_dump($oComponent);
+                printf(
+                    "--".DS.
+                    "Component: %s".DS.
+                    "View: %s".DS.
+                    "Method: %s".DS.DS,
+                    get_class($oComponent),
+                    $oComponent->getRequestView(),
+                    $oComponent->getRequestMethod()
+                );*/
                 
                 $this->_process($oComponent);
             }

@@ -146,19 +146,38 @@ class BUrl
             #print $oComponent->getTemplatePath().NL;
             $oRenderer->unshiftTemplateDir($oComponent->getTemplatePath());
             
+            /*printf(
+                "--".NL.
+                "Component: %s".NL.
+                "View: %s".NL.
+                "Method: %s".NL.NL,
+                $oComponent->get('_sIdentificator'),
+                $oComponent->getRequestView(),
+                $oComponent->getRequestMethod()
+            );*/
+            
+            if (!$oComponent->isValid()) {
+                printf("Component %s is invalid.", $oComponent->get('sIdentificator'));
+                return false;
+            }
+            
+            BComponentLeader::append($oComponent);
             
             // Found, next level.
-            if ($oComponent->isValid()) {
+            if (!$oComponent->hasDestination()) {
                 // There is another Component linked.
                 $sMatchedPart = $aMatches[0][0];
 
                 $sRemainingPart = str_replace($sMatchedPart, '', $sPath);
 
-                BComponentLeader::append($oComponent);
+                
                 
                 
                 $oComponentUrl = $oComponent->getUrl();
-
+                
+                #var_dump($oComponent);
+                #var_dump($oComponentUrl);
+                
                 $sRemainingPart = $this->checkTrailingSlash($sRemainingPart);
 
                 // Url prefix to able the component building urls.
@@ -174,7 +193,7 @@ class BUrl
                     $oDocument->setUrlPrefix($sChainedUri);
                 }
                 
-                if (null === $oComponentUrl) return true;
+                #if (null === $oComponentUrl) return true;
                 
                 return $oComponentUrl->parse(
                     $sRemainingPart,
@@ -182,14 +201,8 @@ class BUrl
                 );
 
             } else {
-                // Destination is "component.view.method"
-                list($com, $view, $method) = explode('.', $sDestination);
-                print "Was hier?";
-
-                /*$_GET['_vc'] = $com;
-                $_GET['_vv'] = $view;
-                $_GET['_vm'] = $method;*/
-
+                
+                // All fine.
                 return true;
             }//end if
 

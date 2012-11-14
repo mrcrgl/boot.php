@@ -50,7 +50,7 @@ class BComponent extends BObject
         
         if (null === $this->get('_oUrl', null)) {
             
-            if (file_exists($this->get('_oUrl').DS.'urls.inc.php')) {
+            if (file_exists($this->get('_sPath').DS.'urls.inc.php')) {
                 $sClassname = sprintf('Component%sUrls', BString::underscores_to_camelcase($this->get('_sIdentificator')));
                 $this->set('_oUrl', new $sClassname());
             }
@@ -124,12 +124,25 @@ class BComponent extends BObject
     
     public function getRequestMethod()
     {
-        return $this->set('_sRequestMethod', null);
+        return $this->get('_sRequestMethod', null);
     }
     
     public function getViewClassname($sViewIdent)
     {
         return sprintf("Component%sView%s", ucfirst($this->get('_sIdentificator')), ucfirst($sViewIdent));
+    }
+    
+    public function hasDestination()
+    {
+        if ($this->getRequestMethod() || $this->getRequestView()) {
+            if ($this->getRequestMethod() && $this->getRequestView()) {
+                return true;
+            } else {
+                print "View or Method is missing.";
+                #BDebug::_(new BDebugMessage($message));
+            }
+        }
+        return false;
     }
     
     public function isValid()
